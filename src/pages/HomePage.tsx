@@ -3,6 +3,7 @@ import { Navbar } from '../components/Navbar';
 import { Hero } from '../components/Hero';
 import { Projects } from '../components/Projects';
 import { Skills } from '../components/Skills';
+import { Certificates } from '../components/Certificates';
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -25,6 +26,7 @@ export default function HomePage() {
         <Hero />
         <Projects />
         <Skills />
+        <Certificates />
       </MainContent>
     </PageContainer>
   );

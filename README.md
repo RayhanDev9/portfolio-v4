@@ -16,99 +16,112 @@
 | React Router v7 + `/projects` Catalogue | ✅ Selesai | `5748b9e` |
 | `/projects/:id` Detail Page (placeholder) | ✅ Selesai | `5748b9e` |
 | **Skills & Career Journey (`#skills`)** | ✅ Selesai | `a390b71` |
-| Certificates Showcase & Lightbox (`#certificates`) | ⬜ Belum | — |
+| **Certificates Showcase & Lightbox (`#certificates`)** | ✅ Selesai | `c4862ba` |
 | Contact Section (`#contact`) | ⬜ Belum | — |
 | Footer | ⬜ Belum | — |
 | `/projects/:id` Full Case Study | ⬜ Belum | — |
 
 ---
 
-## 📋 Active Build Plan: Skills & Career Journey (`#skills`)
+## 📋 Active Build Plan: Certificates Showcase & Lightbox Modal (`#certificates`)
 
 ### Data yang Tersedia
 
-**`src/data/skills.ts`** — 3 kategori, 22 skill total:
+**`src/data/certificates.ts`** — 12 sertifikat total:
 
-| Kategori | Skills (8 / 8 / 6) |
-|---|---|
-| Languages & Core Tools | TypeScript, JavaScript, HTML5, CSS3, Vite, Git, GitHub, C++ |
-| Frameworks & Libraries | React, Vue.js, Redux Toolkit, Pinia, TanStack Query, React Router, Vue Router, Axios |
-| Styling & UI Systems | Tailwind CSS, Framer Motion, Sass, Bootstrap, Lucide Icons, Responsive UI |
+| # | ID | Judul | Platform | Penerbit |
+|---|---|---|---|---|
+| 1 | `penghargaan-isc` | Sertifikat Penghargaan ISC | Penghargaan | Informatics Study Club |
+| 2 | `hackathon-himtif` | Hackathon: Innovating Beyond The Code | Kompetisi | HIMTIF |
+| 3 | `udemy-js-jonas` | Complete JavaScript Course | Udemy | Jonas Schmedtmann |
+| 4 | `udemy-html-css-jonas` | Responsive Websites HTML & CSS | Udemy | Jonas Schmedtmann |
+| 5 | `udemy-js-eko` | JavaScript: Pemula sampai Mahir | Udemy | Eko Kurniawan |
+| 6 | `codepolitan-vue-pinia` | State Management Vue 3 + Pinia | Codepolitan | Ahmad Hakim |
+| 7 | `codepolitan-ajax` | AJAX & Asynchronous Web API | Codepolitan | Ahmad Hakim |
+| 8 | `codepolitan-git` | Git & GitHub untuk Pemula | Codepolitan | Nusendra |
+| 9 | `codepolitan-javascript` | JavaScript Dasar | Codepolitan | Ahmad Hakim |
+| 10 | `codepolitan-bootstrap` | CSS Framework Bootstrap | Codepolitan | Ahmad Hakim |
+| 11 | `codepolitan-css` | Dasar CSS | Codepolitan | Alucard |
+| 12 | `codepolitan-html-dasar` | Dasar HTML | Codepolitan | Ahmad Hakim |
 
-**`src/data/journey.ts`** — 3 milestone perjalanan karier:
+**Distribusi platform:**
+- Penghargaan: 1
+- Kompetisi: 1
+- Udemy: 3
+- Codepolitan: 7
 
-| Tahun | Judul | Teknologi Utama |
-|---|---|---|
-| 2024 | Foundations of Web Development | HTML5, CSS3, Bootstrap, JavaScript |
-| 2025 | Tooling & Modern CSS Workflows | Git, Tailwind CSS, Sass, Responsive Design |
-| 2026 | Production Component Frameworks | React, Vue 3, TypeScript, Pinia, Redux, TanStack |
+**Gambar:** 12 file `.avif` di `public/images/sertifikat/`
 
 ---
 
 ### 1. File Structure
 
 ```
-src/components/Skills/
-├── Skills.tsx             # Section wrapper — tab kategori, skill grid, dan journey
-├── Skills.styles.ts       # Semua styled-components
-├── SkillCard.tsx          # Kartu individual satu skill (icon + nama)
-├── JourneyTimeline.tsx    # Komponen linimasa vertikal
-└── index.ts               # Barrel export
+src/components/Certificates/
+├── Certificates.tsx          # Section wrapper — heading, filter, grid
+├── Certificates.styles.ts    # Semua styled-components
+├── CertificateCard.tsx       # Kartu individual per sertifikat
+├── CertificateLightbox.tsx   # Modal zoom fullscreen
+└── index.ts                  # Barrel export
 ```
 
 ---
 
-### 2. Section Layout (Full)
+### 2. Section Layout
 
 ```
-┌────────────────────────────────────────────────────────────────────┐
-│  SECTION HEADER                                                    │
-│                                                                    │
-│  Skills & Journey                      (Poiret One display font)   │
-│  Teknologi yang digunakan dan         (subheading, textSecondary)  │
-│  rekam jejak belajar.                                              │
-│                                                                    │
-├────────────────────────────────────────────────────────────────────┤
-│  SKILLS SUBSECTION                                                 │
-│                                                                    │
-│  CATEGORY TABS                                                     │
-│  [All]  [Languages & Core]  [Frameworks]  [Styling & UI]          │
-│                                                                    │
-│  SKILL GRID (Responsive auto-fill)                                 │
-│                                                                    │
-│  ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐                  │
-│  │ TS │  │ JS │  │HTML│  │CSS │  │Vite│  │ Git│                  │
-│  │icon│  │icon│  │icon│  │icon│  │icon│  │icon│                  │
-│  └────┘  └────┘  └────┘  └────┘  └────┘  └────┘                  │
-│                                                                    │
-│  ... (all skills in active category)                               │
-│                                                                    │
-├─── DIVIDER ────────────────────────────────────────────────────────┤
-│  JOURNEY SUBSECTION                                                │
-│                                                                    │
-│  Timeline Header:                                                  │
-│  "Career Journey"               (Poiret One)                       │
-│  "Dari nol ke production SPA."  (subheading)                       │
-│                                                                    │
-│  Vertical Timeline (Brandlos-style):                               │
-│                                                                    │
-│       │                                                            │
-│  2024 ●─── Foundations of Web Development                         │
-│       │    Core Web Standards & Vanilla Programming                │
-│       │    Mastered HTML5, CSS3, Bootstrap, JS...                 │
-│       │    [HTML5] [CSS3] [Bootstrap] [JavaScript]                 │
-│       │                                                            │
-│  2025 ●─── Tooling & Modern CSS Workflows                         │
-│       │    Expanding Frontend Toolchains                           │
-│       │    Git, GitHub, Tailwind CSS, Sass...                      │
-│       │    [Git] [Tailwind CSS] [Sass] [Responsive]                │
-│       │                                                            │
-│  2026 ●─── Production Frameworks & State Management               │
-│            Enterprise SPA Ecosystems                               │
-│            React, Vue, TypeScript, Pinia, Redux...                 │
-│            [React] [Vue 3] [TypeScript] [Pinia]  ...+3             │
-│                                                                    │
-└────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│  SECTION HEADER                                                      │
+│                                                                      │
+│  Certifications                          (Poiret One display font)   │
+│  Sertifikasi resmi dan                  (subheading, textMuted)      │
+│  penghargaan yang diperoleh.                                         │
+│                                                                      │
+├──────────────────────────────────────────────────────────────────────┤
+│  FILTER TABS                                                         │
+│                                                                      │
+│  [All (12)] [Udemy (3)] [Codepolitan (7)] [Kompetisi & Awards (2)]  │
+│                                                                      │
+├──────────────────────────────────────────────────────────────────────┤
+│  CERTIFICATE GRID (3 kolom desktop, 2 tablet, 1 mobile)              │
+│                                                                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               │
+│  │  ┌──────────┐│  │  ┌──────────┐│  │  ┌──────────┐│               │
+│  │  │Thumbnail ││  │  │Thumbnail ││  │  │Thumbnail ││               │
+│  │  │(click →  ││  │  │(click →  ││  │  │(click →  ││               │
+│  │  │lightbox) ││  │  │lightbox) ││  │  │lightbox) ││               │
+│  │  └──────────┘│  │  └──────────┘│  │  └──────────┘│               │
+│  │  [Udemy]     │  │  [Codepolitan│  │  [Kompetisi] │               │
+│  │  Title...    │  │  Title...    │  │  Title...    │               │
+│  │  Issuer      │  │  Issuer      │  │  Issuer      │               │
+│  │  [🔍 Zoom]   │  │  [🔍 Zoom]   │  │  [🔍 Zoom]   │               │
+│  └──────────────┘  └──────────────┘  └──────────────┘               │
+│                                                                      │
+│  ... (12 sertifikat total)                                           │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+
+ LIGHTBOX MODAL (saat diklik Zoom atau thumbnail):
+
+┌──────────────────────────────────────────────────────────────────────┐
+│  ████████████████████████████████████████████████████████████████████ │
+│  ██ Overlay gelap (backdrop-filter: blur(20px)) ████████████████████ │
+│  ██                                                              ██ │
+│  ██    ┌────────────────────────────────────────────────┐     [X] ██ │
+│  ██    │                                                │        ██ │
+│  ██    │                                                │        ██ │
+│  ██    │          Gambar Sertifikat                      │        ██ │
+│  ██    │          (max-width: 900px)                     │        ██ │
+│  ██    │          (resolusi tinggi)                      │        ██ │
+│  ██    │                                                │        ██ │
+│  ██    │                                                │        ██ │
+│  ██    └────────────────────────────────────────────────┘        ██ │
+│  ██                                                              ██ │
+│  ██    Judul Sertifikat                                          ██ │
+│  ██    Penerbit • Platform                                       ██ │
+│  ██                                                              ██ │
+│  ████████████████████████████████████████████████████████████████████ │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -116,227 +129,254 @@ src/components/Skills/
 ### 3. Section Header
 
 - **Heading** (`<h2>`):
-  - Teks: `"Skills & Journey"`
+  - Teks: `"Certifications"`
   - `font-family: theme.fonts.display` (Poiret One)
   - `font-size: theme.fontSizes['4xl']` desktop → `['3xl']` mobile
   - `color: theme.colors.textHighlight`
   - `font-weight: theme.fontWeights.regular`
   - `letter-spacing: theme.letterSpacings.wide`
 - **Subheading** (`<p>`):
-  - Teks: `"Teknologi yang digunakan dan rekam jejak belajar."`
+  - Teks: `"Sertifikasi resmi dan penghargaan yang diperoleh."`
   - `font-size: theme.fontSizes.md`
   - `color: theme.colors.textMuted`
   - `margin-top: theme.spacing.sm`
 
 ---
 
-### 4. Skills Subsection: Category Tabs
+### 4. Filter Tabs
 
 #### Tab Data
 ```ts
-const SKILL_TABS = [
-  { value: 'all',    label: 'All' },
-  { value: 0,        label: 'Languages & Core' },
-  { value: 1,        label: 'Frameworks' },
-  { value: 2,        label: 'Styling & UI' },
+const CERT_TABS: { value: CertificatePlatform | 'all'; label: string }[] = [
+  { value: 'all',        label: `All (${certificatesData.length})` },       // 12
+  { value: 'udemy',      label: `Udemy (3)` },
+  { value: 'codepolitan', label: `Codepolitan (7)` },
+  { value: 'kompetisi',  label: `Awards (2)` },     // Gabung kompetisi + penghargaan
 ];
 ```
 
-Tab menggunakan index kategori dari `skillCategories[]` sebagai filter value.
-
-#### Tab Styling
-- Sama persis dengan filter tabs di Featured Projects (konsistensi visual):
-  - `border-radius: theme.radii.full`
-  - Aktif: `background: accentMuted`, `border: border`, `color: accentLime`
-  - Non-aktif: `border: borderSubtle`, `color: textMuted`
-  - Hover: `border: borderHover`, `color: textSecondary`
+> **Catatan:** Karena platform `kompetisi` (1) dan `penghargaan` (1) hanya masing-masing 1 sertifikat, kita gabung keduanya ke tab "Awards (2)". Filter logic: `platform === 'kompetisi' || platform === 'penghargaan'`.
 
 #### Filter Logic
 ```ts
-const [activeTab, setActiveTab] = useState<'all' | 0 | 1 | 2>('all');
+const [activePlatform, setActivePlatform] = useState<CertificatePlatform | 'all'>('all');
 
-const displayedSkills =
-  activeTab === 'all'
-    ? skillCategories.flatMap((cat) => cat.skills)
-    : skillCategories[activeTab].skills;
+const displayedCerts =
+  activePlatform === 'all'
+    ? certificatesData
+    : activePlatform === 'kompetisi'
+      ? certificatesData.filter(c => c.platform === 'kompetisi' || c.platform === 'penghargaan')
+      : certificatesData.filter(c => c.platform === activePlatform);
 ```
+
+#### Tab Styling
+- Identik dengan filter tabs pada Featured Projects dan Skills (konsistensi visual).
 
 ---
 
-### 5. Skill Card (`SkillCard.tsx`)
+### 5. Certificate Card (`CertificateCard.tsx`)
 
-#### Struktur Visual
-```
-┌──────────────────┐
-│                  │
-│    [Icon SVG]    │  ← 40px × 40px, centered
-│                  │
-│  TypeScript      │  ← Nama skill, bawah icon
-│                  │
-└──────────────────┘
-```
-
-#### Props
+#### Props Interface
 ```ts
-interface SkillCardProps {
-  skill: SkillItem;  // { name: string; icon: string }
-  index: number;     // untuk stagger animasi
+interface CertificateCardProps {
+  certificate: Certificate;
+  index: number;
+  onViewCertificate: (certificate: Certificate) => void;
 }
 ```
 
-#### Styling Kartu
-- `display: flex`, `flex-direction: column`, `align-items: center`, `justify-content: center`
-- `gap: theme.spacing.sm`
-- `padding: theme.spacing.lg theme.spacing.md`
-- `background: theme.colors.glass`
+#### Struktur Visual
+```
+┌────────────────────────────────┐
+│ ┌────────────────────────────┐ │  ← Thumbnail wrapper
+│ │                            │ │     aspect-ratio: 4/3
+│ │    Thumbnail Sertifikat    │ │     overflow: hidden
+│ │    (click → lightbox)      │ │     cursor: pointer
+│ │                            │ │
+│ └────────────────────────────┘ │
+│                                │
+│  [Udemy]                       │  ← Platform badge pill
+│  Complete JavaScript Course    │  ← Title (h3), max 2 baris
+│  Jonas Schmedtmann             │  ← Issuer name
+│                                │
+│  [JS ES6+] [OOP] [Async]      │  ← Skill pills (max 3 + overflow)
+│                                │
+│  [🔍 Lihat Sertifikat]         │  ← Action button
+│                                │
+└────────────────────────────────┘
+```
+
+#### Styling Detail
+
+**Card Container**:
+- `background: theme.colors.secondarySurface`
 - `border: 1px solid theme.colors.borderGlass`
 - `border-radius: theme.radii.md`
-- `transition: border-color fast, transform fast, box-shadow fast`
-- Hover:
-  - `border-color: theme.colors.borderHover`
-  - `transform: translateY(-3px)`
-  - `box-shadow: theme.shadows.glow` (glow tipis hijau lime)
+- `overflow: hidden`
+- `display: flex`, `flex-direction: column`
+- Hover: `border-color: borderHover`, `transform: translateY(-4px)`, `box-shadow: glow`
 
-#### Icon
-- `<img src={skill.icon} alt={skill.name} />`, `width: 40px`, `height: 40px`
-- Icon SVG sudah ada di `public/icons/tech/`
-- Hover → `filter: drop-shadow(0 0 6px rgba(183, 216, 148, 0.4))` (glow tipis)
+**Thumbnail**:
+- `<img>` wrapper, `aspect-ratio: 4 / 3`, `overflow: hidden`
+- `object-fit: cover`, `cursor: pointer`
+- `transition: transform normal`
+- Card hover → `transform: scale(1.04)` pada image
+- Klik thumbnail → panggil `onViewCertificate(certificate)` → buka lightbox
 
-#### Label Nama
-- `font-size: theme.fontSizes.xs` (12px)
-- `font-weight: theme.fontWeights.medium`
-- `color: theme.colors.textSecondary`
-- `text-align: center`
-- `margin-top: theme.spacing.xs`
+**Content area** (padding: `theme.spacing.lg`):
+
+- **Platform Badge**:
+  - Pill kecil di atas judul
+  - `font-size: xs`, `padding: 3px 10px`
+  - `border-radius: full`
+  - `background: accentMuted`, `color: accentLime`
+  - `border: 1px solid borderSubtle`
+  - `text-transform: uppercase`, `letter-spacing: wider`
+  - `margin-bottom: theme.spacing.sm`
+
+- **Title** (`<h3>`):
+  - `font-size: theme.fontSizes.base` (16px)
+  - `font-weight: semibold`
+  - `color: textHighlight`
+  - `-webkit-line-clamp: 2` + `overflow: hidden`
+  - `margin-bottom: theme.spacing.xs`
+
+- **Issuer**:
+  - `font-size: theme.fontSizes.xs`
+  - `color: textMuted`
+  - `margin-bottom: theme.spacing.md`
+
+- **Skill Pills** (flex row, max 3 + overflow):
+  - Sama styling dengan ProjectCard tech pills
+  - `margin-bottom: theme.spacing.md`
+
+- **Zoom Button** (action row):
+  - `width: 100%`
+  - `padding: 10px`
+  - `border-radius: theme.radii.sm`
+  - `background: theme.colors.glass`
+  - `border: 1px solid theme.colors.borderGlass`
+  - `color: theme.colors.textSecondary`
+  - `font-size: theme.fontSizes.sm`
+  - `cursor: pointer`
+  - `display: flex`, `align-items: center`, `justify-content: center`, `gap: 6px`
+  - Icon `ZoomIn` dari lucide-react (size 14)
+  - Hover: `border-color: borderHover`, `background: glassHover`, `color: textHighlight`
+  - Klik → panggil `onViewCertificate(certificate)` → buka lightbox
 
 ---
 
-### 6. Skill Grid Layout
+### 6. Certificate Grid Layout
 
 ```css
-grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-gap: theme.spacing.md;
+grid-template-columns: repeat(3, 1fr);   /* ≥ 1024px desktop */
+grid-template-columns: repeat(2, 1fr);   /* 768px–1023px tablet */
+grid-template-columns: 1fr;              /* < 768px mobile */
+gap: theme.spacing.lg;
 ```
-
-- `auto-fill` + `minmax(100px, 1fr)` → Grid menyesuaikan jumlah kolom otomatis berdasarkan lebar container tanpa media query manual.
-- Desktop 1200px → ±10 kolom, Tablet 768px → ±6 kolom, Mobile 375px → ±3 kolom.
-- `margin-top: theme.spacing.xl`
 
 ---
 
-### 7. Journey Timeline (`JourneyTimeline.tsx`)
+### 7. Lightbox Modal (`CertificateLightbox.tsx`)
 
-#### Struktur HTML
-```html
-<section> <!-- Subsection wrapper -->
-  <h3>Career Journey</h3>
-  <p>Dari nol ke production SPA.</p>
-
-  <div class="timeline"> <!-- garis vertikal kiri -->
-    <div class="milestone"> <!-- repeat per milestone -->
-      <div class="node">   <!-- titik bulat di garis -->
-        <span class="year">2024</span>
-      </div>
-      <div class="content">
-        <h4>Foundations of Web Development</h4>
-        <p class="headline">Core Web Standards & Vanilla Programming</p>
-        <p class="description">Mastered web fundamentals...</p>
-        <div class="tech-tags">
-          <span>HTML5</span>
-          <span>CSS3</span>
-          ...
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+#### Props Interface
+```ts
+interface CertificateLightboxProps {
+  certificate: Certificate | null;   // null = tertutup
+  onClose: () => void;
+}
 ```
 
-#### Garis Vertikal (Timeline Line)
-- `position: absolute`, `left: 20px`, `top: 0`, `bottom: 0`
-- `width: 1px`
-- `background: linear-gradient(to bottom, theme.colors.border, theme.colors.borderSubtle, transparent)`
+#### Behavior
+- Muncul saat `certificate !== null`
+- Tutup dengan: klik tombol `X`, klik di luar gambar (overlay), tekan `Esc`
+- `document.body.style.overflow = 'hidden'` saat terbuka (cegah scroll di belakang)
+- `useEffect` listener `keydown` untuk `Escape`
 
-#### Node (Titik Tahun)
-- Bulat: `width: 40px`, `height: 40px`, `border-radius: 50%`
-- `background: theme.colors.secondarySurface`
-- `border: 2px solid theme.colors.accentLime`
+#### Struktur Visual
+
+**Overlay**:
+- `position: fixed`, `inset: 0`, `z-index: 200`
+- `background: rgba(32, 39, 52, 0.92)` (overlay gelap)
+- `backdrop-filter: theme.effects.blurHeavy` (`blur(20px)`)
 - `display: flex`, `align-items: center`, `justify-content: center`
-- Tahun di dalam node:
-  - `font-size: theme.fontSizes.xs` (12px)
-  - `font-weight: theme.fontWeights.bold`
-  - `color: theme.colors.accentLime`
-  - `letter-spacing: theme.letterSpacings.wide`
+- `padding: theme.spacing.xl`
+- Klik overlay (bukan konten) → `onClose()`
 
-#### Content Area
-- `padding-left: theme.spacing.xl` (space setelah node)
-- `padding-bottom: theme.spacing['3xl']` (jarak antar milestone)
+**Close Button**:
+- `position: absolute`, `top: 16px`, `right: 16px`
+- `width: 40px`, `height: 40px`, `border-radius: full`
+- `background: theme.colors.glass`, `border: 1px solid borderGlass`
+- `color: textHighlight`
+- Icon `X` dari lucide-react (size 20)
+- Hover: `background: glassHover`, `border-color: borderHover`
+- `z-index: 201`
 
-**Title** (`<h4>`):
-- `font-family: theme.fonts.heading`
-- `font-size: theme.fontSizes.lg` (20px)
-- `font-weight: theme.fontWeights.semibold`
-- `color: theme.colors.textHighlight`
-- `margin-bottom: theme.spacing.xs`
+**Content Container** (klik TIDAK menutup):
+- `max-width: 900px`, `max-height: 90vh`
+- `display: flex`, `flex-direction: column`, `align-items: center`
+- `gap: theme.spacing.md`
 
-**Headline** (`<p class="headline">`):
-- `font-size: theme.fontSizes.sm`
-- `font-weight: theme.fontWeights.medium`
-- `color: theme.colors.accentLime`
-- `margin-bottom: theme.spacing.sm`
+**Certificate Image**:
+- `max-width: 100%`, `max-height: 75vh`
+- `object-fit: contain`
+- `border-radius: theme.radii.md`
+- `border: 1px solid borderGlass`
+- `box-shadow: theme.shadows.card`
 
-**Description** (`<p>`):
-- `font-size: theme.fontSizes.sm`
-- `color: theme.colors.textSecondary`
-- `line-height: theme.lineHeights.relaxed`
-- `max-width: 600px`
-- `margin-bottom: theme.spacing.md`
+**Info Bar** (di bawah gambar):
+- **Title**: `font-size: lg`, `color: textHighlight`, `font-weight: semibold`, `text-align: center`
+- **Issuer + Platform**: `font-size: sm`, `color: textMuted`, format `"Jonas Schmedtmann • Udemy"`, `text-align: center`
 
-**Tech Tags** (`<div class="tech-tags">`):
-- Flex row, `gap: 6px`, `flex-wrap: wrap`
-- Tiap tag: `font-size: xs`, `padding: 3px 10px`, `border-radius: full`
-- `background: accentMuted`, `color: accentLime`, `border: 1px solid borderSubtle`
-- Jika lebih dari 5 tag → tampilkan `+N` pill (sama persis dengan ProjectCard)
+#### Entry/Exit Animations (AnimatePresence)
+- Overlay: `opacity 0 → 1`, duration 200ms
+- Content: `opacity 0 → 1` + `scale 0.95 → 1`, duration 250ms
+- Exit: reverse
 
 ---
 
-### 8. Entrance Animations
+### 8. State Management di Section Level
 
-Semua animasi `whileInView` → trigger sekali saat scroll masuk viewport:
+```tsx
+// Di Certificates.tsx
+const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
 
-| Elemen | Animasi | Delay |
+// Buka lightbox
+const handleViewCertificate = (cert: Certificate) => setSelectedCert(cert);
+
+// Tutup lightbox
+const handleCloseLightbox = () => setSelectedCert(null);
+```
+
+Setiap `CertificateCard` menerima `onViewCertificate={handleViewCertificate}`.
+`CertificateLightbox` menerima `certificate={selectedCert}` dan `onClose={handleCloseLightbox}`.
+
+---
+
+### 9. Entrance Animations
+
+| Elemen | Animasi | Trigger |
 |---|---|---|
-| Section Header (h2 + p) | `fadeInUp` (y: 20→0) | 0ms |
-| Tabs row | `fadeInUp` | 100ms |
-| Skill Card (tiap item) | `fadeInUp`, staggered | `index * 50ms` (lebih cepat karena banyak item) |
-| Journey Subsection Header | `fadeInUp` | 0ms (trigger sendiri) |
-| Milestone (tiap item) | `fadeInLeft` (x: -20→0) | `index * 150ms` |
+| Section Header | `fadeInUp` (y: 20→0) | `whileInView`, `once: true` |
+| Filter Tabs | `fadeInUp`, delay 100ms | `whileInView`, `once: true` |
+| Certificate Card | `fadeInUp`, staggered `index * 80ms` | `whileInView`, `once: true` |
 
 - Duration: `400ms`, easing: `[0.4, 0, 0.2, 1] as const`
 - `viewport: { once: true, margin: '-50px' }`
 
 ---
 
-### 9. Divider antara Skills dan Journey
-
-- `<hr>` atau `<div>` sebagai pemisah visual antara grid skill dan linimasa.
-- `width: 100%`, `height: 1px`
-- `background: linear-gradient(to right, transparent, theme.colors.border, transparent)`
-- `margin: theme.spacing['3xl'] 0`
-
----
-
 ### 10. Urutan Eksekusi
 
 ```
-Step 1 → Buat src/components/Skills/Skills.styles.ts
-Step 2 → Buat src/components/Skills/SkillCard.tsx
-Step 3 → Buat src/components/Skills/JourneyTimeline.tsx
-Step 4 → Buat src/components/Skills/Skills.tsx
-Step 5 → Buat src/components/Skills/index.ts
-Step 6 → Update src/pages/HomePage.tsx — import Skills, tambah di bawah Projects
-Step 7 → tsc --noEmit + npm run build
-Step 8 → Commit & push: "feat: skills and career journey section"
+Step 1  → Buat src/components/Certificates/Certificates.styles.ts
+Step 2  → Buat src/components/Certificates/CertificateCard.tsx
+Step 3  → Buat src/components/Certificates/CertificateLightbox.tsx
+Step 4  → Buat src/components/Certificates/Certificates.tsx
+Step 5  → Buat src/components/Certificates/index.ts
+Step 6  → Update src/pages/HomePage.tsx — import Certificates, tambah di bawah Skills
+Step 7  → tsc --noEmit + npm run build
+Step 8  → Commit & push: "feat: certificates showcase with interactive lightbox modal"
 ```
 
 ---
@@ -344,17 +384,18 @@ Step 8 → Commit & push: "feat: skills and career journey section"
 ### 11. Theme Tokens yang Dipakai
 
 ```
-colors: darkBase, secondarySurface, glass, glassHover
+colors: darkBase, secondarySurface, glass, glassHover, overlay
         accentLime, accentMuted
-        textHighlight, textSecondary, textMuted
+        textHighlight, textSecondary, textMuted, textInverse
         border, borderHover, borderSubtle, borderGlass
 fonts:  display (Poiret One), heading (Google Sans)
-fontSizes: xs, sm, md, lg, '3xl', '4xl'
-fontWeights: medium, semibold, bold, regular
+fontSizes: xs, sm, base, md, lg, '3xl', '4xl'
+fontWeights: medium, semibold, regular
 lineHeights: relaxed
 letterSpacings: wide, wider
-spacing: xs, sm, md, lg, xl, '2xl', '3xl', '4xl'
-radii: md, full
-transitions: fast (150ms)
-shadows: glow
+spacing: xs, sm, md, lg, xl, '2xl', '4xl'
+radii: sm, md, full
+transitions: fast (150ms), normal (250ms)
+shadows: glow, card
+effects: blurHeavy (blur(20px))
 ```

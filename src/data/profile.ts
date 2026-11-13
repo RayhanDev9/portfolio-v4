@@ -8,6 +8,7 @@ export const profileData: ProfileData = {
   availability: 'Available for Remote • Freelance • Hybrid',
   location: 'Banten, Indonesia (GMT+7)',
   email: 'm.rayhanoi26@gmail.com',
+  resumeUrl: '/CV_Muhamad_Rayhan_ATS_EN.pdf',
   avatar: '/images/profile/rayhan.avif',
   illust: '/icons/ui/people.svg',
   socials: [

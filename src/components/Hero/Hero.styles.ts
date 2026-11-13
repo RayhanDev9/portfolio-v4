@@ -159,6 +159,30 @@ export const SecondaryButton = styled.a`
   }
 `;
 
+export const CvButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  background-color: ${({ theme }) => theme.colors.glass};
+  color: ${({ theme }) => theme.colors.textHighlight};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  padding: 12px 24px;
+  border-radius: ${({ theme }) => theme.radii.sm};
+  border: 1px solid ${({ theme }) => theme.colors.borderGlass};
+  text-decoration: none;
+  cursor: pointer;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+    color: ${({ theme }) => theme.colors.accentLime};
+    transform: translateY(-2px);
+  }
+`;
+
 export const SocialRow = styled.div`
   display: flex;
   align-items: center;

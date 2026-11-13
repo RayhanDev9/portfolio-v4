@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
+import { FileDown } from 'lucide-react';
 import { AvailabilityBadge } from '../shared/AvailabilityBadge';
+import { profileData } from '../../data/profile';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   items: Array<{ label: string; href: string }>;
   isHome?: boolean;
+  activeSection?: string;
 }
 
 const MenuOverlay = styled(motion.div)`
@@ -36,11 +39,12 @@ const NavList = styled.ul`
   margin-bottom: ${({ theme }) => theme.spacing['2xl']};
 `;
 
-const NavItemLink = styled.a`
+const NavItemLink = styled.a<{ $active?: boolean }>`
   font-family: ${({ theme }) => theme.fonts.heading};
   font-size: ${({ theme }) => theme.fontSizes.xl};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
-  color: ${({ theme }) => theme.colors.textMuted};
+  color: ${({ theme, $active }) =>
+    $active ? theme.colors.accentLime : theme.colors.textMuted};
   text-decoration: none;
   transition: color ${({ theme }) => theme.transitions.fast},
     transform ${({ theme }) => theme.transitions.fast};
@@ -52,13 +56,61 @@ const NavItemLink = styled.a`
   }
 `;
 
+const MobileCvButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: ${({ theme }) => theme.colors.accentMuted};
+  color: ${({ theme }) => theme.colors.accentLime};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.sm};
+  padding: 12px 20px;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  text-decoration: none;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.accentLime};
+    color: ${({ theme }) => theme.colors.textInverse};
+  }
+`;
+
 const BadgeWrapper = styled.div`
   margin-top: auto;
   padding-top: ${({ theme }) => theme.spacing.xl};
   border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
-export function MobileMenu({ isOpen, onClose, items, isHome = true }: MobileMenuProps) {
+export function MobileMenu({
+  isOpen,
+  onClose,
+  items,
+  isHome = true,
+  activeSection = 'hero',
+}: MobileMenuProps) {
+  const location = useLocation();
+
+  const getIsActive = (href: string) => {
+    const sectionId = href.replace('#', '');
+    if (isHome) {
+      return activeSection === sectionId;
+    }
+    if (location.pathname.startsWith('/projects') && sectionId === 'projects') {
+      return true;
+    }
+    if (location.pathname.startsWith('/certificates') && sectionId === 'certificates') {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -77,11 +129,20 @@ export function MobileMenu({ isOpen, onClose, items, isHome = true }: MobileMenu
                 transition={{ delay: index * 0.05, duration: 0.2 }}
               >
                 {isHome ? (
-                  <NavItemLink href={item.href} onClick={onClose}>
+                  <NavItemLink
+                    href={item.href}
+                    onClick={onClose}
+                    $active={getIsActive(item.href)}
+                  >
                     {item.label}
                   </NavItemLink>
                 ) : (
-                  <NavItemLink as={Link} to={`/${item.href}`} onClick={onClose}>
+                  <NavItemLink
+                    as={Link}
+                    to={`/${item.href}`}
+                    onClick={onClose}
+                    $active={getIsActive(item.href)}
+                  >
                     {item.label}
                   </NavItemLink>
                 )}
@@ -90,6 +151,18 @@ export function MobileMenu({ isOpen, onClose, items, isHome = true }: MobileMenu
           </NavList>
 
           <BadgeWrapper>
+            {profileData.resumeUrl && (
+              <MobileCvButton
+                href={profileData.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download="CV_Muhamad_Rayhan_ATS_EN.pdf"
+                onClick={onClose}
+              >
+                <FileDown size={16} />
+                <span>Unduh CV / Resume</span>
+              </MobileCvButton>
+            )}
             <AvailabilityBadge />
           </BadgeWrapper>
         </MenuOverlay>

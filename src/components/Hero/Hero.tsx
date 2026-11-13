@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowDown, Mail } from 'lucide-react';
+import { ArrowDown, Mail, FileDown } from 'lucide-react';
 import { profileData } from '../../data/profile';
 import { AvailabilityBadge } from '../shared/AvailabilityBadge';
 import {
@@ -12,6 +12,7 @@ import {
   ButtonGroup,
   PrimaryButton,
   SecondaryButton,
+  CvButton,
   SocialRow,
   SocialIconLink,
   PhotoColumn,
@@ -77,6 +78,19 @@ export function Hero() {
                 <span>Hubungi</span>
                 <Mail size={16} />
               </SecondaryButton>
+
+              {profileData.resumeUrl && (
+                <CvButton
+                  href={profileData.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download="CV_Muhamad_Rayhan_ATS_EN.pdf"
+                  title="Unduh CV Muhamad Rayhan"
+                >
+                  <FileDown size={16} />
+                  <span>Unduh CV</span>
+                </CvButton>
+              )}
             </ButtonGroup>
           </motion.div>
 

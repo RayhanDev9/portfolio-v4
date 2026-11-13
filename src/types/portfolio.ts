@@ -66,5 +66,6 @@ export interface ProfileData {
   email: string;
   avatar: string;
   illust: string;
+  resumeUrl?: string;
   socials: SocialLink[];
 }

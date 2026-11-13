@@ -18,175 +18,131 @@
 | Certificates Showcase & Lightbox Modal | ✅ Selesai | `bcc484e` |
 | Fix: Uniform Card Height & `/certificates` Route | ✅ Selesai | `5540aa2` |
 | Contact Section & Global Footer (`#contact`) | ✅ Selesai | `268fa20` |
-| **/projects/:id Full Case Study** | ✅ Selesai | `5928a90` |
+| /projects/:id Full Case Study | ✅ Selesai | `b4e6f74` |
+| Fix: Prevent Pill Tags Stretching | ✅ Selesai | `29f416e` |
+| **Paket Fitur Kunci Tambahan (Key Essential Features)** | ✅ Selesai | `9338af7` |
 
 ---
 
-## 📋 Active Build Plan: Deep-Dive Case Study Page (`/projects/:id`)
+## 📋 Active Build Plan: Paket Fitur Kunci Tambahan (Key Essential Features Suite)
 
-### 1. Tujuan & Filosofi
+### 1. Latar Belakang & Filosofi Arsitektur
 
-Halaman detail proyek (`/projects/:id`) saat ini masih berupa placeholder sederhana dengan badge *"Studi Kasus Detail Sedang Disiapkan"*.
+Fondasi struktural portofolio (seluruh halaman, routing, katalog, dan studi kasus teknis) telah berdiri kokoh. Untuk membawa portofolio ini ke tingkat **enterprise-grade polish** yang siap diuji oleh recruiter dan klien internasional, kita akan menambahkan paket **6 Fitur Kunci Tambahan**:
 
-Sesuai aturan locked di **GEMINI.md (Section 4: Deep-Dive Case Study Routes)** dan standar **Anti-Slop & Impeccable Taste**:
-- **Menolak deskripsi generik**: Tidak menggunakan teks AI-slop atau basa-basi pemasaran.
-- **Fokus pada engineering nyata**: Menjelaskan masalah spesifik yang diselesaikan, keputusan arsitektur data, alasan pemilihan tech stack, dan tantangan performa.
-- **Navigasi mulus**: Memberikan aksi langsung (Live Demo, GitHub source code) serta navigasi *Next / Previous Project* untuk menjelajahi seluruh 10 proyek secara berkesinambungan.
-- **Kelengkapan tampilan**: Melengkapi halaman dengan `<Footer />` global.
+1. **Global Scroll Restoration**: Menjamin setiap pergantian halaman rute secara otomatis mengembalikan posisi scroll ke paling atas (`scrollY: 0`).
+2. **SEO, Open Graph & Social Share Preview Meta Tags**: Optimasi `index.html` dengan metadata Open Graph dan Twitter Cards agar tautan portofolio yang dibagikan ke WhatsApp, LinkedIn, atau Twitter menampilkan kartu pratinjau yang kredibel dan menarik.
+3. **Scroll Spy / Active Section Indicator di Navbar**: Navbar mendeteksi section yang sedang aktif di viewport saat scrolling di beranda menggunakan `IntersectionObserver`, menyalakan aksen warna `#B7D894` dan indikator lembut.
+4. **Resume / CV Action Buttons**: Tombol aksi "Unduh CV / Resume" di Hero Section dan Navbar untuk memudahkan recruiter mengunduh profil kualifikasi kerja tanpa hambatan.
+5. **Instant Search Bar & Tech Filter di Katalog (`/projects` & `/certificates`)**: Kolom pencarian interaktif yang memfilter proyek dan sertifikat secara instan berdasarkan nama, tech stack, dan platform, lengkap dengan pesan *empty state* yang estetik.
+6. **Polish Halaman 404 (`NotFoundPage`)**: Meremajakan tampilan halaman 404 dengan dark glassmorphism AW Media, teks *humanizer*, tombol aksi ganda, dan `<Footer />` global.
 
 ---
 
-### 2. Desain Layout (`/projects/:id`)
+### 2. Desain Layout Fitur Baru
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────┐
-│  NAVBAR (Fixed Top)                                                        │
+│ NAVBAR: Rayhan.   [Home] [Projects*] [Skills] [Certs] [Contact]   [Unduh CV]│
+│ (*Scroll spy menyorot section yang aktif dengan aksen lime #B7D894)        │
 ├────────────────────────────────────────────────────────────────────────────┤
-│                                                                            │
-│  ← Kembali ke Katalog Proyek                                               │
-│                                                                            │
-│  [WEB APP] • [FRONT-END • MENTOR: AHMAD HAKIM]                             │
-│  DapurRasa Food Store                                                      │
-│  Aplikasi e-commerce kuliner modern dengan instant search & state caching. │
-│                                                                            │
-│  [ Buka Live Demo ↗ ]   [ Source Code < / > ]   [Vue 3] [Pinia] [Query]    │
-│                                                                            │
+│ HERO SECTION:                                                              │
+│ [Lihat Proyek ↘]   [Hubungi ✉]   [Unduh CV / Resume 📄]                   │
 ├────────────────────────────────────────────────────────────────────────────┤
-│  SHOWCASE BANNER                                                           │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │                                                                      │  │
-│  │                    Preview Gambar Resolusi Tinggi                    │  │
-│  │                                                                      │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
+│ KATALOG PROYEK & SERTIFIKAT (/projects & /certificates):                   │
 │                                                                            │
+│ ┌───────────────────────────────────────────────────────┐                  │
+│ │ 🔍 Cari proyek, teknologi (React, Vue, TS...), dll... │ [X] Clear        │
+│ └───────────────────────────────────────────────────────┘                  │
+│ [Semua] [Web App] [Landing Page] [Interactive]   • Menampilkan 6 dari 10   │
+│                                                                            │
+│ ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                       │
+│ │ Project Card │  │ Project Card │  │ Project Card │                       │
+│ └──────────────┘  └──────────────┘  └──────────────┘                       │
 ├────────────────────────────────────────────────────────────────────────────┤
-│  DEEP-DIVE SECTIONS (Grid 2 Kolom)                                         │
-│                                                                            │
-│  ┌──────────────────────────────────┐  ┌─────────────────────────────────┐ │
-│  │ 🎯 TANTANGAN & MASALAH NYATA     │  │ 💡 SOLUSI & IMPLEMENTASI        │ │
-│  │ Masalah konkurensi data menu dan │  │ Arsitektur Vue 3 Composables    │ │
-│  │ kebutuhan caching tanpa fetch    │  │ dipadu TanStack Query untuk     │ │
-│  │ berulang saat navigasi rute...   │  │ stale-while-revalidate data...  │ │
-│  └──────────────────────────────────┘  └─────────────────────────────────┘ │
-│                                                                            │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │ ⚙️ KEPUTUSAN ARSITEKTUR & TEKNOLOGI                                  │  │
-│  │ • Mengapa Pinia? (State modular tanpa boilerplate Vuex lama)         │  │
-│  │ • Mengapa TanStack Query? (Pengurangan network request hingga 60%)   │  │
-│  │ • Mengapa Composables? (Separation of concerns logika search)        │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
-│                                                                            │
-│  ┌──────────────────────────────────────────────────────────────────────┐  │
-│  │ ✨ FITUR KUNCI & SPESIFIKASI TEKNIS                                   │  │
-│  │ ✓ Instant search dengan debounce optimasi performa                    │  │
-│  │ ✓ Cart synchronization real-time lintas rute                         │  │
-│  │ ✓ Responsive fluid grid untuk checkout mobile dan desktop            │  │
-│  └──────────────────────────────────────────────────────────────────────┘  │
-│                                                                            │
-├────────────────────────────────────────────────────────────────────────────┤
-│  NEXT / PREVIOUS PROJECT NAVIGATION                                        │
-│  ┌───────────────────────────────┐   ┌──────────────────────────────────┐  │
-│  │ ← Proyek Sebelumnya           │   │ Proyek Selanjutnya →             │  │
-│  │ First Portfolio Milestone     │   │ Fast React Pizza                 │  │
-│  └───────────────────────────────┘   └──────────────────────────────────┘  │
-├────────────────────────────────────────────────────────────────────────────┤
-│  GLOBAL FOOTER                                                             │
+│ HALAMAN 404 (NotFoundPage):                                                │
+│ ┌────────────────────────────────────────────────────────────────────────┐ │
+│ │  404                                                                   │ │
+│ │  Halaman Tidak Ditemukan                                               │ │
+│ │  Tautan yang Anda tuju mungkin telah dipindahkan atau salah ketik.     │ │
+│ │  [Kembali ke Beranda]   [Jelajahi Proyek]                              │ │
+│ └────────────────────────────────────────────────────────────────────────┘ │
+│ GLOBAL FOOTER                                                              │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### 3. Struktur Data Teknis (`src/data/caseStudies.ts`)
+### 3. Rincian Teknis Per Komponen
 
-Kita akan membuat data studi kasus terstruktur untuk setiap proyek:
+#### Fitur 1: Global Scroll Restoration
+- **File**: `src/router/index.tsx`
+- **Implementasi**: Menggunakan `RootLayout` pembungkus dengan komponen `<ScrollRestoration />` dan `<Outlet />` dari React Router v7.
 
-```ts
-export interface CaseStudyArchitecture {
-  title: string;
-  reason: string;
-}
+#### Fitur 2: SEO, Open Graph & Social Share Preview Meta Tags
+- **File**: `index.html`
+- **Metadata**:
+  - `meta name="description"` deskripsi lugas tanpa AI slop.
+  - `meta property="og:title"`, `og:description"`, `og:image"`, `og:type="website"`, `og:site_name`.
+  - `meta name="twitter:card" content="summary_large_image"`, `twitter:title`, `twitter:description`, `twitter:image`.
+  - `meta name="theme-color" content="#202734"`.
 
-export interface CaseStudyDetail {
-  projectId: string;
-  tagline: string;
-  problem: string;
-  solution: string;
-  architecture: CaseStudyArchitecture[];
-  keyFeatures: string[];
-  metricsOrLearnings: string;
-}
-```
+#### Fitur 3: Scroll Spy / Active Section Highlighter
+- **File**: `src/components/Navbar/Navbar.tsx`, `Navbar.styles.ts`, `MobileMenu.tsx`
+- **Implementasi**:
+  - State `activeSection` diatur dinamis oleh `IntersectionObserver` terhadap ID `#hero`, `#projects`, `#skills`, `#certificates`, `#contact`.
+  - Prop `$active` pada `NavLink` memberikan aksen warna `#B7D894`, indikator bawah tipis, dan efek transisi lembut (150ms).
+  - Sinkronisasi otomatis: saat berada di rute `/projects` atau `/certificates`, nav link terkait langsung ditandai aktif.
 
-#### Contoh Data Engineering Nyata untuk Proyek Unggulan:
-1. **DapurRasa Food Store (`dapur-rasa`)**:
-   - *Problem*: Manajemen data menu statis yang lambat diakses ulang, sinkronisasi keranjang belanja yang rapuh saat berpindah halaman, serta pencarian menu yang memicu render berlebihan.
-   - *Solution*: Mengadopsi Vue 3 Composition API dengan Pinia modular store untuk sinkronisasi cart, serta TanStack Vue Query untuk data caching di sisi klien.
-   - *Architecture*:
-     - *Pinia*: Menggantikan Vuex lama untuk type safety TypeScript penuh dan zero boilerplate mutations.
-     - *TanStack Query*: Mengeliminasi fetch berulang dengan caching cerdas (*stale-while-revalidate*).
-     - *Custom Composables*: Isolasi logika filter dan pencarian menu agar komponen UI tetap murni (*clean presentation*).
-2. **Fast React Pizza (`fast-react-pizza`)**:
-   - *Problem*: Aplikasi pemesanan pizza membutuhkan kalkulasi harga dinamis, update kuantitas pesanan instan, serta pelacakan status pesanan real-time tanpa reload.
-   - *Solution*: Arsitektur React 18 dengan Redux Toolkit (RTK) untuk global state cart, digabungkan dengan React Router Data Loaders untuk data fetching deklaratif.
-   - *Architecture*:
-     - *Redux Toolkit*: Menangani kompleksitas state multi-level (tambah item, ubah kuantitas, hitung total, kosongkan keranjang).
-     - *React Router Loaders*: Mengambil data pesanan langsung pada fase routing sebelum komponen di-render.
-3. **Danu Satya Portfolio (`danu-satya`)**:
-   - *Problem*: Klien desainer grafis & motion membutuhkan portofolio dark-mode dengan tipografi berkarakter tajam, pemuatan media grafis resolusi tinggi yang cepat, dan layout visual presisi.
-   - *Solution*: React 19 + TypeScript dengan Tailwind CSS v4, optimasi format gambar web modern (AVIF/WebP), dan integrasi custom domain DNS pribadi.
-4. **Siap Kerja (`siap-kerja`)**:
-   - *Problem*: Kolaborasi tim multi-disiplin (FE, BE, UI/UX) untuk platform kesiapan karir yang membutuhkan integrasi rekomendasi AI, modul interaktif, dan animasi transisi responsif.
-   - *Solution*: React + Redux Toolkit terintegrasi dengan endpoint Google Gemini AI, didukung animasi Framer Motion dan manajemen alur kerja Git berbasis tim.
-5. **Proyek Lainnya (5–10)**:
-   - Disediakan fallback arsitektur berbasis data asli di `src/data/projects.ts` sehingga seluruh 10 proyek memiliki studi kasus yang konsisten dan informatif.
+#### Fitur 4: Resume / CV Action Buttons
+- **File**: `src/data/profile.ts`, `src/types/portfolio.ts`, `src/components/Hero/Hero.tsx`, `Hero.styles.ts`, `src/components/Navbar/Navbar.tsx`, `public/resume.pdf`
+- **Implementasi**:
+  - Menambahkan properti `resumeUrl` pada `ProfileData`.
+  - Tombol aksi berikon `FileDown` / `FileText` pada Hero Section (`CvButton`) dan Navbar (`NavResumeBtn`).
+  - Menyediakan file PDF resume yang valid di `public/resume.pdf` agar tautan langsung dapat diunduh/dilihat.
 
----
+#### Fitur 5: Instant Search Bar & Filter di Katalog
+- **File**: `src/pages/ProjectsPage.tsx`, `src/pages/CertificatesPage.tsx`
+- **Implementasi**:
+  - Input pencarian real-time dengan ikon `Search` dan tombol clear `X`.
+  - Pencarian multi-kriteria: mencocokkan judul, deskripsi, issuer/platform, dan tag keahlian (*skills array*).
+  - Integrasi dengan filter tab aktif (*AND logic*).
+  - Indikator jumlah hasil (*Result Count*).
+  - Tampilan *Empty State* elegan dengan tombol *"Reset Filter"* jika tidak ada hasil yang cocok.
 
-### 4. Detail Komponen & Styling
-
-1. **Breadcrumb & Meta Tag**:
-   - Tombol `← Kembali ke Katalog Proyek` (Link ke `/projects`).
-   - Pill badge kategori (*Web App*, *Landing Page*, *Interactive*) dan tag kolaborasi/role.
-2. **Hero Header & Action Buttons**:
-   - Judul H1 besar bergaya *Google Sans* / *Poiret One*.
-   - Tombol utama:
-     - `Buka Live Demo` (solid lime `#B7D894` + icon `ExternalLink`).
-     - `Lihat Source Code` (ghost button + icon `Code2`, hanya tampil jika `githubUrl` ada).
-   - Tech stack pill tags lengkap.
-3. **Showcase Visual Container**:
-   - Gambar beresolusi tajam dengan `aspect-ratio: 16 / 9`, border 1px `borderGlass`, dan subtle shadow glow.
-4. **Deep-Dive Cards (Glass Surfaces)**:
-   - **Tantangan & Solusi**: Grid 2 kolom dengan kartu kaca gelap (`#36415A` + blur).
-   - **Keputusan Arsitektur**: Kartu modular yang merinci *Teknologi* dan *Alasan Pemilihan Teknis*.
-   - **Fitur Kunci**: Daftar fitur dengan icon checkmark beraksen lime.
-5. **Next / Previous Navigation**:
-   - Di bagian bawah kartu studi kasus:
-     - Tombol kiri: `← Proyek Sebelumnya` (judul proyek sebelumnya).
-     - Tombol kanan: `Proyek Selanjutnya →` (judul proyek berikutnya).
-     - Berputar secara siklis (proyek pertama mengarah ke proyek terakhir dan sebaliknya).
-6. **Footer Global**:
-   - Memasang `<Footer />` di bagian bawah halaman.
+#### Fitur 6: Polish Halaman 404 (`NotFoundPage`)
+- **File**: `src/pages/NotFoundPage.tsx`
+- **Implementasi**:
+  - Kanvas dark glassmorphism AW Media (`#202734` base + `#36415A` card + 1px border `rgba(183, 216, 148, 0.16)`).
+  - Tipografi 404 besar bergaya `Poiret One` dengan aksen lime.
+  - Pesan teks manusiawi (*humanizer*).
+  - Tombol aksi ganda (*Kembali ke Beranda* & *Jelajahi Proyek*).
+  - Footer global terpasang rapi.
 
 ---
 
-### 5. Urutan Eksekusi
+### 4. Urutan Eksekusi
 
 ```
-Step 1  → Buat src/data/caseStudies.ts (data teknis tantangan, arsitektur, dan solusi 10 proyek)
-Step 2  → Buat src/pages/ProjectDetailPage.styles.ts (semua styled-components detail studi kasus)
-Step 3  → Refactor src/pages/ProjectDetailPage.tsx (tampilan komprehensif, navigasi next/prev, dan footer)
-Step 4  → Verifikasi build & type check: tsc --noEmit + npm run build
-Step 5  → Update README.md status tracker
-Step 6  → Git commit & push: "feat: implement comprehensive engineering case study page"
+Step 1 → Global Scroll Restoration (src/router/index.tsx dengan RootLayout + ScrollRestoration)
+Step 2 → SEO & Social Share Open Graph Meta Tags (index.html)
+Step 3 → Resume / CV Setup (public/resume.pdf, src/types/portfolio.ts, src/data/profile.ts)
+Step 4 → Resume Action Buttons & Scroll Spy Navbar (Navbar.tsx, Navbar.styles.ts, MobileMenu.tsx, Hero.tsx, Hero.styles.ts)
+Step 5 → Instant Search Bar & Multi-Filter di /projects (ProjectsPage.tsx)
+Step 6 → Instant Search Bar & Multi-Filter di /certificates (CertificatesPage.tsx)
+Step 7 → Polish Halaman 404 (NotFoundPage.tsx)
+Step 8 → Verifikasi Typecheck & Build Produksi (tsc --noEmit && npm run build)
+Step 9 → Update README.md status & Git Commit + Push
 ```
 
 ---
 
-### 6. Kriteria Keberhasilan
+### 5. Kriteria Keberhasilan
 
-- ✅ **Hilangkan Placeholder**: Tidak ada lagi tulisan *"Studi Kasus Detail Sedang Disiapkan"*.
-- ✅ **High-Signal Technical Prose**: Bahasa teknis lugas, berbasis arsitektur data riil tanpa AI cliches (*delve, tapestry, seamless, game-changer*).
-- ✅ **Aksi Lengkap**: Tombol Live Demo, Source Code, dan link kembali berfungsi instan.
-- ✅ **Sirkulasi Proyek Mulus**: Recruiter dapat berpindah dari satu proyek ke proyek lain dengan tombol Next/Prev.
-- ✅ **Desain Terpadu**: Glassmorphism AW Media × ketegasan Brandlos konsisten dengan halaman beranda.
-- ✅ **Lolos Verifikasi**: 0 error TypeScript, build produksi Vite sukses, dan working tree git bersih.
+- ✅ **Scroll Otomatis**: Setiap navigasi rute selalu mulai dari paling atas layar.
+- ✅ **Rich Social Sharing**: Tautan portofolio siap dibagikan ke media sosial/chat dengan preview gambar dan profil yang tajam.
+- ✅ **Navigasi Presisi**: Navbar memberikan umpan balik visual secara *real-time* tentang section yang sedang dilihat.
+- ✅ **Akses CV Cepat**: Recruiter dapat mengunduh/melihat resume dalam 1 kali klik.
+- ✅ **Pencarian Instan**: Pengguna dapat mencari proyek atau sertifikat berdasarkan keyword teknologi secara instan.
+- ✅ **Estetika 404**: Halaman error tetap konsisten dengan identitas desain portofolio dan tidak terasa terputus.
+- ✅ **Bebas Error**: Lolos 100% type check TypeScript, build produksi Vite sukses, dan git commit bersih.

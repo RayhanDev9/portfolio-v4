@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'motion/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Search, X } from 'lucide-react';
 import { Link } from 'react-router';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
@@ -73,7 +73,7 @@ const PageTitle = styled.h1`
 const PageSubtitle = styled.p`
   font-size: ${({ theme }) => theme.fontSizes.md};
   color: ${({ theme }) => theme.colors.textMuted};
-  max-width: 520px;
+  max-width: 540px;
   line-height: ${({ theme }) => theme.lineHeights.relaxed};
 
   ${({ theme }) => theme.media.mobile} {
@@ -81,12 +81,82 @@ const PageSubtitle = styled.p`
   }
 `;
 
+const SearchWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+`;
+
+const SearchIconBox = styled.div`
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${({ theme }) => theme.colors.textMuted};
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 12px 42px 12px 42px;
+  background-color: ${({ theme }) => theme.colors.secondarySurface};
+  border: 1px solid ${({ theme }) => theme.colors.borderGlass};
+  border-radius: ${({ theme }) => theme.radii.full};
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  outline: none;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textMuted};
+  }
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.accentLime};
+    box-shadow: ${({ theme }) => theme.shadows.glow};
+    background-color: ${({ theme }) => theme.colors.glass};
+  }
+`;
+
+const ClearButton = styled.button`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: ${({ theme }) => theme.colors.textMuted};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: ${({ theme }) => theme.radii.full};
+  transition: color ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accentLime};
+  }
+`;
+
+const ControlsRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
+`;
+
 const FilterTabsWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   flex-wrap: wrap;
-  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
 `;
 
 const FilterTabButton = styled.button<{ $active: boolean }>`
@@ -112,14 +182,16 @@ const FilterTabButton = styled.button<{ $active: boolean }>`
   }
 `;
 
+const ResultCount = styled.span`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  letter-spacing: ${({ theme }) => theme.letterSpacings.wide};
+`;
+
 const CatalogGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: ${({ theme }) => theme.spacing.lg};
-
-  ${({ theme }) => theme.media.desktop} {
-    grid-template-columns: repeat(3, 1fr);
-  }
 
   @media (max-width: 1023px) and (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
@@ -133,36 +205,79 @@ const CatalogGrid = styled.div`
 const EmptyState = styled.div`
   padding: ${({ theme }) => theme.spacing['3xl']} 0;
   text-align: center;
+  background-color: ${({ theme }) => theme.colors.secondarySurface};
+  border: 1px dashed ${({ theme }) => theme.colors.borderGlass};
+  border-radius: ${({ theme }) => theme.radii.md};
+  margin-top: ${({ theme }) => theme.spacing.lg};
+`;
+
+const EmptyTitle = styled.h3`
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textHighlight};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+`;
+
+const EmptySubtitle = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
   color: ${({ theme }) => theme.colors.textMuted};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const ResetFilterBtn = styled.button`
+  background-color: transparent;
+  color: ${({ theme }) => theme.colors.accentLime};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.sm};
+  padding: 8px 18px;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  cursor: pointer;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+    border-color: ${({ theme }) => theme.colors.accentLime};
+    color: ${({ theme }) => theme.colors.textHighlight};
+  }
 `;
 
 const easeOut = [0.4, 0, 0.2, 1] as const;
 
 export default function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const categoryCounts = {
-    all: projectsData.length,
-    app: projectsData.filter((p) => p.category === 'app').length,
-    landing: projectsData.filter((p) => p.category === 'landing').length,
-    interactive: projectsData.filter((p) => p.category === 'interactive').length,
-  };
-
   const categories: { value: ProjectCategory; label: string }[] = [
-    { value: 'all', label: `All (${categoryCounts.all})` },
-    { value: 'app', label: `Web App (${categoryCounts.app})` },
-    { value: 'landing', label: `Landing Page (${categoryCounts.landing})` },
-    { value: 'interactive', label: `Interactive (${categoryCounts.interactive})` },
+    { value: 'all', label: 'All' },
+    { value: 'app', label: 'Web App' },
+    { value: 'landing', label: 'Landing Page' },
+    { value: 'interactive', label: 'Interactive' },
   ];
 
-  const displayedProjects =
-    activeCategory === 'all'
-      ? projectsData
-      : projectsData.filter((p) => p.category === activeCategory);
+  const query = searchQuery.trim().toLowerCase();
+  const displayedProjects = projectsData.filter((project) => {
+    const matchesCategory =
+      activeCategory === 'all' || project.category === activeCategory;
+    if (!matchesCategory) return false;
+    if (!query) return true;
+
+    const titleMatch = project.title.toLowerCase().includes(query);
+    const descMatch = project.description.toLowerCase().includes(query);
+    const collabMatch = project.collab?.toLowerCase().includes(query) ?? false;
+    const skillsMatch = project.skills.some((s) => s.toLowerCase().includes(query));
+
+    return titleMatch || descMatch || collabMatch || skillsMatch;
+  });
 
   return (
     <PageContainer>
@@ -198,19 +313,47 @@ export default function ProjectsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1, ease: easeOut }}
           >
-            <FilterTabsWrapper role="tablist" aria-label="Filter kategori proyek">
-              {categories.map((cat) => (
-                <FilterTabButton
-                  key={cat.value}
-                  $active={activeCategory === cat.value}
-                  onClick={() => setActiveCategory(cat.value)}
-                  role="tab"
-                  aria-selected={activeCategory === cat.value}
+            <SearchWrapper>
+              <SearchIconBox>
+                <Search size={16} />
+              </SearchIconBox>
+              <SearchInput
+                type="text"
+                placeholder="Cari proyek atau teknologi (React, Vue, TS...)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Cari proyek"
+              />
+              {searchQuery && (
+                <ClearButton
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Hapus pencarian"
                 >
-                  {cat.label}
-                </FilterTabButton>
-              ))}
-            </FilterTabsWrapper>
+                  <X size={15} />
+                </ClearButton>
+              )}
+            </SearchWrapper>
+
+            <ControlsRow>
+              <FilterTabsWrapper role="tablist" aria-label="Filter kategori proyek">
+                {categories.map((cat) => (
+                  <FilterTabButton
+                    key={cat.value}
+                    $active={activeCategory === cat.value}
+                    onClick={() => setActiveCategory(cat.value)}
+                    role="tab"
+                    aria-selected={activeCategory === cat.value}
+                  >
+                    {cat.label}
+                  </FilterTabButton>
+                ))}
+              </FilterTabsWrapper>
+
+              <ResultCount>
+                Menampilkan {displayedProjects.length} dari {projectsData.length} proyek
+              </ResultCount>
+            </ControlsRow>
           </motion.div>
 
           {displayedProjects.length > 0 ? (
@@ -220,7 +363,22 @@ export default function ProjectsPage() {
               ))}
             </CatalogGrid>
           ) : (
-            <EmptyState>Tidak ada proyek dalam kategori ini.</EmptyState>
+            <EmptyState>
+              <EmptyTitle>Tidak ada proyek yang cocok</EmptyTitle>
+              <EmptySubtitle>
+                Tidak ditemukan proyek yang cocok dengan kata kunci &ldquo;{searchQuery}&rdquo;
+                {activeCategory !== 'all' ? ` pada kategori ${activeCategory}` : ''}.
+              </EmptySubtitle>
+              <ResetFilterBtn
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveCategory('all');
+                }}
+              >
+                Reset Filter &amp; Pencarian
+              </ResetFilterBtn>
+            </EmptyState>
           )}
         </ContentContainer>
       </MainContent>

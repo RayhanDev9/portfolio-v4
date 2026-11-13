@@ -73,10 +73,11 @@ export const NavLinksList = styled.nav`
   }
 `;
 
-export const NavLink = styled.a`
+export const NavLink = styled.a<{ $active?: boolean }>`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
-  color: ${({ theme }) => theme.colors.textMuted};
+  color: ${({ theme, $active }) =>
+    $active ? theme.colors.accentLime : theme.colors.textMuted};
   text-decoration: none;
   position: relative;
   padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.xs}`};
@@ -87,9 +88,11 @@ export const NavLink = styled.a`
     position: absolute;
     bottom: -2px;
     left: 0;
-    width: 0;
+    width: ${({ $active }) => ($active ? '100%' : '0')};
     height: 1.5px;
     background-color: ${({ theme }) => theme.colors.accentLime};
+    box-shadow: ${({ $active, theme }) =>
+      $active ? theme.shadows.glow : 'none'};
     transition: width ${({ theme }) => theme.transitions.fast};
   }
 
@@ -106,6 +109,32 @@ export const NavActions = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
+`;
+
+export const NavResumeButton = styled.a`
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background-color: transparent;
+  color: ${({ theme }) => theme.colors.accentLime};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.full};
+  padding: 5px 14px;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  text-decoration: none;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+    border-color: ${({ theme }) => theme.colors.accentLime};
+    color: ${({ theme }) => theme.colors.textHighlight};
+  }
+
+  ${({ theme }) => theme.media.desktop} {
+    display: inline-flex;
+  }
 `;
 
 export const DesktopBadgeWrapper = styled.div`

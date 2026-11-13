@@ -34,3 +34,35 @@
 ## 3. Engineering & Clean Code
 - Gunakan React 19 + TypeScript yang idiomatik, clean, dan modular.
 - Hindari over-engineering atau memasang library berlebih untuk hal-hal yang dapat ditangani oleh CSS murni atau state sederhana.
+
+## 4. Portfolio Architecture: Hybrid Model (Locked)
+- **Home Page (`/`) — Seamless Storytelling Flow:**
+  - Menggabungkan seluruh section utama dalam satu halaman beranda yang mengalir dan responsif:
+    1. Hero Section (Intro, headline, role, availability badge, quick social links)
+    2. Featured Projects (Kurasi 4-6 proyek terbaik dengan preview visual)
+    3. Skills & Career Journey (Tech stack per kategori dan linimasa perjalanan karier)
+    4. Certificates Showcase (Sertifikasi resmi dengan thumbnail berkualitas tinggi)
+    5. Contact Section (Formulir, email langsung, dan saluran komunikasi)
+  - Dioptimalkan untuk recruiter/klien yang ingin review kilat dalam 30 detik melalui scroll mulus.
+- **Deep-Dive Case Study Routes (`/projects/:id`):**
+  - Menggunakan `react-router-dom` untuk membuka studi kasus teknis mendalam setiap kali kartu proyek dipilih:
+    - Menjelaskan masalah nyata, arsitektur data, tantangan teknis, dan keputusan teknologi.
+    - Tombol live demo interaktif, link repositori GitHub, dan tombol kembali ke beranda.
+- **Full Projects Catalogue (`/projects`):**
+  - Menampilkan seluruh katalog proyek lengkap dengan filter kategori (*app*, *landing*, *interactive*).
+- **Interactive Lightbox Modal for Certificates:**
+  - Sertifikat menggunakan modal zoom popup interaktif beresolusi tinggi di tempat, tanpa reload atau navigasi halaman penuh agar fokus pengguna tidak terputus.
+
+## 5. Design DNA: The AW Media × Brandlos Synthesis (Locked)
+- **Pengaruh Visual 1 — AW Media (`awmedia.marketing/blog`):**
+  - **Dark Glassmorphism:** Kanvas dasar gelap (`#202734`) dilapisi kartu semi-transparan (`#36415A` dengan `backdrop-filter: blur(12px)`).
+  - **1px Subtle Contrast Borders:** Garis tepi tipis dengan aksen lembut (`rgba(183, 216, 148, 0.16)`) yang bereaksi lembut saat disentuh kursor (*hover glow*).
+  - **Content-Forward Visual Cards:** Thumbnail proyek rasio tajam dengan tag kategori berbentuk kapsul (*pill badge*).
+- **Pengaruh Visual 2 — Brandlos (`brandlos.nl/vacatures`):**
+  - **Confident & Direct Persona:** Tipografi berani, tajam, dan berkarakter (menolak tampilan korporat generik yang membosankan).
+  - **Modular Rhythm & Structure:** Pembagian section yang tegas dengan garis pemisah minimalis, penataan data linimasa (*Journey*) yang terstruktur, dan pill status ketersediaan kerja yang mencolok.
+  - **Action-Oriented CTAs:** Tombol ajakan kolaborasi yang tegas, bersih, dan berorientasi hasil tanpa basa-basi.
+- **Aturan Eksekusi Desain Gabungan:**
+  - Tetap disiplin pada palet warna proyek: `#202734` (Base), `#36415A` (Glass Surface), `#B7D894` (Accent Lime), `#E0F8C7` (Text Highlight).
+  - Tipografi Google Sans (struktur kuat & modern) + Poiret One (aksen display berkarakter).
+  - Kecepatan mikro-interaksi: 150ms - 250ms (snappy ease-out curve).

@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router';
 import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import { CertificateCard } from '../components/Certificates/CertificateCard';
 import { CertificateLightbox } from '../components/Certificates/CertificateLightbox';
 import { certificatesData } from '../data/certificates';
@@ -239,6 +240,8 @@ export default function CertificatesPage() {
         certificate={selectedCert}
         onClose={() => setSelectedCert(null)}
       />
+
+      <Footer />
     </PageContainer>
   );
 }

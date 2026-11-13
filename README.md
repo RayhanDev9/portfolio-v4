@@ -17,176 +17,183 @@
 | `/projects/:id` Detail Page (placeholder) | ✅ Selesai | `5748b9e` |
 | Skills & Career Journey (`#skills`) | ✅ Selesai | `f155aaf` |
 | Certificates Showcase & Lightbox Modal | ✅ Selesai | `bcc484e` |
-| **Fix: Uniform Card Height & `/certificates` Route** | ✅ Selesai | `d2891f7` |
-| Contact Section (`#contact`) | ⬜ Belum | — |
-| Footer | ⬜ Belum | — |
+| Fix: Uniform Card Height & `/certificates` Route | ✅ Selesai | `5540aa2` |
+| **Contact Section & Footer (`#contact`)** | ✅ Selesai | `7e891ab` |
 | `/projects/:id` Full Case Study | ⬜ Belum | — |
 
 ---
 
-## 📋 Active Build Plan: Fix Certificate Card Alignment & `/certificates` Route
+## 📋 Active Build Plan: Contact Section & Footer (`#contact`)
 
-### 1. Masalah yang Ditemukan (Problem Analysis)
+### 1. Tujuan & Konteks
 
-#### Masalah A: Tinggi Kartu & Perataan Elemen Tidak Rata (Card Height Mismatch)
-- **Gejala visual**: Pada screenshot, kartu di tengah ("Hackathon: Innovating Beyond The Code" - 1 baris judul) memiliki tinggi kartu yang lebih pendek daripada kartu kiri dan kanan (judul 2 baris). Tombol *"Lihat Sertifikat"* di kartu tengah posisinya lebih tinggi dan tidak sejajar.
-- **Penyebab teknis**:
-  1. `<motion.div>` pembungkus di `CertificateCard.tsx` tidak memiliki `height: 100%`, dan `<CardContainer>` juga tidak di-set `height: 100%`. Akibatnya kartu hanya mengambil tinggi konten alaminya sendiri, bukan meregang mengikuti tinggi baris CSS Grid.
-  2. `CardTitle` tidak memiliki `min-height` tetap untuk 2 baris teks. Judul 1 baris (~24px) menghasilkan selisih ~24px dibanding judul 2 baris (~48px), mendorong elemen di bawahnya secara tidak rata.
-  3. `SkillsRow` memiliki jumlah baris tag yang bervariasi (1 baris vs 2 baris) tanpa `min-height` cadangan.
+Section ini adalah penutup dari alur beranda (*Seamless Storytelling Flow*) sekaligus menjadi target navigasi dari:
+1. Tombol **"Hubungi"** di Hero section (`href="#contact"`).
+2. Tautan **"Contact"** di Navbar & Mobile Menu (`href="#contact"`).
 
-#### Masalah B: Sertifikat Belum Memiliki Route Tersendiri & Belum Ada Kurasi Featured
-- **Gejala**: Beranda saat ini langsung menampilkan seluruh 12 sertifikat sekaligus tanpa sistem kurasi, berbeda dengan section **Featured Projects** yang menampilkan proyek terpilih di beranda dan menyediakan halaman katalog lengkap `/projects`.
-- **Kebutuhan**:
-  1. Beranda (`#certificates`) hanya menampilkan **sertifikat terbaik/unggulan** (6 sertifikat terkurasi dalam 2 baris × 3 kolom yang presisi).
-  2. Tombol CTA di bawah beranda: *"Lihat Semua Sertifikat (12) →"* yang mengarahkan pengguna ke halaman rute baru `/certificates`.
-  3. Halaman rute baru `src/pages/CertificatesPage.tsx` (`/certificates`) menampilkan seluruh 12 sertifikat dengan tombol kembali, filter tabs + counter, dan Lightbox modal interaktif.
+Desain memadukan prinsip **Brandlos** (direct persona, perataan data tegas, dan aksi nyata tanpa basa-basi) dengan **AW Media** (glassmorphism card surface dengan 1px subtle border glow).
 
 ---
 
-### 2. Rencana Solusi Detail (Technical Blueprint)
+### 2. Struktur File
 
-#### A. Fix Optical Alignment & Equal Height Kartu (`Certificates.styles.ts` & `CertificateCard.tsx`)
+```
+src/components/Contact/
+├── Contact.tsx          # Section wrapper (#contact) — header & split grid
+├── Contact.styles.ts    # Styled-components untuk Contact section & form
+├── ContactDirect.tsx    # Kolom kiri: Info kontak langsung, copy email, WhatsApp & socials
+├── ContactForm.tsx      # Kolom kanan: Formulir interaktif (nama, email, layanan, pesan)
+└── index.ts             # Barrel export
 
-1. **Equal Card Height & Flex Stretcher**:
-   - Di `CertificateCard.tsx`:
-     ```tsx
-     <motion.div
-       ...
-       style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-     >
-       <CardContainer style={{ height: '100%' }}>
-     ```
-   - Di `CardContainer`: tambahkan `height: 100%; display: flex; flex-direction: column;`
-
-2. **Reserved Title Height (2 Baris Konsisten)**:
-   - Di `CardTitle`:
-     ```css
-     min-height: 2.9rem; /* persis 2 baris line-height normal */
-     line-height: 1.45;
-     display: -webkit-box;
-     -webkit-line-clamp: 2;
-     -webkit-box-orient: vertical;
-     overflow: hidden;
-     text-overflow: ellipsis;
-     ```
-     *Hasil*: Judul 1 baris maupun 2 baris akan selalu menempati tinggi vertikal yang sama persis (±46px), sehingga elemen `CardIssuer` di bawahnya selalu dimulai pada garis horizontal yang sejajar.
-
-3. **Reserved Issuer & SkillsRow Height**:
-   - Di `CardIssuer`: `min-height: 1.25rem;`
-   - Di `SkillsRow`:
-     ```css
-     margin-top: auto; /* mendorong tombol ke bawah */
-     min-height: 48px;  /* ruang seragam untuk tag skill */
-     ```
-     *Hasil*: Tombol *"Lihat Sertifikat"* akan selalu terkunci di posisi dasar (*bottom-aligned*) pada semua kartu dalam satu baris.
-
----
-
-#### B. Skema Data: Tambah Properti `featured` di Certificate
-
-1. **`src/types/portfolio.ts`**:
-   ```ts
-   export interface Certificate {
-     id: string;
-     title: string;
-     platform: CertificatePlatform;
-     platformName: string;
-     issuer: string;
-     img: string;
-     alt: string;
-     skills: string[];
-     desc: string;
-     featured?: boolean; // BARU
-   }
-   ```
-
-2. **`src/data/certificates.ts`**:
-   Tandai **6 sertifikat terbaik** sebagai `featured: true` mencakup prestasi penghargaan, kompetisi, dan sertifikasi kursus kredibel:
-   - `penghargaan-isc` (Penghargaan Kontribusi Web Dev ISC)
-   - `hackathon-himtif` (Hackathon HIMTIF)
-   - `udemy-js-jonas` (The Complete JavaScript Course - Jonas Schmedtmann)
-   - `udemy-html-css-jonas` (Build Responsive Websites - Jonas Schmedtmann)
-   - `udemy-js-eko` (Pemrograman JavaScript - Eko Kurniawan)
-   - `codepolitan-vue-pinia` (State Management Vue 3 dengan Pinia)
-
----
-
-#### C. Update Section Beranda (`src/components/Certificates/Certificates.tsx`)
-
-1. Hanya render sertifikat dengan `featured: true` (6 sertifikat).
-2. Di bawah grid, tambahkan:
-   ```tsx
-   <FooterCTAWrapper>
-     <AllCertificatesButton
-       as={Link}
-       to="/certificates"
-       aria-label={`Lihat semua ${certificatesData.length} sertifikat di katalog lengkap`}
-     >
-       <span>Lihat Semua Sertifikat ({certificatesData.length})</span>
-       <ArrowRight size={16} />
-     </AllCertificatesButton>
-   </FooterCTAWrapper>
-   ```
-3. Styling `FooterCTAWrapper` dan `AllCertificatesButton` ditambahkan di `Certificates.styles.ts` (mengikuti pola Brandlos secondary button seperti di Projects).
-
----
-
-#### D. Buat Halaman Katalog Lengkap (`src/pages/CertificatesPage.tsx`)
-
-1. **Layout**:
-   - `<Navbar />` di bagian atas.
-   - Tombol `← Kembali ke Beranda` (Link ke `/`).
-   - Page Header:
-     - Judul: `"All Certificates"` (Poiret One).
-     - Subtitle: `"Seluruh kredensial sertifikasi, pelatihan intensif, dan penghargaan resmi yang diperoleh."`
-   - Filter tabs lengkap dengan counter badge:
-     - `All (12)`
-     - `Udemy (3)`
-     - `Codepolitan (7)`
-     - `Awards (2)` (gabungan kompetisi + penghargaan)
-   - Grid 3 kolom menampilkan seluruh 12 kartu sertifikat.
-   - Integrasi `<CertificateLightbox />` aktif untuk pratinjau zoom gambar.
-   - Scroll ke paling atas otomatis saat halaman dibuka (`window.scrollTo(0, 0)`).
-
----
-
-#### E. Daftarkan Rute di Router (`src/router/index.tsx`)
-
-Tambahkan path `/certificates`:
-```tsx
-import CertificatesPage from '../pages/CertificatesPage';
-
-export const router = createBrowserRouter([
-  { path: '/', element: <HomePage /> },
-  { path: '/projects', element: <ProjectsPage /> },
-  { path: '/projects/:id', element: <ProjectDetailPage /> },
-  { path: '/certificates', element: <CertificatesPage /> }, // BARU
-  { path: '*', element: <NotFoundPage /> },
-]);
+src/components/Footer/
+├── Footer.tsx           # Footer komponen (copyright, nav links, back-to-top)
+├── Footer.styles.ts     # Styled-components untuk Footer
+└── index.ts             # Barrel export
 ```
 
 ---
 
-### 3. Urutan Eksekusi (Step-by-Step Implementation)
+### 3. Layout & Desain
 
-1. **Step 1**: Update `src/types/portfolio.ts` — tambahkan `featured?: boolean` pada interface `Certificate`.
-2. **Step 2**: Update `src/data/certificates.ts` — tandai 6 sertifikat pilihan dengan `featured: true`.
-3. **Step 3**: Update `src/components/Certificates/Certificates.styles.ts` — fix equal height kartu (`CardTitle` min-height, `CardIssuer`, `SkillsRow`, `CardContainer` 100% height) + styling tombol `AllCertificatesButton`.
-4. **Step 4**: Update `src/components/Certificates/CertificateCard.tsx` — pasang `height: 100%` pada motion wrapper & container.
-5. **Step 5**: Update `src/components/Certificates/Certificates.tsx` — kurasi beranda (hanya featured) + tombol CTA ke `/certificates`.
-6. **Step 6**: Buat file baru `src/pages/CertificatesPage.tsx` — katalog lengkap seluruh 12 sertifikat + filter + lightbox.
-7. **Step 7**: Update `src/router/index.tsx` — daftarkan rute `/certificates`.
-8. **Step 8**: Verifikasi build & type check: `npx tsc --noEmit` dan `npm run build`.
-9. **Step 9**: Git commit & push ke remote repository.
+```
+┌────────────────────────────────────────────────────────────────────────────┐
+│  SECTION HEADER                                                            │
+│                                                                            │
+│  Let's Connect                         (Poiret One display font)           │
+│  Terbuka untuk kolaborasi proyek       (subheading, textMuted)             │
+│  frontend atau diskusi teknis.                                             │
+│                                                                            │
+├────────────────────────────────────────────────────────────────────────────┤
+│  SPLIT 2-COLUMN GRID (1.1fr 1fr desktop, 1-col mobile)                     │
+│                                                                            │
+│  KOLOM KIRI: DIRECT CHANNELS           KOLOM KANAN: INTERACTIVE FORM       │
+│  ┌─────────────────────────────────┐   ┌─────────────────────────────────┐ │
+│  │ [🟢 Available for Remote...]    │   │ Kirim Pesan Langsung            │ │
+│  │                                 │   │                                 │ │
+│  │ ✉️ m.rayhanoi26@gmail.com        │   │ Nama Lengkap                    │ │
+│  │    [Salin Email] [Kirim Email]  │   │ [                               ] │ │
+│  │                                 │   │                                 │ │
+│  │ 💬 WhatsApp Langsung            │   │ Alamat Email                    │ │
+│  │    +62 895 3256 03726           │   │ [                               ] │ │
+│  │                                 │   │                                 │ │
+│  │ 📍 Banten, Indonesia (GMT+7)    │   │ Layanan / Topik                 │ │
+│  │                                 │   │ [ Web App / Frontend Dev  ▼ ]   │ │
+│  │ Terhubung di Media Sosial:      │   │                                 │ │
+│  │ [GitHub] [IG] [WA] [Email]      │   │ Pesan Anda                      │ │
+│  │                                 │   │ [                             ] │ │
+│  │                                 │   │                                 │ │
+│  │                                 │   │ [ Kirim Pesan ✉️ ]             │ │
+│  └─────────────────────────────────┘   └─────────────────────────────────┘ │
+│                                                                            │
+├────────────────────────────────────────────────────────────────────────────┤
+│  FOOTER                                                                    │
+│  ────────────────────────────────────────────────────────────────────────  │
+│  Rayhan.   © 2026 Muhamad Rayhan       Home • Projects • Skills • Certs   │
+│  Crafted with React 19 & TypeScript                     [↑ Back to Top]   │
+└────────────────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-### 4. Kriteria Keberhasilan (Success Criteria)
+### 4. Detail Komponen Contact
 
-- ✅ **Presisi Visual**: Semua kartu sertifikat pada baris yang sama memiliki tinggi 100% identik.
-- ✅ **Perataan Horizontal**: Tombol *"Lihat Sertifikat"* di setiap kartu sejajar sempurna pada garis bawah horizontal yang sama, tidak terpengaruh oleh panjang judul (1 baris vs 2 baris).
-- ✅ **Home Page Ringkas**: Beranda hanya menampilkan 6 sertifikat terbaik sehingga halaman tetap proporsional dan tidak overloaded.
-- ✅ **Navigasi Mulus**: Tombol *"Lihat Semua Sertifikat (12)"* membuka rute `/certificates` tanpa reload halaman.
-- ✅ **Full Catalogue**: Halaman `/certificates` menampilkan seluruh 12 sertifikat lengkap dengan filter kategori dan lightbox modal zoom yang tetap berfungsi prima.
-- ✅ **Zero Errors**: Build production Vite dan TypeScript check lulus 100%.
+#### A. Kolom Kiri: Direct Channels (`ContactDirect.tsx`)
+1. **Status Badge**:
+   - Memakai `<AvailabilityBadge />` ("Available for Remote • Freelance • Hybrid").
+2. **Email Card**:
+   - Menampilkan email `m.rayhanoi26@gmail.com`.
+   - Tombol **"Salin Email"** dengan feedback tooltip *"Tersalin!"* selama 2 detik via clipboard API (`navigator.clipboard.writeText`).
+   - Tautan langsung `mailto:m.rayhanoi26@gmail.com`.
+3. **WhatsApp Card**:
+   - Menampilkan nomor WhatsApp `+62 895 3256 03726`.
+   - Tautan langsung ke `https://wa.me/62895325603726` dengan target `_blank`.
+4. **Location Card**:
+   - Ikon pin lokasi + `"Banten, Indonesia (GMT+7)"`.
+5. **Socials Row**:
+   - Mengambil data dari `profileData.socials` (GitHub, Instagram, Email, WhatsApp) dengan hover background glow.
+
+#### B. Kolom Kanan: Interactive Form (`ContactForm.tsx`)
+1. **Form Fields**:
+   - **Nama**: `<input type="text" required placeholder="Nama Anda" />`
+   - **Email**: `<input type="email" required placeholder="email@contoh.com" />`
+   - **Kategori Proyek**: `<select>` dengan opsi:
+     - *Frontend Web Application (React / Vue / TypeScript)*
+     - *Landing Page & Web Profile*
+     - *UI/UX Implementation & Slicing*
+     - *Diskusi & Konsultasi Teknis*
+   - **Pesan**: `<textarea required rows={4} placeholder="Tuliskan kebutuhan proyek Anda..." />`
+2. **Interaktivitas & Feedback**:
+   - Dark glass input styling: `background: theme.colors.glass`, border subtle 1px.
+   - Focus state: border `theme.colors.accentLime` dengan box-shadow halus (`accentGlow`).
+   - Saat submit:
+     - Mencegah reload (`e.preventDefault()`).
+     - Menyusun link `mailto` otomatis dengan subjek dan isi pesan yang diformat rapi, lalu membuka client email pengguna.
+     - Menampilkan feedback visual sukses: *"Pesan siap dikirimkan melalui aplikasi email Anda!"*.
+     - Reset form.
+3. **Submit Button**:
+   - Solid accent lime (`#B7D894`), teks `#202734` semibold, icon `Send` dari `lucide-react`.
+
+---
+
+### 5. Detail Komponen Footer (`Footer.tsx`)
+
+1. **Brand & Copyright**:
+   - Brand logo **"Rayhan."** (Poiret One).
+   - Copyright: `"© 2026 Muhamad Rayhan. All rights reserved."`
+2. **Quick Nav Links**:
+   - Navigasi cepat: `Home`, `Projects`, `Skills`, `Certificates`, `Contact`.
+   - Masing-masing link memiliki smooth scroll anchor.
+3. **Tech Badge & Back to Top**:
+   - Label teks: `"Built with React 19, TypeScript & styled-components"`.
+   - Tombol **"Back to Top"** dengan icon `ArrowUp` yang menjalankan `window.scrollTo({ top: 0, behavior: 'smooth' })`.
+4. **Penempatan Reusable**:
+   - Dipasang di bagian paling bawah [HomePage.tsx](file:///d:/data/rayhan/programs/project-2/portfolio-v4/src/pages/HomePage.tsx), [ProjectsPage.tsx](file:///d:/data/rayhan/programs/project-2/portfolio-v4/src/pages/ProjectsPage.tsx), dan [CertificatesPage.tsx](file:///d:/data/rayhan/programs/project-2/portfolio-v4/src/pages/CertificatesPage.tsx).
+
+---
+
+### 6. Entrance Animations (motion library)
+
+| Elemen | Animasi | Trigger |
+|---|---|---|
+| Section Header | `fadeInUp` (y: 20 → 0) | `whileInView`, `once: true` |
+| Direct Channels (Kiri) | `fadeInLeft` (x: -20 → 0) | `whileInView`, `once: true`, delay 100ms |
+| Contact Form (Kanan) | `fadeInRight` (x: 20 → 0) | `whileInView`, `once: true`, delay 150ms |
+| Footer | `fadeIn` (opacity: 0 → 1) | `whileInView`, `once: true` |
+
+- Duration: `400ms`, easing: `[0.4, 0, 0.2, 1] as const`
+
+---
+
+### 7. Urutan Eksekusi
+
+```
+Step 1  → Buat src/components/Contact/Contact.styles.ts
+Step 2  → Buat src/components/Contact/ContactDirect.tsx
+Step 3  → Buat src/components/Contact/ContactForm.tsx
+Step 4  → Buat src/components/Contact/Contact.tsx
+Step 5  → Buat src/components/Contact/index.ts
+Step 6  → Buat src/components/Footer/Footer.styles.ts
+Step 7  → Buat src/components/Footer/Footer.tsx & index.ts
+Step 8  → Update src/pages/HomePage.tsx — import Contact & Footer
+Step 9  → Update src/pages/ProjectsPage.tsx & CertificatesPage.tsx — pasang Footer
+Step 10 → Verifikasi: tsc --noEmit + npm run build
+Step 11 → Git commit & push: "feat: implement contact section and footer"
+```
+
+---
+
+### 8. Theme Tokens yang Dipakai
+
+```
+colors: darkBase, secondarySurface, glass, glassHover, glassElevated
+        accentLime, accentMuted, accentGlow
+        textHighlight, textSecondary, textMuted, textPrimary, textInverse
+        border, borderHover, borderSubtle, borderGlass
+fonts:  display (Poiret One), heading (Google Sans), body
+fontSizes: xs, sm, base, md, lg, xl, '2xl', '3xl', '4xl'
+fontWeights: medium, semibold, regular, bold
+spacing: xs, sm, md, lg, xl, '2xl', '3xl', '4xl'
+radii: sm, md, full
+transitions: fast (150ms), normal (250ms)
+shadows: glow, card
+```

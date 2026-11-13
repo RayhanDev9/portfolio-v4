@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import { Link, useLocation } from 'react-router';
-import { AvailabilityBadge } from '../shared/AvailabilityBadge';
-import { MobileMenu } from './MobileMenu';
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router";
+import { AvailabilityBadge } from "../shared/AvailabilityBadge";
+import { MobileMenu } from "./MobileMenu";
 import {
   NavHeader,
   NavContainer,
@@ -12,29 +12,30 @@ import {
   NavActions,
   DesktopBadgeWrapper,
   MenuToggleButton,
-} from './Navbar.styles';
+} from "./Navbar.styles";
 
 const NAV_ITEMS = [
-  { label: 'Home', href: '#hero' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Certificates', href: '#certificates' },
-  { label: 'Contact', href: '#contact' },
+  { label: "Home", href: "#hero" },
+  { label: "Projects", href: "#projects" },
+  { label: "Skills", href: "#skills" },
+  { label: "Certificates", href: "#certificates" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === '/';
+  const isHome = location.pathname === "/";
+  console.info(location.hash);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -72,7 +73,11 @@ export function Navbar() {
 
             <MenuToggleButton
               onClick={() => setMobileMenuOpen((prev) => !prev)}
-              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-label={
+                mobileMenuOpen
+                  ? "Close navigation menu"
+                  : "Open navigation menu"
+              }
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}

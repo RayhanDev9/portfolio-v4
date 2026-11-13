@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router';
 import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import { ProjectCard } from '../components/Projects/ProjectCard';
 import { projectsData } from '../data/projects';
 import type { ProjectCategory } from '../types/portfolio';
@@ -223,6 +224,7 @@ export default function ProjectsPage() {
           )}
         </ContentContainer>
       </MainContent>
+      <Footer />
     </PageContainer>
   );
 }

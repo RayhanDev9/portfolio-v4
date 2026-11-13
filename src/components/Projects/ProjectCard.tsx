@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight, Code2 } from 'lucide-react';
 import { Link } from 'react-router';
 import type { Project } from '../../types/portfolio';
 import {
@@ -9,12 +9,15 @@ import {
   CardContent,
   CardTitle,
   CardMeta,
+  CollabMetaLink,
   CardDescription,
   TechStackRow,
   TechPill,
   TechPillMore,
   CardActionRow,
+  CardActionGroup,
   LiveDemoLink,
+  RepoLink,
   DetailLink,
 } from './Projects.styles';
 
@@ -53,7 +56,23 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         <CardContent>
           <CardTitle>{project.title}</CardTitle>
 
-          {metaText && <CardMeta>{metaText}</CardMeta>}
+          {project.collaborator ? (
+            <CardMeta>
+              <span>{project.role || 'Front-End'} • </span>
+              <CollabMetaLink
+                href={project.collaborator.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={`${project.collaborator.role ? project.collaborator.role + ' - ' : ''}${project.collaborator.name}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span>{project.collaborator.name}</span>
+                <ExternalLink size={10} style={{ opacity: 0.7 }} />
+              </CollabMetaLink>
+            </CardMeta>
+          ) : metaText ? (
+            <CardMeta>{metaText}</CardMeta>
+          ) : null}
 
           <CardDescription>{project.description}</CardDescription>
 
@@ -67,15 +86,29 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           </TechStackRow>
 
           <CardActionRow>
-            <LiveDemoLink
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`Buka demo live ${project.title}`}
-            >
-              <span>Live Demo</span>
-              <ExternalLink size={14} />
-            </LiveDemoLink>
+            <CardActionGroup>
+              <LiveDemoLink
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Buka demo live ${project.title}`}
+              >
+                <span>Live Demo</span>
+                <ExternalLink size={14} />
+              </LiveDemoLink>
+
+              {project.githubUrl && (
+                <RepoLink
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Buka repositori GitHub ${project.title}`}
+                >
+                  <Code2 size={14} />
+                  <span>Repo</span>
+                </RepoLink>
+              )}
+            </CardActionGroup>
 
             <DetailLink
               as={Link}

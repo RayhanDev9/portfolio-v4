@@ -1,10 +1,20 @@
 export type ProjectCategory = 'all' | 'app' | 'landing' | 'interactive';
 
+export type CollaboratorPlatform = 'github' | 'instagram' | 'shopee' | 'website';
+
+export interface Collaborator {
+  name: string;
+  role?: string;
+  url: string;
+  platform?: CollaboratorPlatform;
+}
+
 export interface Project {
   id: string;
   title: string;
   category: 'app' | 'landing' | 'interactive';
   collab?: string;
+  collaborator?: Collaborator;
   role?: string;
   description: string;
   skills: string[];

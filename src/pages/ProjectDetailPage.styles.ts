@@ -72,13 +72,30 @@ export const CategoryBadge = styled.span`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
 `;
 
-export const CollabBadge = styled.span`
+export const CollabBadge = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: ${({ theme }) => theme.fontSizes.xs};
   padding: 4px 12px;
   border-radius: ${({ theme }) => theme.radii.full};
   background-color: ${({ theme }) => theme.colors.glass};
   color: ${({ theme }) => theme.colors.textSecondary};
   border: 1px solid ${({ theme }) => theme.colors.borderGlass};
+  text-decoration: none;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  img {
+    width: 13px;
+    height: 13px;
+  }
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accentLime};
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+    transform: translateY(-1px);
+  }
 `;
 
 export const ProjectHero = styled.header`
@@ -167,6 +184,38 @@ export const SecondaryCodeLink = styled.a`
     border-color: ${({ theme }) => theme.colors.borderHover};
     background-color: ${({ theme }) => theme.colors.accentMuted};
     color: ${({ theme }) => theme.colors.textHighlight};
+  }
+`;
+
+export const CollabActionLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  background-color: ${({ theme }) => theme.colors.glass};
+  color: ${({ theme }) => theme.colors.textHighlight};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  padding: 12px 22px;
+  border-radius: ${({ theme }) => theme.radii.sm};
+  border: 1px solid ${({ theme }) => theme.colors.borderGlass};
+  text-decoration: none;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  img {
+    width: 15px;
+    height: 15px;
+  }
+
+  svg {
+    color: ${({ theme }) => theme.colors.accentLime};
+  }
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+    color: ${({ theme }) => theme.colors.accentLime};
+    transform: translateY(-2px);
   }
 `;
 

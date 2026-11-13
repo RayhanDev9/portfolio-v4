@@ -147,7 +147,24 @@ export const CardMeta = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   color: ${({ theme }) => theme.colors.textMuted};
   margin-bottom: ${({ theme }) => theme.spacing.sm};
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+`;
+
+export const CollabMetaLink = styled.a`
+  color: ${({ theme }) => theme.colors.textHighlight};
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: color ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accentLime};
+    text-decoration: underline;
+  }
 `;
 
 export const CardDescription = styled.p`
@@ -207,8 +224,30 @@ export const CardActionRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.sm};
   padding-top: ${({ theme }) => theme.spacing.md};
   border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+`;
+
+export const CardActionGroup = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+export const RepoLink = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  color: ${({ theme }) => theme.colors.textMuted};
+  text-decoration: none;
+  transition: color ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.textHighlight};
+  }
 `;
 
 export const LiveDemoLink = styled.a`

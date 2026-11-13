@@ -21,115 +21,135 @@
 | /projects/:id Full Case Study | ✅ Selesai | `b4e6f74` |
 | Fix: Prevent Pill Tags Stretching | ✅ Selesai | `29f416e` |
 | Paket Fitur Kunci Tambahan (Scroll, SEO, CV, Search, 404) | ✅ Selesai | `4ec736f` |
-| **Paket Fitur Tingkat Lanjut (Command Palette, Ambient Glow, Direct Email, Code Snippets)** | ✅ Selesai | `c37f8ab` |
+| Paket Fitur Tingkat Lanjut (Command Palette, Ambient Glow, Direct Email, Code Snippets) | ✅ Selesai | `ea6112b` |
+| **Integrasi Link GitHub Repo & Dinamika Link Kolaborator (GitHub, Instagram, Shopee)** | ✅ Selesai | `cdae4c6` |
 
 ---
 
-## 📋 Active Build Plan: Paket Fitur Tingkat Lanjut (Advanced Engineering Suite)
+## 📋 Active Build Plan: Integrasi Link GitHub Repo & Dinamika Kolaborator Multi-Platform
 
-### 1. Tujuan & Filosofi
+### 1. Latar Belakang & Filosofi Desain
 
-Portofolio ini telah memiliki seluruh fitur dasar dan navigasi penting. Paket ini dirancang untuk mengangkat kualitas portofolio ke standar **World-Class Design Engineering** (setara dengan situs portofolio engineer di Linear, Vercel, dan Raycast):
+Setiap proyek portofolio memiliki konteks kolaborasi dan kepemilikan kode yang berbeda:
+1. **Source Code Repositori GitHub RayhanDev9**: Menghubungkan langsung ke kode sumber proyek untuk verifikasi teknis recruiter.
+2. **Rekan Kolaborator Developer**: Menghubungkan ke profil GitHub rekan satu tim (*Team Collaborator*).
+3. **Klien / Partner Desainer Grafis**: Menghubungkan ke akun Instagram resmi (*Creative Partner*).
+4. **Klien Toko / E-Commerce**: Menghubungkan ke Toko Online Shopee resmi (*E-Commerce Client*).
 
-1. **⌨️ Quick Command Palette (`Ctrl + K` / `Cmd + K`)**: Memberikan pengalaman navigasi kilat berbasis keyboard dan pencarian global instan.
-2. **✨ Ambient Specular Cursor Glow (AW Media Polish)**: Lapisan pencahayaan difus aksen lime yang bereaksi terhadap kursor mouse, memberikan kedalaman estetika kanvas gelap tanpa membebani performa.
-3. **📬 Direct Email Delivery pada Contact Form**: Mengirim pesan langsung ke email tanpa memicu pembukaan aplikasi mailto bawaan perangkat pengguna.
-4. **💻 Code Architecture Snippets di Detail Studi Kasus (`/projects/:id`)**: Menampilkan cuplikan kode arsitektur TypeScript nyata pada studi kasus proyek lengkap dengan tombol salin kode (*copy code*).
+Sistem akan dirancang dengan **Smart Dynamic Platform Detection** agar secara otomatis mengenali jenis link (`github.com`, `instagram.com`, `shopee.co.id`, atau website kustom) dan menampilkan ikon serta label yang sesuai tanpa redundansi atau layout yang berantakan.
 
 ---
 
-### 2. Desain Layout Fitur Baru
+### 2. Desain Layout & Penempatan UI
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ NAVBAR: Rayhan.   [Home] [Projects] [Skills] [Certs] [Contact] [⌘K] [Resume]│
+│ HALAMAN DETAIL STUDI KASUS (/projects/:id)                                 │
+│                                                                            │
+│ ← Kembali ke Katalog Proyek             [WEB APP] • [👥 @akumalas ↗]       │
+│                                                                            │
+│ Mading Kampus                                                              │
+│ Digital campus magazine and announcement portal developed in team.         │
+│                                                                            │
+│ [ Buka Live Demo ↗ ]  [ Source Code < / > ]  [ 👥 Partner: @akumalas ↗ ]   │
+│                                                                            │
+│ (Ikon & label tombol ketiga beradaptasi otomatis sesuai platform):         │
+│ • GitHub: [ 🐙 Collab: @akumalas ↗ ]                                       │
+│ • Instagram: [ 📸 Client: @dnustya_ ↗ ]                                    │
+│ • Shopee: [ 🛍️ Toko Shopee ↗ ]                                            │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ FLOATING COMMAND PALETTE (Ctrl + K / Cmd + K):                             │
+│ KARTU KATALOG PROYEK (ProjectCard.tsx)                                     │
 │ ┌────────────────────────────────────────────────────────────────────────┐ │
-│ │ 🔍 Ketik perintah atau cari proyek...                       [Esc]      │ │
-│ ├────────────────────────────────────────────────────────────────────────┤ │
-│ │ NAVIGASI CEPAT                                                         │ │
-│ │ ↗ Beranda                                                              │ │
-│ │ ↗ Katalog Semua Proyek (10)                                            │ │
-│ │ ↗ Katalog Semua Sertifikat (12)                                        │ │
+│ │ 🖼️ Thumbnail Proyek                                                    │ │
 │ │                                                                        │ │
-│ │ STUDI KASUS PROYEK                                                     │ │
-│ │ ⚡ DapurRasa Food Store (Vue 3 + Pinia + TanStack Query)                │ │
-│ │ ⚡ Fast React Pizza (React 18 + Redux Toolkit)                          │ │
-│ │ ⚡ Danu Satya Portfolio (React 19 + Tailwind CSS)                       │ │
-│ │ ...                                                                    │ │
+│ │ Danu Satya Portfolio                                                   │ │
+│ │ Front-End • Client: [@dnustya_ ↗] (Link aktif dengan warna aksen)      │ │
 │ │                                                                        │ │
-│ │ AKSI CEPAT                                                             │ │
-│ │ 📄 Unduh CV / Resume ATS (PDF)                                         │ │
-│ │ 📋 Salin Alamat Email                                                  │ │
-│ │ 💬 Buka Percakapan WhatsApp Langsung                                   │ │
-│ └────────────────────────────────────────────────────────────────────────┘ │
-├────────────────────────────────────────────────────────────────────────────┤
-│ AMBIENT CURSOR GLOW:                                                       │
-│ (Cahaya difus lime lembut mengikuti gerakan kursor di kanvas #202734)     │
-├────────────────────────────────────────────────────────────────────────────┤
-│ STUDI KASUS /projects/:id - CODE ARCHITECTURE BLOCK:                       │
-│ ┌────────────────────────────────────────────────────────────────────────┐ │
-│ │ 💻 Arsitektur State: Pinia Store (useCartStore.ts)        [Salin Kode] │ │
-│ │ const useCartStore = defineStore('cart', () => { ... })                │ │
+│ │ [React 19] [Tailwind CSS] [TypeScript]                                 │ │
+│ │                                                                        │ │
+│ │ [ Live Demo ↗ ]  [ < / > Repo ]  [ Detail → ]                          │ │
 │ └────────────────────────────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### 3. Rincian Teknis Per Fitur
+### 3. Rincian Teknis Per Komponen
 
-#### Fitur 1: Global Command Palette (`src/components/CommandPalette/`)
-- **Struktur File**:
-  - `CommandPalette.tsx`: Komponen modal dengan listener keyboard global (`keydown` untuk `Ctrl+K`, `Cmd+K`, dan `Escape`).
-  - `CommandPalette.styles.ts`: Dark glass modal dengan border 1px halus, input pencarian beraksen lime, dan item list dengan transisi keyboard.
-  - `index.ts`: Public export.
-- **Dukungan Navigasi**:
-  - Dukungan tombol panah atas/bawah (`ArrowUp`, `ArrowDown`) dan tombol `Enter` untuk memilih.
-  - Filter pencarian instan pada seluruh item (halaman, 10 proyek, dan aksi langsung).
-- **Navbar Trigger**:
-  - Tombol pintasan pill di samping kanan Navbar: ikon `Search` + badge `⌘K` / `Ctrl+K`.
+#### A. Pembaruan Model Data (`src/types/portfolio.ts`)
+Menambahkan interface `Collaborator`:
+```typescript
+export type CollaboratorPlatform = 'github' | 'instagram' | 'shopee' | 'website';
 
-#### Fitur 2: Ambient Specular Cursor Glow (`src/components/shared/CursorGlow.tsx`)
-- **Implementasi**:
-  - Menggunakan radial gradient halus: `radial-gradient(600px at [x]px [y]px, rgba(183, 216, 148, 0.04), transparent 80%)`.
-  - Menggunakan `requestAnimationFrame` untuk menjamin pergerakan stabil di 60 FPS tanpa re-render React berlebih.
-  - `pointer-events: none` dan `z-index: 0` agar tidak mengganggu klik atau seleksi teks.
-  - Otomatis disembunyikan pada layar sentuh/mobile (`@media (hover: none)`).
+export interface Collaborator {
+  name: string;        // contoh: 'akumalas', 'EternalVultr', 'ItzRyz', 'Danu Satya', 'Store Radeva'
+  role?: string;       // contoh: 'Backend Collaborator', 'UI/UX Designer', 'Client'
+  url: string;         // tautan langsung ke profil / toko
+  platform?: CollaboratorPlatform; // opsional: otomatis dideteksi dari URL jika kosong
+}
 
-#### Fitur 3: Direct Email Delivery pada Contact Form (`ContactForm.tsx`)
-- **Implementasi**:
-  - Integrasi submission form via `fetch` asinkron ke endpoint terstandar Web3Forms (menggunakan access key publik/standar formulir statis).
-  - State manajemen: `isSubmitting`, `submitStatus` (`idle` | `success` | `error`).
-  - Animasi loading spinner saat pengiriman berlangsung.
-  - Banner pesan sukses di dalam kartu tanpa reload halaman dan form otomatis di-reset.
-  - Fallback otomatis ke `mailto:` jika koneksi jaringan offline/gagal.
+export interface Project {
+  // ... field eksisting
+  githubUrl?: string;          // Repositori GitHub RayhanDev9
+  collab?: string;             // Label teks ringkas untuk badge
+  collaborator?: Collaborator; // Objek detail kolaborator
+}
+```
 
-#### Fitur 4: Code Architecture Snippets di Studi Kasus (`/projects/:id`)
-- **Implementasi**:
-  - Menambahkan data `codeSnippet` opsional (title, language, code, explanation) pada `caseStudiesData` untuk proyek-proyek unggulan.
-  - Komponen blok kode gelap dengan font monospaced (`Fira Code` / `Consolas`), nomor baris atau bar status, dan tombol interaktif *"Salin Kode"* dengan status centang `Check` selama 2 detik.
+#### B. Pembaruan Data Proyek Nyata (`src/data/projects.ts`)
+1. **Mading Kampus (`mading-kampus`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/mading-kampus`
+   - `collab`: `Collab with @akumalas`
+   - `collaborator`: `{ name: 'akumalas', role: 'Backend Collaborator', url: 'https://github.com/akumalas', platform: 'github' }`
+2. **Siap Kerja (`siap-kerja`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/siap-kerja`
+   - `collab`: `Collab with @EternalVultr`
+   - `collaborator`: `{ name: 'EternalVultr', role: 'Developer Collaborator', url: 'https://github.com/EternalVultr', platform: 'github' }`
+3. **Company Profile ISC (`company-profile-isc`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/company-profile-isc`
+   - `collab`: `Collab with @ItzRyz`
+   - `collaborator`: `{ name: 'ItzRyz', role: 'ISC Collaborator', url: 'https://github.com/ItzRyz', platform: 'github' }`
+4. **Danu Satya Portfolio (`danu-satya`)**:
+   - `collab`: `Client: @dnustya_`
+   - `collaborator`: `{ name: 'Danu Satya', role: 'Graphic & Motion Designer', url: 'https://instagram.com/dnustya_', platform: 'instagram' }`
+5. **Store Radeva (`store-radeva`)**:
+   - `collab`: `Toko Shopee: Radeva`
+   - `collaborator`: `{ name: 'Store Radeva', role: 'E-Commerce Store', url: 'https://shopee.co.id/Bedak-MBK-Powder-Sachetan-13-6-gram-Dan-Box-200-gram-bedak-deodoran-legendaris-Varian-Putih-i.1736388240.56660827193', platform: 'shopee' }`
+
+#### C. Smart Platform Helper (`src/utils/collaborator.ts` atau inline helper)
+Mendeteksi jenis platform dan ikon:
+- `github.com` -> Ikon GitHub / `Code2`, label format: `Collab: @username`
+- `instagram.com` -> Ikon Instagram, label format: `Client: @username`
+- `shopee.co.id` -> Ikon `ShoppingBag`, label format: `Toko Shopee`
+- Default -> Ikon `ExternalLink`, label format: `Partner Web ↗`
+
+#### D. Integrasi Halaman Detail Studi Kasus (`ProjectDetailPage.tsx` & `.styles.ts`)
+- `CollabBadge`: Diubah menjadi link interaktif (`as="a" target="_blank"`).
+- `HeroActionRow`: Tombol ketiga `CollabActionButton` bergaya glassmorphism dengan hover glow aksen lime.
+
+#### E. Integrasi Kartu Katalog (`ProjectCard.tsx` & `Projects.styles.ts`)
+- `CardMeta`: Menjadikan teks kolaborator link aktif yang dapat diklik tanpa mengganggu navigasi kartu utama.
+- `CardActionRow`: Jika `project.githubUrl` ada, tampilkan tombol direct link repositori.
 
 ---
 
 ### 4. Urutan Eksekusi
 
 ```
-Step 1 → Ambient Specular Cursor Glow (src/components/shared/CursorGlow.tsx + integrasi di RootLayout)
-Step 2 → Direct Email Delivery Contact Form (src/components/Contact/ContactForm.tsx)
-Step 3 → Code Architecture Snippets di Detail Studi Kasus (src/data/caseStudies.ts & src/pages/ProjectDetailPage.*)
-Step 4 → Global Command Palette (src/components/CommandPalette/ + integrasi Navbar & RootLayout)
-Step 5 → Verifikasi Typecheck & Production Build (tsc --noEmit && npm run build)
-Step 6 → Update README.md status & Git Commit + Push
+Step 1 → Update src/types/portfolio.ts (Tambahkan interface Collaborator & field collaborator di Project)
+Step 2 → Update src/data/projects.ts (Masukkan link repo GitHub & data kolaborator Mading Kampus, Siap Kerja, ISC, Danu Satya, Radeva)
+Step 3 → Buat helper icon & detector platform kolaborasi (GitHub, Instagram, Shopee, Website)
+Step 4 → Update ProjectDetailPage.tsx & ProjectDetailPage.styles.ts (Tampilkan tombol & badge kolaborator)
+Step 5 → Update ProjectCard.tsx & Projects.styles.ts (Link kolaborator di kartu & tombol repo GitHub)
+Step 6 → Verifikasi Typecheck & Build Produksi (tsc --noEmit && npm run build)
+Step 7 → Update README.md status & Git Commit + Push
 ```
 
 ---
 
 ### 5. Kriteria Keberhasilan
 
-- ✅ **Snappy Command Palette**: Terbuka instan dengan `Ctrl+K` atau `Cmd+K` serta klik Navbar, navigasi panah & enter bekerja mulus.
-- ✅ **Smooth Cursor Glow**: Cahaya difus bergerak tanpa lag (60 FPS) dan tidak mengganggu elemen UI lainnya.
-- ✅ **Zero Friction Contact**: Pesan form terkirim langsung tanpa harus membuka aplikasi email eksternal.
-- ✅ **Kredibilitas Kode Nyata**: Studi kasus menampilkan potongan kode implementasi nyata yang rapi dan dapat disalin.
-- ✅ **Lolos Verifikasi**: 0 error TypeScript, build Vite produksi sukses, dan commit git bersih.
+- ✅ **Akses Instan ke Repo**: Pengguna dapat langsung membuka source code GitHub untuk proyek Mading Kampus, Siap Kerja, dan ISC.
+- ✅ **Multi-Platform Kolaborasi**: Link kolaborator GitHub (`@akumalas`, `@EternalVultr`, `@ItzRyz`), Instagram (`@dnustya_`), dan Toko Shopee (Radeva) terbuka di tab baru dengan ikon dan label yang tepat.
+- ✅ **Visual Estetik & Responsif**: Tombol dan badge tertata rapi di mobile maupun desktop sesuai DNA AW Media dark glassmorphism.
+- ✅ **Lolos Verifikasi**: 0 error TypeScript, build Vite produksi 100% sukses, dan git commit bersih.

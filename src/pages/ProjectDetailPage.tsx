@@ -14,11 +14,13 @@ import {
   Copy,
   Check,
   FileCode,
+  ShoppingBag,
 } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { projectsData } from '../data/projects';
 import { caseStudiesData } from '../data/caseStudies';
+import { getCollaboratorInfo } from '../utils/collaborator';
 import {
   PageContainer,
   MainContent,
@@ -35,6 +37,7 @@ import {
   HeroActionRow,
   PrimaryDemoLink,
   SecondaryCodeLink,
+  CollabActionLink,
   SkillsList,
   SkillPill,
   ShowcaseCard,
@@ -120,6 +123,23 @@ export default function ProjectDetailPage() {
   const nextProject =
     projectsData[(currentIndex + 1) % projectsData.length];
 
+  const collabInfo = project.collaborator ? getCollaboratorInfo(project.collaborator) : null;
+
+  const renderPlatformIcon = (platform: string, size = 15) => {
+    if (platform === 'github') return <Code2 size={size} />;
+    if (platform === 'instagram') {
+      return (
+        <img
+          src="/icons/social/instagram.svg"
+          alt="Instagram"
+          style={{ width: size, height: size, display: 'inline-block' }}
+        />
+      );
+    }
+    if (platform === 'shopee') return <ShoppingBag size={size} />;
+    return <ExternalLink size={size} />;
+  };
+
   return (
     <PageContainer>
       <Navbar />
@@ -133,7 +153,20 @@ export default function ProjectDetailPage() {
 
             <MetaPills>
               <CategoryBadge>{project.category}</CategoryBadge>
-              {project.collab && <CollabBadge>{project.collab}</CollabBadge>}
+              {collabInfo ? (
+                <CollabBadge
+                  href={collabInfo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Buka tautan ${collabInfo.label}`}
+                >
+                  {renderPlatformIcon(collabInfo.platform, 13)}
+                  <span>{project.collab || collabInfo.label}</span>
+                  <ExternalLink size={11} style={{ opacity: 0.7 }} />
+                </CollabBadge>
+              ) : (
+                project.collab && <CollabBadge as="span">{project.collab}</CollabBadge>
+              )}
             </MetaPills>
           </NavRow>
 
@@ -168,6 +201,19 @@ export default function ProjectDetailPage() {
                     <Code2 size={16} />
                     <span>Lihat Source Code</span>
                   </SecondaryCodeLink>
+                )}
+
+                {collabInfo && (
+                  <CollabActionLink
+                    href={collabInfo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={`Kunjungi profil / link ${collabInfo.label}`}
+                  >
+                    {renderPlatformIcon(collabInfo.platform, 15)}
+                    <span>{collabInfo.label}</span>
+                    <ExternalLink size={14} />
+                  </CollabActionLink>
                 )}
               </HeroActionRow>
 

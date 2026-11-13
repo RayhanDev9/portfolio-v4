@@ -7,7 +7,7 @@
 
 ## 🚀 Status Implementasi
 
-| Section | Status | Commit |
+| Section / Fitur | Status | Commit |
 |---|---|---|
 | Theme System & Design Tokens | ✅ Selesai | `d01871d` |
 | Navbar & Glassmorphism Mobile Menu | ✅ Selesai | `f578672` |
@@ -15,387 +15,178 @@
 | Featured Projects + Filter Tabs | ✅ Selesai | `9fcd808` |
 | React Router v7 + `/projects` Catalogue | ✅ Selesai | `5748b9e` |
 | `/projects/:id` Detail Page (placeholder) | ✅ Selesai | `5748b9e` |
-| **Skills & Career Journey (`#skills`)** | ✅ Selesai | `a390b71` |
-| **Certificates Showcase & Lightbox (`#certificates`)** | ✅ Selesai | `c4862ba` |
+| Skills & Career Journey (`#skills`) | ✅ Selesai | `f155aaf` |
+| Certificates Showcase & Lightbox Modal | ✅ Selesai | `bcc484e` |
+| **Fix: Uniform Card Height & `/certificates` Route** | ✅ Selesai | `d2891f7` |
 | Contact Section (`#contact`) | ⬜ Belum | — |
 | Footer | ⬜ Belum | — |
 | `/projects/:id` Full Case Study | ⬜ Belum | — |
 
 ---
 
-## 📋 Active Build Plan: Certificates Showcase & Lightbox Modal (`#certificates`)
+## 📋 Active Build Plan: Fix Certificate Card Alignment & `/certificates` Route
 
-### Data yang Tersedia
+### 1. Masalah yang Ditemukan (Problem Analysis)
 
-**`src/data/certificates.ts`** — 12 sertifikat total:
+#### Masalah A: Tinggi Kartu & Perataan Elemen Tidak Rata (Card Height Mismatch)
+- **Gejala visual**: Pada screenshot, kartu di tengah ("Hackathon: Innovating Beyond The Code" - 1 baris judul) memiliki tinggi kartu yang lebih pendek daripada kartu kiri dan kanan (judul 2 baris). Tombol *"Lihat Sertifikat"* di kartu tengah posisinya lebih tinggi dan tidak sejajar.
+- **Penyebab teknis**:
+  1. `<motion.div>` pembungkus di `CertificateCard.tsx` tidak memiliki `height: 100%`, dan `<CardContainer>` juga tidak di-set `height: 100%`. Akibatnya kartu hanya mengambil tinggi konten alaminya sendiri, bukan meregang mengikuti tinggi baris CSS Grid.
+  2. `CardTitle` tidak memiliki `min-height` tetap untuk 2 baris teks. Judul 1 baris (~24px) menghasilkan selisih ~24px dibanding judul 2 baris (~48px), mendorong elemen di bawahnya secara tidak rata.
+  3. `SkillsRow` memiliki jumlah baris tag yang bervariasi (1 baris vs 2 baris) tanpa `min-height` cadangan.
 
-| # | ID | Judul | Platform | Penerbit |
-|---|---|---|---|---|
-| 1 | `penghargaan-isc` | Sertifikat Penghargaan ISC | Penghargaan | Informatics Study Club |
-| 2 | `hackathon-himtif` | Hackathon: Innovating Beyond The Code | Kompetisi | HIMTIF |
-| 3 | `udemy-js-jonas` | Complete JavaScript Course | Udemy | Jonas Schmedtmann |
-| 4 | `udemy-html-css-jonas` | Responsive Websites HTML & CSS | Udemy | Jonas Schmedtmann |
-| 5 | `udemy-js-eko` | JavaScript: Pemula sampai Mahir | Udemy | Eko Kurniawan |
-| 6 | `codepolitan-vue-pinia` | State Management Vue 3 + Pinia | Codepolitan | Ahmad Hakim |
-| 7 | `codepolitan-ajax` | AJAX & Asynchronous Web API | Codepolitan | Ahmad Hakim |
-| 8 | `codepolitan-git` | Git & GitHub untuk Pemula | Codepolitan | Nusendra |
-| 9 | `codepolitan-javascript` | JavaScript Dasar | Codepolitan | Ahmad Hakim |
-| 10 | `codepolitan-bootstrap` | CSS Framework Bootstrap | Codepolitan | Ahmad Hakim |
-| 11 | `codepolitan-css` | Dasar CSS | Codepolitan | Alucard |
-| 12 | `codepolitan-html-dasar` | Dasar HTML | Codepolitan | Ahmad Hakim |
-
-**Distribusi platform:**
-- Penghargaan: 1
-- Kompetisi: 1
-- Udemy: 3
-- Codepolitan: 7
-
-**Gambar:** 12 file `.avif` di `public/images/sertifikat/`
+#### Masalah B: Sertifikat Belum Memiliki Route Tersendiri & Belum Ada Kurasi Featured
+- **Gejala**: Beranda saat ini langsung menampilkan seluruh 12 sertifikat sekaligus tanpa sistem kurasi, berbeda dengan section **Featured Projects** yang menampilkan proyek terpilih di beranda dan menyediakan halaman katalog lengkap `/projects`.
+- **Kebutuhan**:
+  1. Beranda (`#certificates`) hanya menampilkan **sertifikat terbaik/unggulan** (6 sertifikat terkurasi dalam 2 baris × 3 kolom yang presisi).
+  2. Tombol CTA di bawah beranda: *"Lihat Semua Sertifikat (12) →"* yang mengarahkan pengguna ke halaman rute baru `/certificates`.
+  3. Halaman rute baru `src/pages/CertificatesPage.tsx` (`/certificates`) menampilkan seluruh 12 sertifikat dengan tombol kembali, filter tabs + counter, dan Lightbox modal interaktif.
 
 ---
 
-### 1. File Structure
+### 2. Rencana Solusi Detail (Technical Blueprint)
 
-```
-src/components/Certificates/
-├── Certificates.tsx          # Section wrapper — heading, filter, grid
-├── Certificates.styles.ts    # Semua styled-components
-├── CertificateCard.tsx       # Kartu individual per sertifikat
-├── CertificateLightbox.tsx   # Modal zoom fullscreen
-└── index.ts                  # Barrel export
-```
+#### A. Fix Optical Alignment & Equal Height Kartu (`Certificates.styles.ts` & `CertificateCard.tsx`)
 
----
+1. **Equal Card Height & Flex Stretcher**:
+   - Di `CertificateCard.tsx`:
+     ```tsx
+     <motion.div
+       ...
+       style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+     >
+       <CardContainer style={{ height: '100%' }}>
+     ```
+   - Di `CardContainer`: tambahkan `height: 100%; display: flex; flex-direction: column;`
 
-### 2. Section Layout
+2. **Reserved Title Height (2 Baris Konsisten)**:
+   - Di `CardTitle`:
+     ```css
+     min-height: 2.9rem; /* persis 2 baris line-height normal */
+     line-height: 1.45;
+     display: -webkit-box;
+     -webkit-line-clamp: 2;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     ```
+     *Hasil*: Judul 1 baris maupun 2 baris akan selalu menempati tinggi vertikal yang sama persis (±46px), sehingga elemen `CardIssuer` di bawahnya selalu dimulai pada garis horizontal yang sejajar.
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│  SECTION HEADER                                                      │
-│                                                                      │
-│  Certifications                          (Poiret One display font)   │
-│  Sertifikasi resmi dan                  (subheading, textMuted)      │
-│  penghargaan yang diperoleh.                                         │
-│                                                                      │
-├──────────────────────────────────────────────────────────────────────┤
-│  FILTER TABS                                                         │
-│                                                                      │
-│  [All (12)] [Udemy (3)] [Codepolitan (7)] [Kompetisi & Awards (2)]  │
-│                                                                      │
-├──────────────────────────────────────────────────────────────────────┤
-│  CERTIFICATE GRID (3 kolom desktop, 2 tablet, 1 mobile)              │
-│                                                                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐               │
-│  │  ┌──────────┐│  │  ┌──────────┐│  │  ┌──────────┐│               │
-│  │  │Thumbnail ││  │  │Thumbnail ││  │  │Thumbnail ││               │
-│  │  │(click →  ││  │  │(click →  ││  │  │(click →  ││               │
-│  │  │lightbox) ││  │  │lightbox) ││  │  │lightbox) ││               │
-│  │  └──────────┘│  │  └──────────┘│  │  └──────────┘│               │
-│  │  [Udemy]     │  │  [Codepolitan│  │  [Kompetisi] │               │
-│  │  Title...    │  │  Title...    │  │  Title...    │               │
-│  │  Issuer      │  │  Issuer      │  │  Issuer      │               │
-│  │  [🔍 Zoom]   │  │  [🔍 Zoom]   │  │  [🔍 Zoom]   │               │
-│  └──────────────┘  └──────────────┘  └──────────────┘               │
-│                                                                      │
-│  ... (12 sertifikat total)                                           │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
-
- LIGHTBOX MODAL (saat diklik Zoom atau thumbnail):
-
-┌──────────────────────────────────────────────────────────────────────┐
-│  ████████████████████████████████████████████████████████████████████ │
-│  ██ Overlay gelap (backdrop-filter: blur(20px)) ████████████████████ │
-│  ██                                                              ██ │
-│  ██    ┌────────────────────────────────────────────────┐     [X] ██ │
-│  ██    │                                                │        ██ │
-│  ██    │                                                │        ██ │
-│  ██    │          Gambar Sertifikat                      │        ██ │
-│  ██    │          (max-width: 900px)                     │        ██ │
-│  ██    │          (resolusi tinggi)                      │        ██ │
-│  ██    │                                                │        ██ │
-│  ██    │                                                │        ██ │
-│  ██    └────────────────────────────────────────────────┘        ██ │
-│  ██                                                              ██ │
-│  ██    Judul Sertifikat                                          ██ │
-│  ██    Penerbit • Platform                                       ██ │
-│  ██                                                              ██ │
-│  ████████████████████████████████████████████████████████████████████ │
-└──────────────────────────────────────────────────────────────────────┘
-```
+3. **Reserved Issuer & SkillsRow Height**:
+   - Di `CardIssuer`: `min-height: 1.25rem;`
+   - Di `SkillsRow`:
+     ```css
+     margin-top: auto; /* mendorong tombol ke bawah */
+     min-height: 48px;  /* ruang seragam untuk tag skill */
+     ```
+     *Hasil*: Tombol *"Lihat Sertifikat"* akan selalu terkunci di posisi dasar (*bottom-aligned*) pada semua kartu dalam satu baris.
 
 ---
 
-### 3. Section Header
+#### B. Skema Data: Tambah Properti `featured` di Certificate
 
-- **Heading** (`<h2>`):
-  - Teks: `"Certifications"`
-  - `font-family: theme.fonts.display` (Poiret One)
-  - `font-size: theme.fontSizes['4xl']` desktop → `['3xl']` mobile
-  - `color: theme.colors.textHighlight`
-  - `font-weight: theme.fontWeights.regular`
-  - `letter-spacing: theme.letterSpacings.wide`
-- **Subheading** (`<p>`):
-  - Teks: `"Sertifikasi resmi dan penghargaan yang diperoleh."`
-  - `font-size: theme.fontSizes.md`
-  - `color: theme.colors.textMuted`
-  - `margin-top: theme.spacing.sm`
+1. **`src/types/portfolio.ts`**:
+   ```ts
+   export interface Certificate {
+     id: string;
+     title: string;
+     platform: CertificatePlatform;
+     platformName: string;
+     issuer: string;
+     img: string;
+     alt: string;
+     skills: string[];
+     desc: string;
+     featured?: boolean; // BARU
+   }
+   ```
 
----
-
-### 4. Filter Tabs
-
-#### Tab Data
-```ts
-const CERT_TABS: { value: CertificatePlatform | 'all'; label: string }[] = [
-  { value: 'all',        label: `All (${certificatesData.length})` },       // 12
-  { value: 'udemy',      label: `Udemy (3)` },
-  { value: 'codepolitan', label: `Codepolitan (7)` },
-  { value: 'kompetisi',  label: `Awards (2)` },     // Gabung kompetisi + penghargaan
-];
-```
-
-> **Catatan:** Karena platform `kompetisi` (1) dan `penghargaan` (1) hanya masing-masing 1 sertifikat, kita gabung keduanya ke tab "Awards (2)". Filter logic: `platform === 'kompetisi' || platform === 'penghargaan'`.
-
-#### Filter Logic
-```ts
-const [activePlatform, setActivePlatform] = useState<CertificatePlatform | 'all'>('all');
-
-const displayedCerts =
-  activePlatform === 'all'
-    ? certificatesData
-    : activePlatform === 'kompetisi'
-      ? certificatesData.filter(c => c.platform === 'kompetisi' || c.platform === 'penghargaan')
-      : certificatesData.filter(c => c.platform === activePlatform);
-```
-
-#### Tab Styling
-- Identik dengan filter tabs pada Featured Projects dan Skills (konsistensi visual).
+2. **`src/data/certificates.ts`**:
+   Tandai **6 sertifikat terbaik** sebagai `featured: true` mencakup prestasi penghargaan, kompetisi, dan sertifikasi kursus kredibel:
+   - `penghargaan-isc` (Penghargaan Kontribusi Web Dev ISC)
+   - `hackathon-himtif` (Hackathon HIMTIF)
+   - `udemy-js-jonas` (The Complete JavaScript Course - Jonas Schmedtmann)
+   - `udemy-html-css-jonas` (Build Responsive Websites - Jonas Schmedtmann)
+   - `udemy-js-eko` (Pemrograman JavaScript - Eko Kurniawan)
+   - `codepolitan-vue-pinia` (State Management Vue 3 dengan Pinia)
 
 ---
 
-### 5. Certificate Card (`CertificateCard.tsx`)
+#### C. Update Section Beranda (`src/components/Certificates/Certificates.tsx`)
 
-#### Props Interface
-```ts
-interface CertificateCardProps {
-  certificate: Certificate;
-  index: number;
-  onViewCertificate: (certificate: Certificate) => void;
-}
-```
-
-#### Struktur Visual
-```
-┌────────────────────────────────┐
-│ ┌────────────────────────────┐ │  ← Thumbnail wrapper
-│ │                            │ │     aspect-ratio: 4/3
-│ │    Thumbnail Sertifikat    │ │     overflow: hidden
-│ │    (click → lightbox)      │ │     cursor: pointer
-│ │                            │ │
-│ └────────────────────────────┘ │
-│                                │
-│  [Udemy]                       │  ← Platform badge pill
-│  Complete JavaScript Course    │  ← Title (h3), max 2 baris
-│  Jonas Schmedtmann             │  ← Issuer name
-│                                │
-│  [JS ES6+] [OOP] [Async]      │  ← Skill pills (max 3 + overflow)
-│                                │
-│  [🔍 Lihat Sertifikat]         │  ← Action button
-│                                │
-└────────────────────────────────┘
-```
-
-#### Styling Detail
-
-**Card Container**:
-- `background: theme.colors.secondarySurface`
-- `border: 1px solid theme.colors.borderGlass`
-- `border-radius: theme.radii.md`
-- `overflow: hidden`
-- `display: flex`, `flex-direction: column`
-- Hover: `border-color: borderHover`, `transform: translateY(-4px)`, `box-shadow: glow`
-
-**Thumbnail**:
-- `<img>` wrapper, `aspect-ratio: 4 / 3`, `overflow: hidden`
-- `object-fit: cover`, `cursor: pointer`
-- `transition: transform normal`
-- Card hover → `transform: scale(1.04)` pada image
-- Klik thumbnail → panggil `onViewCertificate(certificate)` → buka lightbox
-
-**Content area** (padding: `theme.spacing.lg`):
-
-- **Platform Badge**:
-  - Pill kecil di atas judul
-  - `font-size: xs`, `padding: 3px 10px`
-  - `border-radius: full`
-  - `background: accentMuted`, `color: accentLime`
-  - `border: 1px solid borderSubtle`
-  - `text-transform: uppercase`, `letter-spacing: wider`
-  - `margin-bottom: theme.spacing.sm`
-
-- **Title** (`<h3>`):
-  - `font-size: theme.fontSizes.base` (16px)
-  - `font-weight: semibold`
-  - `color: textHighlight`
-  - `-webkit-line-clamp: 2` + `overflow: hidden`
-  - `margin-bottom: theme.spacing.xs`
-
-- **Issuer**:
-  - `font-size: theme.fontSizes.xs`
-  - `color: textMuted`
-  - `margin-bottom: theme.spacing.md`
-
-- **Skill Pills** (flex row, max 3 + overflow):
-  - Sama styling dengan ProjectCard tech pills
-  - `margin-bottom: theme.spacing.md`
-
-- **Zoom Button** (action row):
-  - `width: 100%`
-  - `padding: 10px`
-  - `border-radius: theme.radii.sm`
-  - `background: theme.colors.glass`
-  - `border: 1px solid theme.colors.borderGlass`
-  - `color: theme.colors.textSecondary`
-  - `font-size: theme.fontSizes.sm`
-  - `cursor: pointer`
-  - `display: flex`, `align-items: center`, `justify-content: center`, `gap: 6px`
-  - Icon `ZoomIn` dari lucide-react (size 14)
-  - Hover: `border-color: borderHover`, `background: glassHover`, `color: textHighlight`
-  - Klik → panggil `onViewCertificate(certificate)` → buka lightbox
+1. Hanya render sertifikat dengan `featured: true` (6 sertifikat).
+2. Di bawah grid, tambahkan:
+   ```tsx
+   <FooterCTAWrapper>
+     <AllCertificatesButton
+       as={Link}
+       to="/certificates"
+       aria-label={`Lihat semua ${certificatesData.length} sertifikat di katalog lengkap`}
+     >
+       <span>Lihat Semua Sertifikat ({certificatesData.length})</span>
+       <ArrowRight size={16} />
+     </AllCertificatesButton>
+   </FooterCTAWrapper>
+   ```
+3. Styling `FooterCTAWrapper` dan `AllCertificatesButton` ditambahkan di `Certificates.styles.ts` (mengikuti pola Brandlos secondary button seperti di Projects).
 
 ---
 
-### 6. Certificate Grid Layout
+#### D. Buat Halaman Katalog Lengkap (`src/pages/CertificatesPage.tsx`)
 
-```css
-grid-template-columns: repeat(3, 1fr);   /* ≥ 1024px desktop */
-grid-template-columns: repeat(2, 1fr);   /* 768px–1023px tablet */
-grid-template-columns: 1fr;              /* < 768px mobile */
-gap: theme.spacing.lg;
-```
-
----
-
-### 7. Lightbox Modal (`CertificateLightbox.tsx`)
-
-#### Props Interface
-```ts
-interface CertificateLightboxProps {
-  certificate: Certificate | null;   // null = tertutup
-  onClose: () => void;
-}
-```
-
-#### Behavior
-- Muncul saat `certificate !== null`
-- Tutup dengan: klik tombol `X`, klik di luar gambar (overlay), tekan `Esc`
-- `document.body.style.overflow = 'hidden'` saat terbuka (cegah scroll di belakang)
-- `useEffect` listener `keydown` untuk `Escape`
-
-#### Struktur Visual
-
-**Overlay**:
-- `position: fixed`, `inset: 0`, `z-index: 200`
-- `background: rgba(32, 39, 52, 0.92)` (overlay gelap)
-- `backdrop-filter: theme.effects.blurHeavy` (`blur(20px)`)
-- `display: flex`, `align-items: center`, `justify-content: center`
-- `padding: theme.spacing.xl`
-- Klik overlay (bukan konten) → `onClose()`
-
-**Close Button**:
-- `position: absolute`, `top: 16px`, `right: 16px`
-- `width: 40px`, `height: 40px`, `border-radius: full`
-- `background: theme.colors.glass`, `border: 1px solid borderGlass`
-- `color: textHighlight`
-- Icon `X` dari lucide-react (size 20)
-- Hover: `background: glassHover`, `border-color: borderHover`
-- `z-index: 201`
-
-**Content Container** (klik TIDAK menutup):
-- `max-width: 900px`, `max-height: 90vh`
-- `display: flex`, `flex-direction: column`, `align-items: center`
-- `gap: theme.spacing.md`
-
-**Certificate Image**:
-- `max-width: 100%`, `max-height: 75vh`
-- `object-fit: contain`
-- `border-radius: theme.radii.md`
-- `border: 1px solid borderGlass`
-- `box-shadow: theme.shadows.card`
-
-**Info Bar** (di bawah gambar):
-- **Title**: `font-size: lg`, `color: textHighlight`, `font-weight: semibold`, `text-align: center`
-- **Issuer + Platform**: `font-size: sm`, `color: textMuted`, format `"Jonas Schmedtmann • Udemy"`, `text-align: center`
-
-#### Entry/Exit Animations (AnimatePresence)
-- Overlay: `opacity 0 → 1`, duration 200ms
-- Content: `opacity 0 → 1` + `scale 0.95 → 1`, duration 250ms
-- Exit: reverse
+1. **Layout**:
+   - `<Navbar />` di bagian atas.
+   - Tombol `← Kembali ke Beranda` (Link ke `/`).
+   - Page Header:
+     - Judul: `"All Certificates"` (Poiret One).
+     - Subtitle: `"Seluruh kredensial sertifikasi, pelatihan intensif, dan penghargaan resmi yang diperoleh."`
+   - Filter tabs lengkap dengan counter badge:
+     - `All (12)`
+     - `Udemy (3)`
+     - `Codepolitan (7)`
+     - `Awards (2)` (gabungan kompetisi + penghargaan)
+   - Grid 3 kolom menampilkan seluruh 12 kartu sertifikat.
+   - Integrasi `<CertificateLightbox />` aktif untuk pratinjau zoom gambar.
+   - Scroll ke paling atas otomatis saat halaman dibuka (`window.scrollTo(0, 0)`).
 
 ---
 
-### 8. State Management di Section Level
+#### E. Daftarkan Rute di Router (`src/router/index.tsx`)
 
+Tambahkan path `/certificates`:
 ```tsx
-// Di Certificates.tsx
-const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+import CertificatesPage from '../pages/CertificatesPage';
 
-// Buka lightbox
-const handleViewCertificate = (cert: Certificate) => setSelectedCert(cert);
-
-// Tutup lightbox
-const handleCloseLightbox = () => setSelectedCert(null);
-```
-
-Setiap `CertificateCard` menerima `onViewCertificate={handleViewCertificate}`.
-`CertificateLightbox` menerima `certificate={selectedCert}` dan `onClose={handleCloseLightbox}`.
-
----
-
-### 9. Entrance Animations
-
-| Elemen | Animasi | Trigger |
-|---|---|---|
-| Section Header | `fadeInUp` (y: 20→0) | `whileInView`, `once: true` |
-| Filter Tabs | `fadeInUp`, delay 100ms | `whileInView`, `once: true` |
-| Certificate Card | `fadeInUp`, staggered `index * 80ms` | `whileInView`, `once: true` |
-
-- Duration: `400ms`, easing: `[0.4, 0, 0.2, 1] as const`
-- `viewport: { once: true, margin: '-50px' }`
-
----
-
-### 10. Urutan Eksekusi
-
-```
-Step 1  → Buat src/components/Certificates/Certificates.styles.ts
-Step 2  → Buat src/components/Certificates/CertificateCard.tsx
-Step 3  → Buat src/components/Certificates/CertificateLightbox.tsx
-Step 4  → Buat src/components/Certificates/Certificates.tsx
-Step 5  → Buat src/components/Certificates/index.ts
-Step 6  → Update src/pages/HomePage.tsx — import Certificates, tambah di bawah Skills
-Step 7  → tsc --noEmit + npm run build
-Step 8  → Commit & push: "feat: certificates showcase with interactive lightbox modal"
+export const router = createBrowserRouter([
+  { path: '/', element: <HomePage /> },
+  { path: '/projects', element: <ProjectsPage /> },
+  { path: '/projects/:id', element: <ProjectDetailPage /> },
+  { path: '/certificates', element: <CertificatesPage /> }, // BARU
+  { path: '*', element: <NotFoundPage /> },
+]);
 ```
 
 ---
 
-### 11. Theme Tokens yang Dipakai
+### 3. Urutan Eksekusi (Step-by-Step Implementation)
 
-```
-colors: darkBase, secondarySurface, glass, glassHover, overlay
-        accentLime, accentMuted
-        textHighlight, textSecondary, textMuted, textInverse
-        border, borderHover, borderSubtle, borderGlass
-fonts:  display (Poiret One), heading (Google Sans)
-fontSizes: xs, sm, base, md, lg, '3xl', '4xl'
-fontWeights: medium, semibold, regular
-lineHeights: relaxed
-letterSpacings: wide, wider
-spacing: xs, sm, md, lg, xl, '2xl', '4xl'
-radii: sm, md, full
-transitions: fast (150ms), normal (250ms)
-shadows: glow, card
-effects: blurHeavy (blur(20px))
-```
+1. **Step 1**: Update `src/types/portfolio.ts` — tambahkan `featured?: boolean` pada interface `Certificate`.
+2. **Step 2**: Update `src/data/certificates.ts` — tandai 6 sertifikat pilihan dengan `featured: true`.
+3. **Step 3**: Update `src/components/Certificates/Certificates.styles.ts` — fix equal height kartu (`CardTitle` min-height, `CardIssuer`, `SkillsRow`, `CardContainer` 100% height) + styling tombol `AllCertificatesButton`.
+4. **Step 4**: Update `src/components/Certificates/CertificateCard.tsx` — pasang `height: 100%` pada motion wrapper & container.
+5. **Step 5**: Update `src/components/Certificates/Certificates.tsx` — kurasi beranda (hanya featured) + tombol CTA ke `/certificates`.
+6. **Step 6**: Buat file baru `src/pages/CertificatesPage.tsx` — katalog lengkap seluruh 12 sertifikat + filter + lightbox.
+7. **Step 7**: Update `src/router/index.tsx` — daftarkan rute `/certificates`.
+8. **Step 8**: Verifikasi build & type check: `npx tsc --noEmit` dan `npm run build`.
+9. **Step 9**: Git commit & push ke remote repository.
+
+---
+
+### 4. Kriteria Keberhasilan (Success Criteria)
+
+- ✅ **Presisi Visual**: Semua kartu sertifikat pada baris yang sama memiliki tinggi 100% identik.
+- ✅ **Perataan Horizontal**: Tombol *"Lihat Sertifikat"* di setiap kartu sejajar sempurna pada garis bawah horizontal yang sama, tidak terpengaruh oleh panjang judul (1 baris vs 2 baris).
+- ✅ **Home Page Ringkas**: Beranda hanya menampilkan 6 sertifikat terbaik sehingga halaman tetap proporsional dan tidak overloaded.
+- ✅ **Navigasi Mulus**: Tombol *"Lihat Semua Sertifikat (12)"* membuka rute `/certificates` tanpa reload halaman.
+- ✅ **Full Catalogue**: Halaman `/certificates` menampilkan seluruh 12 sertifikat lengkap dengan filter kategori dan lightbox modal zoom yang tetap berfungsi prima.
+- ✅ **Zero Errors**: Build production Vite dan TypeScript check lulus 100%.

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
 import { certificatesData } from '../../data/certificates';
 import type { Certificate } from '../../types/portfolio';
 import { CertificateCard } from './CertificateCard';
@@ -13,6 +15,8 @@ import {
   FilterTabsWrapper,
   FilterTabButton,
   CertificatesGrid,
+  FooterCTAWrapper,
+  AllCertificatesButton,
 } from './Certificates.styles';
 
 type FilterCategory = 'all' | 'udemy' | 'codepolitan' | 'awards';
@@ -23,22 +27,25 @@ export function Certificates() {
   const [activeCategory, setActiveCategory] = useState<FilterCategory>('all');
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
 
-  const udemyCount = certificatesData.filter((c) => c.platform === 'udemy').length;
-  const codepolitanCount = certificatesData.filter(
+  // Home page only showcases curated featured certificates
+  const featuredCertificates = certificatesData.filter((c) => c.featured);
+
+  const udemyCount = featuredCertificates.filter((c) => c.platform === 'udemy').length;
+  const codepolitanCount = featuredCertificates.filter(
     (c) => c.platform === 'codepolitan',
   ).length;
-  const awardsCount = certificatesData.filter(
+  const awardsCount = featuredCertificates.filter(
     (c) => c.platform === 'kompetisi' || c.platform === 'penghargaan',
   ).length;
 
   const categories: { value: FilterCategory; label: string }[] = [
-    { value: 'all', label: `All (${certificatesData.length})` },
+    { value: 'all', label: `All (${featuredCertificates.length})` },
     { value: 'udemy', label: `Udemy (${udemyCount})` },
     { value: 'codepolitan', label: `Codepolitan (${codepolitanCount})` },
     { value: 'awards', label: `Awards (${awardsCount})` },
   ];
 
-  const displayedCertificates = certificatesData.filter((cert) => {
+  const displayedCertificates = featuredCertificates.filter((cert) => {
     if (activeCategory === 'all') return true;
     if (activeCategory === 'udemy') return cert.platform === 'udemy';
     if (activeCategory === 'codepolitan') return cert.platform === 'codepolitan';
@@ -60,7 +67,7 @@ export function Certificates() {
           <SectionHeader>
             <SectionTitle>Certifications</SectionTitle>
             <SectionSubtitle>
-              Sertifikasi resmi dan penghargaan yang diperoleh sepanjang pembelajaran dan kontribusi komunitas.
+              Sertifikasi resmi dan penghargaan unggulan yang diperoleh sepanjang pembelajaran dan kontribusi komunitas.
             </SectionSubtitle>
           </SectionHeader>
         </motion.div>
@@ -96,6 +103,24 @@ export function Certificates() {
             />
           ))}
         </CertificatesGrid>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.4, delay: 0.2, ease: easeOut }}
+        >
+          <FooterCTAWrapper>
+            <AllCertificatesButton
+              as={Link}
+              to="/certificates"
+              aria-label={`Lihat semua ${certificatesData.length} sertifikat di katalog lengkap`}
+            >
+              <span>Lihat Semua Sertifikat ({certificatesData.length})</span>
+              <ArrowRight size={16} />
+            </AllCertificatesButton>
+          </FooterCTAWrapper>
+        </motion.div>
 
         <CertificateLightbox
           certificate={selectedCert}

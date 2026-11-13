@@ -12,6 +12,7 @@ export const certificatesData: Certificate[] = [
     alt: 'Sertifikat Penghargaan Informatics Study Club Bidang Web Development',
     skills: ['Web Development', 'Informatics Study Club', 'Dedikasi & Kontribusi', 'Teknologi Informasi'],
     desc: 'Penghargaan atas dedikasi dan kontribusi aktif sebagai anggota Informatics Study Club (ISC) bidang Web Development pada Program Studi Teknik Informatika Universitas Pamulang.',
+    featured: true,
   },
 
   // --- Kompetisi & Hackathon ---
@@ -25,6 +26,7 @@ export const certificatesData: Certificate[] = [
     alt: 'Sertifikat Partisipasi Hackathon Innovating Beyond The Code HIMTIF',
     skills: ['Hackathon', 'Problem Solving', 'Team Collaboration', 'Web Development'],
     desc: 'Partisipasi kompetisi Hackathon HIMTIF dalam merancang dan mengembangkan solusi aplikasi web di bawah batas waktu intensif.',
+    featured: true,
   },
 
   // --- Kursus & Sertifikasi Udemy ---
@@ -38,6 +40,7 @@ export const certificatesData: Certificate[] = [
     alt: 'Certificate The Complete JavaScript Course Jonas Schmedtmann',
     skills: ['JavaScript ES6+', 'OOP', 'Asynchronous JS', 'DOM & Events', 'Clean Architecture'],
     desc: 'Pendidikan komprehensif JavaScript modern: async/await, closures, prototypical inheritance, event loop, dan arsitektur kode berbasis modul.',
+    featured: true,
   },
   {
     id: 'udemy-html-css-jonas',
@@ -49,6 +52,7 @@ export const certificatesData: Certificate[] = [
     alt: 'Certificate Build Responsive Real-World Websites with HTML and CSS',
     skills: ['HTML5 Semantic', 'CSS3 Modern', 'Flexbox & Grid', 'Responsive Design', 'Web Performance'],
     desc: 'Implementasi standar web modern, tipografi responsif, sistem grid 12-kolom, optimasi aset gambar, dan aksesibilitas ramah pengguna.',
+    featured: true,
   },
   {
     id: 'udemy-js-eko',
@@ -60,6 +64,7 @@ export const certificatesData: Certificate[] = [
     alt: 'Certificate Pemrograman JavaScript Pemula sampai Mahir Eko Kurniawan Khannedy',
     skills: ['JavaScript Core', 'Standard Library', 'Web API', 'Object & Class', 'ES Modules'],
     desc: 'Pemahaman mendalam struktur data JavaScript, manipulasi browser DOM, penanganan error terstruktur, dan standar best practice industri.',
+    featured: true,
   },
 
   // --- Kursus & Sertifikasi Codepolitan ---
@@ -73,6 +78,7 @@ export const certificatesData: Certificate[] = [
     alt: 'Certificate Belajar State Management Vue 3 dengan Pinia Codepolitan',
     skills: ['Vue 3', 'Pinia', 'State Management', 'Vue Router', 'Composables'],
     desc: 'Arsitektur modular store dengan Pinia pada Vue 3, reaktivitas data state, sinkronisasi actions, getters, dan pemisahan logika bisnis melalui Composables.',
+    featured: true,
   },
   {
     id: 'codepolitan-ajax',

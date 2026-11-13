@@ -37,7 +37,7 @@ export function CertificateCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.4, delay: index * 0.08, ease: easeOut }}
-      style={{ display: 'flex', flexDirection: 'column' }}
+      style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
     >
       <CardContainer>
         <ThumbnailWrapper

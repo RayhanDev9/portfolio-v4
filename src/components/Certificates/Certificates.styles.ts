@@ -98,6 +98,7 @@ export const CardContainer = styled.article`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
   transition: border-color ${({ theme }) => theme.transitions.fast},
     transform ${({ theme }) => theme.transitions.fast},
     box-shadow ${({ theme }) => theme.transitions.fast};
@@ -159,7 +160,8 @@ export const CardTitle = styled.h3`
   font-size: ${({ theme }) => theme.fontSizes.base};
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
   color: ${({ theme }) => theme.colors.textHighlight};
-  line-height: ${({ theme }) => theme.lineHeights.normal};
+  line-height: 1.45;
+  min-height: 2.9rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -171,6 +173,7 @@ export const CardTitle = styled.h3`
 export const CardIssuer = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   color: ${({ theme }) => theme.colors.textMuted};
+  min-height: 1.25rem;
   margin-bottom: ${({ theme }) => theme.spacing.md};
   display: block;
 `;
@@ -180,6 +183,7 @@ export const SkillsRow = styled.div`
   flex-wrap: wrap;
   gap: 6px;
   margin-top: auto;
+  min-height: 48px;
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
@@ -316,4 +320,35 @@ export const LightboxTitle = styled.h3`
 export const LightboxMeta = styled.p`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+export const FooterCTAWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: ${({ theme }) => theme.spacing['2xl']};
+`;
+
+export const AllCertificatesButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  background-color: transparent;
+  color: ${({ theme }) => theme.colors.textPrimary};
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  padding: 12px 28px;
+  border-radius: ${({ theme }) => theme.radii.sm};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color ${({ theme }) => theme.transitions.fast},
+    background-color ${({ theme }) => theme.transitions.fast},
+    color ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+    color: ${({ theme }) => theme.colors.textHighlight};
+  }
 `;

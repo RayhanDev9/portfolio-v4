@@ -27,6 +27,7 @@ export interface Certificate {
   alt: string;
   skills: string[];
   desc: string;
+  featured?: boolean;
 }
 
 export interface SkillItem {

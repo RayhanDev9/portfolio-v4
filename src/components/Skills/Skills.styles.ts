@@ -98,6 +98,8 @@ export const SkillCardContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.glass};
   border: 1px solid ${({ theme }) => theme.colors.borderGlass};
   border-radius: ${({ theme }) => theme.radii.md};
+  height: 100%;
+  box-sizing: border-box;
   transition: border-color ${({ theme }) => theme.transitions.fast},
     transform ${({ theme }) => theme.transitions.fast},
     box-shadow ${({ theme }) => theme.transitions.fast};
@@ -132,6 +134,13 @@ export const SkillName = styled.span`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-align: center;
   margin-top: ${({ theme }) => theme.spacing.xs};
+  width: 100%;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  padding: 0 4px;
 `;
 
 export const SectionDivider = styled.div`

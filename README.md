@@ -5,361 +5,110 @@
 
 ---
 
-## Build Plan: Navbar & Hero Section
+## 🚀 Status Implementasi
 
-### Pre-requisites (sebelum mulai coding)
-
-1. **Install `lucide-react`** — package `lucide` yang terinstall sekarang hanya menyediakan icon mentah, bukan React components. Ganti dengan:
-   ```bash
-   pnpm remove lucide
-   pnpm add lucide-react
-   ```
-2. **Commit perubahan yang belum di-commit** — theme setup, GlobalStyles, styled.d.ts, App.tsx, main.tsx, index.html, GEMINI.md sudah dimodifikasi tapi belum masuk git.
-
----
-
-### 1. Navbar (`src/components/Navbar/`)
-
-#### File Structure
-```
-src/components/Navbar/
-├── Navbar.tsx          # Komponen utama
-├── Navbar.styles.ts    # Semua styled-components
-├── MobileMenu.tsx      # Overlay menu untuk layar kecil
-└── index.ts            # Barrel export
-```
-
-#### Behavior
-| Aspek | Detail |
-|---|---|
-| **Posisi** | `position: fixed`, `top: 0`, `z-index: 100`, full-width |
-| **Visual** | Glass surface: `background: theme.colors.glass` + `backdrop-filter: theme.effects.blur` + `border-bottom: 1px solid theme.colors.borderGlass` |
-| **Scroll Effect** | Saat scroll > 20px, navbar mengecilkan padding vertikal (64px → 48px) dan menambah `box-shadow: theme.shadows.subtle`. Deteksi via `useState` + `useEffect` + `window scroll listener` |
-| **Layout** | Flexbox: Logo/Brand kiri — Nav Links tengah — Availability Badge kanan |
-| **Mobile** | Di bawah `theme.breakpoints.tablet` (768px): nav links disembunyikan, muncul hamburger icon (`Menu` / `X` dari lucide-react). Klik buka `MobileMenu` overlay fullscreen |
-
-#### Nav Items
-```ts
-const navItems = [
-  { label: 'Home', href: '#hero' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Certificates', href: '#certificates' },
-  { label: 'Contact', href: '#contact' },
-];
-```
-
-Navigasi menggunakan smooth scroll ke anchor section di beranda. Nanti saat rute `/projects/:id` aktif, link akan jadi `<Link to="/#projects">` (react-router).
-
-#### Brand / Logo
-- Teks **"Rayhan"** menggunakan `font-family: theme.fonts.display` (Poiret One), `fontSize: theme.fontSizes.xl`, `color: theme.colors.textHighlight`
-- Titik hijau kecil (dot) setelah nama: `color: theme.colors.accentLime`
-
-#### Availability Pill Badge (Desktop)
-- Hanya tampil di desktop (`theme.media.desktop`)
-- Layout: Green pulsing dot (CSS animation) + teks "Open to Work"
-- Styling:
-  - `background: theme.colors.accentMuted`
-  - `border: 1px solid theme.colors.border`
-  - `border-radius: theme.radii.full`
-  - `color: theme.colors.accentLime`
-  - `font-size: theme.fontSizes.xs`
-  - `letter-spacing: theme.letterSpacings.wide`
-  - `text-transform: uppercase`
-- Pulsing dot: `@keyframes pulse` — scale 1→1.5→1 + opacity 1→0.5→1, duration `2s infinite`
-
-#### MobileMenu Overlay
-- `position: fixed`, `inset: 0`, `z-index: 99`
-- `background: theme.colors.glassElevated` + `backdrop-filter: theme.effects.blurHeavy`
-- Nav links ditampilkan vertikal, tengah layar, `font-size: theme.fontSizes.xl`
-- Setiap link punya hover effect: `color` dari `textMuted` → `accentLime`, transisi `theme.transitions.fast`
-- Entry animation: fade-in dari atas (gunakan `motion` library) duration 250ms
-- Availability badge tampil di bawah nav links dalam versi mobile
-
-#### Theme Tokens yang Dipakai
-```
-colors: glass, glassElevated, borderGlass, accentLime, accentMuted, textHighlight, textMuted, border
-fonts: display (Poiret One), body
-fontSizes: xs, sm, xl
-spacing: sm, md, lg, xl
-radii: full
-transitions: fast (150ms), normal (250ms)
-effects: blur, blurHeavy
-shadows: subtle
-breakpoints: tablet (768px), desktop (1024px)
-```
-
----
-
-### 2. Hero Section (`src/components/Hero/`)
-
-#### File Structure
-```
-src/components/Hero/
-├── Hero.tsx             # Komponen utama
-├── Hero.styles.ts       # Semua styled-components
-├── AvailabilityBadge.tsx # Badge reusable (juga dipakai Navbar)
-└── index.ts             # Barrel export
-```
-
-> **Catatan:** `AvailabilityBadge` akan di-extract ke `src/components/shared/` nanti kalau dipakai di lebih dari 2 tempat. Untuk sekarang, simpan di Hero/ dulu.
-
-#### Layout (Desktop ≥ 1024px)
-```
-┌────────────────────────────────────────────────────────┐
-│                                                        │
-│  [Availability Badge]                                  │
-│                                                        │
-│  Muhamad Rayhan.              ┌──────────────────┐     │
-│  Frontend Web                 │                  │     │
-│  Developer                    │   Profile Photo  │     │
-│                               │   (Polaroid)     │     │
-│  Headline text...             │                  │     │
-│                               └──────────────────┘     │
-│  [Lihat Proyek]  [Hubungi]                             │
-│                                                        │
-│  [GitHub] [Email] [Instagram] [WhatsApp]               │
-│                                                        │
-└────────────────────────────────────────────────────────┘
-```
-
-- **Grid 2 kolom**: kiri 55% (teks) — kanan 45% (foto), `gap: theme.spacing['3xl']`
-- Di bawah `theme.breakpoints.tablet`: single column, foto di atas teks (order swap via flexbox)
-- `min-height: 100vh`, `padding-top: 120px` (ruang untuk fixed navbar)
-- `id="hero"` sebagai scroll anchor
-
-#### Konten Kiri — Text Block
-
-1. **Availability Badge** (komponen terpisah):
-   - Posisi: di atas nama, `margin-bottom: theme.spacing.lg`
-   - Green pulsing dot + `profileData.availability` ("Available for Remote • Freelance • Hybrid")
-   - Sama styling dengan yang di Navbar, tapi teks lengkap
-
-2. **Nama** (`<h1>`):
-   - `profileData.name` → "Muhamad Rayhan"
-   - `font-family: theme.fonts.heading`
-   - `font-size: theme.fontSizes['5xl']` (60px) desktop, `theme.fontSizes['4xl']` (48px) tablet, `theme.fontSizes['3xl']` (36px) mobile
-   - `color: theme.colors.textHighlight`
-   - `font-weight: theme.fontWeights.bold`
-   - `line-height: theme.lineHeights.tight`
-   - `letter-spacing: theme.letterSpacings.tight`
-   - Titik hijau "." di akhir nama: `<span>` dengan `color: theme.colors.accentLime`
-
-3. **Role** (`<h2>`):
-   - `profileData.role` → "Frontend Web Developer"
-   - `font-family: theme.fonts.display` (Poiret One)
-   - `font-size: theme.fontSizes['2xl']` (30px) desktop, `theme.fontSizes.xl` (24px) mobile
-   - `color: theme.colors.accentLime`
-   - `font-weight: theme.fontWeights.regular`
-   - `letter-spacing: theme.letterSpacings.wide`
-
-4. **Headline** (`<p>`):
-   - `profileData.headline`
-   - `font-size: theme.fontSizes.md` (18px)
-   - `color: theme.colors.textSecondary`
-   - `line-height: theme.lineHeights.relaxed`
-   - `max-width: 520px` — jangan terlalu lebar, jaga readability
-
-5. **CTA Buttons** (row, `gap: theme.spacing.md`):
-   - **Primary** — "Lihat Proyek":
-     - `background: theme.colors.accentLime`
-     - `color: theme.colors.textInverse` (#202734)
-     - `border: none`
-     - `border-radius: theme.radii.sm`
-     - `padding: 12px 28px`
-     - `font-weight: theme.fontWeights.semibold`
-     - Hover: `filter: brightness(1.1)`, `transform: translateY(-1px)`
-     - `href="#projects"` (smooth scroll)
-   - **Secondary** — "Hubungi":
-     - `background: transparent`
-     - `border: 1px solid theme.colors.border`
-     - `color: theme.colors.textPrimary`
-     - `border-radius: theme.radii.sm`
-     - `padding: 12px 28px`
-     - Hover: `border-color: theme.colors.borderHover`, `background: theme.colors.accentMuted`
-     - `href="#contact"` (smooth scroll)
-
-6. **Social Links** (row, `gap: theme.spacing.md`, `margin-top: theme.spacing.xl`):
-   - Map `profileData.socials` → icon buttons
-   - Setiap icon: `<img src={social.icon} />`, `width: 20px`, `height: 20px`
-   - Wrapper: `padding: theme.spacing.sm`, `border-radius: theme.radii.sm`
-   - Hover: `background: theme.colors.accentMuted`, transisi `theme.transitions.fast`
-   - `<a>` dengan `target="_blank"`, `rel="noopener noreferrer"`
-
-#### Konten Kanan — Profile Photo (Polaroid Style)
-
-- **Container** (polaroid card):
-  - `background: theme.colors.secondarySurface`
-  - `border: 1px solid theme.colors.borderGlass`
-  - `border-radius: theme.radii.md` (12px)
-  - `padding: theme.spacing.sm` (8px) di tiga sisi atas + kiri + kanan, `theme.spacing.lg` (24px) di bawah
-  - `box-shadow: theme.shadows.card`
-  - `transform: rotate(2deg)` — sedikit miring untuk kesan organik
-  - `max-width: 360px`
-
-- **Image**:
-  - `<img src={profileData.avatar} alt="Muhamad Rayhan" />`
-  - `width: 100%`, `aspect-ratio: 3 / 4`
-  - `object-fit: cover`
-  - `border-radius: theme.radii.xs` (4px)
-
-- **Caption** (di bawah foto, dalam area padding bawah polaroid):
-  - `profileData.location` → "Banten, Indonesia (GMT+7)"
-  - Icon lokasi: `<img src="/icons/ui/location.svg" />`
-  - `font-size: theme.fontSizes.sm`
-  - `color: theme.colors.textMuted`
-  - `text-align: center`
-
-#### Entrance Animations (motion library)
-
-Semua animasi menggunakan `motion` (Framer Motion v14):
-
-| Elemen | Animasi | Delay |
+| Section | Status | Commit |
 |---|---|---|
-| Availability Badge | `fadeInUp` (y: 20 → 0, opacity: 0 → 1) | 0ms |
-| Nama (h1) | `fadeInUp` | 100ms |
-| Role (h2) | `fadeInUp` | 200ms |
-| Headline (p) | `fadeInUp` | 300ms |
-| CTA Buttons | `fadeInUp` | 400ms |
-| Social Links | `fadeInUp` | 500ms |
-| Polaroid Photo | `fadeIn` + `scale(0.95 → 1)` + `rotate(0 → 2deg)` | 300ms |
-
-Duration semua: `500ms`, easing: `[0.4, 0, 0.2, 1]` (ease-out)
-Gunakan `motion.div` wrapper dengan `initial`, `animate`, dan `transition` props.
-
----
-
-### 3. Shared Components
-
-```
-src/components/shared/
-└── AvailabilityBadge.tsx   # (nanti dipindah ke sini jika reusable)
-```
+| Theme System & Design Tokens | ✅ Selesai | `d01871d` |
+| Navbar & Glassmorphism Mobile Menu | ✅ Selesai | `f578672` |
+| Hero Section (Polaroid, CTA, Socials) | ✅ Selesai | `f578672` |
+| Featured Projects + Filter Tabs | ✅ Selesai | `9fcd808` |
+| React Router v7 + `/projects` Catalogue | ✅ Selesai | `5748b9e` |
+| `/projects/:id` Detail Page (placeholder) | ✅ Selesai | `5748b9e` |
+| **Skills & Career Journey (`#skills`)** | ✅ Selesai | `a390b71` |
+| Certificates Showcase & Lightbox (`#certificates`) | ⬜ Belum | — |
+| Contact Section (`#contact`) | ⬜ Belum | — |
+| Footer | ⬜ Belum | — |
+| `/projects/:id` Full Case Study | ⬜ Belum | — |
 
 ---
 
-### 4. Urutan Eksekusi
-
-```
-Step 1 → pnpm remove lucide; pnpm add lucide-react
-Step 2 → Commit semua perubahan yang belum di-commit (theme, GEMINI.md, etc.)
-Step 3 → Buat src/components/Navbar/ (4 files)
-Step 4 → Buat src/components/Hero/ (4 files)
-Step 5 → Update src/App.tsx — import Navbar + Hero, hapus placeholder
-Step 6 → Verifikasi: tsc --noEmit, build, dev server check
-Step 7 → Commit & push: "feat: navbar & hero section with glassmorphism design"
-```
-
----
-
-### 5. Referensi Visual
-
-| Inspirasi | Apa yang Diambil |
-|---|---|
-| **AW Media** (`awmedia.marketing/blog`) | Dark canvas, glass card surfaces, 1px border glow on hover, semi-transparent overlays |
-| **Brandlos** (`brandlos.nl/vacatures`) | Bold/confident headline typography, modular section rhythm, pill status badges, action-oriented CTA |
-
-### 6. Palette & Token Quick Reference
-
-| Token | Value | Usage |
-|---|---|---|
-| `colors.darkBase` | `#202734` | Page background |
-| `colors.glass` | `rgba(54, 65, 90, 0.55)` | Navbar background |
-| `colors.borderGlass` | `rgba(183, 216, 148, 0.18)` | Navbar & card borders |
-| `colors.accentLime` | `#B7D894` | Dot indicator, role text, primary CTA |
-| `colors.textHighlight` | `#E0F8C7` | h1 name text |
-| `colors.textSecondary` | `#C5D8B4` | Headline paragraph |
-| `colors.textMuted` | `#9DA9C1` | Nav links, caption text |
-| `fonts.display` | Poiret One | Logo, role subtitle |
-| `fonts.heading` | Google Sans / Plus Jakarta Sans | h1 name |
-| `transitions.fast` | `150ms ease-out` | Hover states |
-| `transitions.normal` | `250ms ease-out` | Scroll effects, mobile menu |
-
----
----
-
-## Build Plan: Featured Projects Section (`#projects`)
-
-> ✅ Navbar & Hero sudah selesai. Section ini adalah tujuan scroll dari tombol "Lihat Proyek" di Hero.
+## 📋 Active Build Plan: Skills & Career Journey (`#skills`)
 
 ### Data yang Tersedia
 
-Dari `src/data/projects.ts` — **10 proyek total**:
+**`src/data/skills.ts`** — 3 kategori, 22 skill total:
 
-| # | ID | Judul | Kategori | Featured? |
-|---|---|---|---|---|
-| 1 | `dapur-rasa` | DapurRasa Food Store | `app` | ✅ |
-| 2 | `fast-react-pizza` | Fast React Pizza | `app` | ✅ |
-| 3 | `danu-satya` | Danu Satya Portfolio | `landing` | ✅ |
-| 4 | `siap-kerja` | Siap Kerja | `app` | ✅ |
-| 5 | `tk-paud-permata` | TK PAUD Permata | `landing` | — |
-| 6 | `mading-kampus` | Mading Kampus | `app` | — |
-| 7 | `store-radeva` | Store Radeva | `landing` | — |
-| 8 | `company-profile-isc` | Company Profile ISC | `landing` | — |
-| 9 | `pig-game` | Pig Game | `interactive` | — |
-| 10 | `first-portfolio` | First Portfolio Milestone | `landing` | — |
+| Kategori | Skills (8 / 8 / 6) |
+|---|---|
+| Languages & Core Tools | TypeScript, JavaScript, HTML5, CSS3, Vite, Git, GitHub, C++ |
+| Frameworks & Libraries | React, Vue.js, Redux Toolkit, Pinia, TanStack Query, React Router, Vue Router, Axios |
+| Styling & UI Systems | Tailwind CSS, Framer Motion, Sass, Bootstrap, Lucide Icons, Responsive UI |
 
-**Di beranda hanya tampil 4 proyek yang `featured: true`.**
-Tombol di bawah mengarah ke halaman katalog lengkap `/projects` (dibangun nanti).
+**`src/data/journey.ts`** — 3 milestone perjalanan karier:
+
+| Tahun | Judul | Teknologi Utama |
+|---|---|---|
+| 2024 | Foundations of Web Development | HTML5, CSS3, Bootstrap, JavaScript |
+| 2025 | Tooling & Modern CSS Workflows | Git, Tailwind CSS, Sass, Responsive Design |
+| 2026 | Production Component Frameworks | React, Vue 3, TypeScript, Pinia, Redux, TanStack |
 
 ---
 
 ### 1. File Structure
 
 ```
-src/components/Projects/
-├── Projects.tsx          # Section wrapper — heading, filter, grid, CTA
-├── Projects.styles.ts    # Semua styled-components
-├── ProjectCard.tsx       # Kartu individual per proyek
-└── index.ts              # Barrel export
+src/components/Skills/
+├── Skills.tsx             # Section wrapper — tab kategori, skill grid, dan journey
+├── Skills.styles.ts       # Semua styled-components
+├── SkillCard.tsx          # Kartu individual satu skill (icon + nama)
+├── JourneyTimeline.tsx    # Komponen linimasa vertikal
+└── index.ts               # Barrel export
 ```
 
 ---
 
-### 2. Section Layout
+### 2. Section Layout (Full)
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│  SECTION HEADER                                                  │
-│                                                                  │
-│  Selected Works                  (heading, Poiret One display)   │
-│  Proyek terpilih yang menunjukkan                                │
-│  kemampuan arsitektur frontend.  (subheading, textSecondary)     │
-│                                                                  │
-├──────────────────────────────────────────────────────────────────┤
-│  FILTER TABS (opsional, hanya jika > 1 kategori featured)        │
-│                                                                  │
-│  [All ✓]  [Web App]  [Landing Page]                              │
-│                                                                  │
-├──────────────────────────────────────────────────────────────────┤
-│  PROJECT GRID (2 kolom desktop, 1 kolom mobile)                  │
-│                                                                  │
-│  ┌─────────────────────────┐  ┌─────────────────────────┐        │
-│  │  ┌───────────────────┐  │  │  ┌───────────────────┐  │        │
-│  │  │                   │  │  │  │                   │  │        │
-│  │  │    Thumbnail       │  │  │  │    Thumbnail       │  │        │
-│  │  │    (hover: zoom)   │  │  │  │    (hover: zoom)   │  │        │
-│  │  │                   │  │  │  │                   │  │        │
-│  │  └───────────────────┘  │  │  └───────────────────┘  │        │
-│  │                         │  │                         │        │
-│  │  DapurRasa Food Store   │  │  Fast React Pizza       │        │
-│  │  Culinary e-commerce... │  │  Interactive pizza...   │        │
-│  │                         │  │                         │        │
-│  │  [Vue 3] [Pinia] [VQ]  │  │  [React] [Redux] [TW]  │        │
-│  │                         │  │                         │        │
-│  │  Live Demo →    Detail  │  │  Live Demo →    Detail  │        │
-│  └─────────────────────────┘  └─────────────────────────┘        │
-│                                                                  │
-│  ┌─────────────────────────┐  ┌─────────────────────────┐        │
-│  │  ... Danu Satya ...     │  │  ... Siap Kerja ...     │        │
-│  └─────────────────────────┘  └─────────────────────────┘        │
-│                                                                  │
-├──────────────────────────────────────────────────────────────────┤
-│  SECTION FOOTER                                                  │
-│                                                                  │
-│           [ Lihat Semua Proyek (10) → ]                          │
-│                                                                  │
-└──────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────┐
+│  SECTION HEADER                                                    │
+│                                                                    │
+│  Skills & Journey                      (Poiret One display font)   │
+│  Teknologi yang digunakan dan         (subheading, textSecondary)  │
+│  rekam jejak belajar.                                              │
+│                                                                    │
+├────────────────────────────────────────────────────────────────────┤
+│  SKILLS SUBSECTION                                                 │
+│                                                                    │
+│  CATEGORY TABS                                                     │
+│  [All]  [Languages & Core]  [Frameworks]  [Styling & UI]          │
+│                                                                    │
+│  SKILL GRID (Responsive auto-fill)                                 │
+│                                                                    │
+│  ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐  ┌────┐                  │
+│  │ TS │  │ JS │  │HTML│  │CSS │  │Vite│  │ Git│                  │
+│  │icon│  │icon│  │icon│  │icon│  │icon│  │icon│                  │
+│  └────┘  └────┘  └────┘  └────┘  └────┘  └────┘                  │
+│                                                                    │
+│  ... (all skills in active category)                               │
+│                                                                    │
+├─── DIVIDER ────────────────────────────────────────────────────────┤
+│  JOURNEY SUBSECTION                                                │
+│                                                                    │
+│  Timeline Header:                                                  │
+│  "Career Journey"               (Poiret One)                       │
+│  "Dari nol ke production SPA."  (subheading)                       │
+│                                                                    │
+│  Vertical Timeline (Brandlos-style):                               │
+│                                                                    │
+│       │                                                            │
+│  2024 ●─── Foundations of Web Development                         │
+│       │    Core Web Standards & Vanilla Programming                │
+│       │    Mastered HTML5, CSS3, Bootstrap, JS...                 │
+│       │    [HTML5] [CSS3] [Bootstrap] [JavaScript]                 │
+│       │                                                            │
+│  2025 ●─── Tooling & Modern CSS Workflows                         │
+│       │    Expanding Frontend Toolchains                           │
+│       │    Git, GitHub, Tailwind CSS, Sass...                      │
+│       │    [Git] [Tailwind CSS] [Sass] [Responsive]                │
+│       │                                                            │
+│  2026 ●─── Production Frameworks & State Management               │
+│            Enterprise SPA Ecosystems                               │
+│            React, Vue, TypeScript, Pinia, Redux...                 │
+│            [React] [Vue 3] [TypeScript] [Pinia]  ...+3             │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -367,523 +116,245 @@ src/components/Projects/
 ### 3. Section Header
 
 - **Heading** (`<h2>`):
-  - Teks: `"Selected Works"`
+  - Teks: `"Skills & Journey"`
   - `font-family: theme.fonts.display` (Poiret One)
-  - `font-size: theme.fontSizes['4xl']` (48px) desktop, `theme.fontSizes['3xl']` (36px) mobile
+  - `font-size: theme.fontSizes['4xl']` desktop → `['3xl']` mobile
   - `color: theme.colors.textHighlight`
   - `font-weight: theme.fontWeights.regular`
   - `letter-spacing: theme.letterSpacings.wide`
 - **Subheading** (`<p>`):
-  - Teks: `"Proyek terpilih yang menunjukkan kemampuan arsitektur frontend."`
-  - `font-size: theme.fontSizes.md` (18px)
+  - Teks: `"Teknologi yang digunakan dan rekam jejak belajar."`
+  - `font-size: theme.fontSizes.md`
   - `color: theme.colors.textMuted`
   - `margin-top: theme.spacing.sm`
-  - `max-width: 480px`
 
 ---
 
-### 4. Filter Tabs
+### 4. Skills Subsection: Category Tabs
 
-> Di beranda, filter tabs bersifat **opsional** karena hanya 4 featured projects (3 app, 1 landing). Kita tetap implementasi agar konsisten dengan halaman `/projects` nanti. Filter hanya memfilter proyek yang ditampilkan (featured saja di home).
-
-#### Data Kategori
+#### Tab Data
 ```ts
-const CATEGORIES: { value: ProjectCategory; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'app', label: 'Web App' },
-  { value: 'landing', label: 'Landing Page' },
-  { value: 'interactive', label: 'Interactive' },
+const SKILL_TABS = [
+  { value: 'all',    label: 'All' },
+  { value: 0,        label: 'Languages & Core' },
+  { value: 1,        label: 'Frameworks' },
+  { value: 2,        label: 'Styling & UI' },
 ];
 ```
 
-#### Styling Tab Button
-- **Default state**:
-  - `background: transparent`
-  - `border: 1px solid theme.colors.borderSubtle`
-  - `border-radius: theme.radii.full`
-  - `padding: 6px 16px`
-  - `color: theme.colors.textMuted`
-  - `font-size: theme.fontSizes.sm`
-  - `font-weight: theme.fontWeights.medium`
-  - `cursor: pointer`
-  - `transition: all theme.transitions.fast`
-- **Active state** (`$active` prop):
-  - `background: theme.colors.accentMuted`
-  - `border-color: theme.colors.border`
-  - `color: theme.colors.accentLime`
-- **Hover state** (non-active):
-  - `border-color: theme.colors.borderHover`
-  - `color: theme.colors.textSecondary`
+Tab menggunakan index kategori dari `skillCategories[]` sebagai filter value.
 
-#### Behavior
-- Default active tab: `'all'`
-- State management: `useState<ProjectCategory>('all')`
-- Filter logic: `category === 'all' ? featuredProjects : featuredProjects.filter(p => p.category === category)`
-- Saat kategori berubah, kartu langsung difilter tanpa animasi rumit (cukup `AnimatePresence` + layout animation)
+#### Tab Styling
+- Sama persis dengan filter tabs di Featured Projects (konsistensi visual):
+  - `border-radius: theme.radii.full`
+  - Aktif: `background: accentMuted`, `border: border`, `color: accentLime`
+  - Non-aktif: `border: borderSubtle`, `color: textMuted`
+  - Hover: `border: borderHover`, `color: textSecondary`
+
+#### Filter Logic
+```ts
+const [activeTab, setActiveTab] = useState<'all' | 0 | 1 | 2>('all');
+
+const displayedSkills =
+  activeTab === 'all'
+    ? skillCategories.flatMap((cat) => cat.skills)
+    : skillCategories[activeTab].skills;
+```
 
 ---
 
-### 5. Project Card (`ProjectCard.tsx`)
+### 5. Skill Card (`SkillCard.tsx`)
 
-#### Props Interface
+#### Struktur Visual
+```
+┌──────────────────┐
+│                  │
+│    [Icon SVG]    │  ← 40px × 40px, centered
+│                  │
+│  TypeScript      │  ← Nama skill, bawah icon
+│                  │
+└──────────────────┘
+```
+
+#### Props
 ```ts
-interface ProjectCardProps {
-  project: Project;
-  index: number; // untuk stagger delay animasi
+interface SkillCardProps {
+  skill: SkillItem;  // { name: string; icon: string }
+  index: number;     // untuk stagger animasi
 }
 ```
 
-#### Struktur Visual Kartu
-```
-┌────────────────────────────────┐
-│ ┌────────────────────────────┐ │  ← Thumbnail wrapper
-│ │                            │ │     aspect-ratio: 16/10
-│ │       Thumbnail Image      │ │     overflow: hidden
-│ │       (hover: scale 1.04)  │ │     border-radius: top corners
-│ │                            │ │
-│ └────────────────────────────┘ │
-│                                │
-│  DapurRasa Food Store          │  ← Title (h3)
-│  Team: Ahmad Hakim • FE       │  ← Collab + Role (opsional)
-│                                │
-│  Culinary e-commerce app       │  ← Description (2 baris, ellipsis)
-│  featuring instant menu...     │
-│                                │
-│  [Vue 3] [Pinia] [TanStack]   │  ← Tech pills (max 4 tampil)
-│                                │
-│  Live Demo →         Detail →  │  ← Action row
-└────────────────────────────────┘
-```
-
-#### Styling Detail
-
-**Card Container**:
-- `background: theme.colors.secondarySurface`
+#### Styling Kartu
+- `display: flex`, `flex-direction: column`, `align-items: center`, `justify-content: center`
+- `gap: theme.spacing.sm`
+- `padding: theme.spacing.lg theme.spacing.md`
+- `background: theme.colors.glass`
 - `border: 1px solid theme.colors.borderGlass`
-- `border-radius: theme.radii.md` (12px)
-- `overflow: hidden`
-- `transition: border-color theme.transitions.fast, transform theme.transitions.fast, box-shadow theme.transitions.fast`
+- `border-radius: theme.radii.md`
+- `transition: border-color fast, transform fast, box-shadow fast`
 - Hover:
   - `border-color: theme.colors.borderHover`
-  - `transform: translateY(-4px)`
-  - `box-shadow: theme.shadows.glow`
+  - `transform: translateY(-3px)`
+  - `box-shadow: theme.shadows.glow` (glow tipis hijau lime)
 
-**Thumbnail**:
-- `<img>` di dalam overflow-hidden wrapper
-- `width: 100%`, `aspect-ratio: 16 / 10`
-- `object-fit: cover`
-- `transition: transform theme.transitions.normal`
-- Card hover → `transform: scale(1.04)` pada image (zoom halus)
+#### Icon
+- `<img src={skill.icon} alt={skill.name} />`, `width: 40px`, `height: 40px`
+- Icon SVG sudah ada di `public/icons/tech/`
+- Hover → `filter: drop-shadow(0 0 6px rgba(183, 216, 148, 0.4))` (glow tipis)
 
-**Content area** (padding: `theme.spacing.lg`):
-- **Title** (`<h3>`):
-  - `font-family: theme.fonts.heading`
-  - `font-size: theme.fontSizes.lg` (20px)
-  - `font-weight: theme.fontWeights.semibold`
-  - `color: theme.colors.textHighlight`
-  - `margin-bottom: theme.spacing.xs`
-
-- **Meta** (collab + role, opsional — hanya jika `project.collab` atau `project.role` ada):
-  - `font-size: theme.fontSizes.xs`
-  - `color: theme.colors.textMuted`
-  - `margin-bottom: theme.spacing.sm`
-  - Format: `"Mentor: Ahmad Hakim • Front-End"` atau `"Team: FE • BE • UI/UX • Front-End"`
-
-- **Description** (`<p>`):
-  - `font-size: theme.fontSizes.sm` (14px)
-  - `color: theme.colors.textSecondary`
-  - `line-height: theme.lineHeights.relaxed`
-  - `-webkit-line-clamp: 2` + `overflow: hidden` + `text-overflow: ellipsis` (max 2 baris, sisanya dipotong)
-  - `margin-bottom: theme.spacing.md`
-
-- **Tech Stack Pills** (flex row, `gap: 6px`, `flex-wrap: wrap`):
-  - Tampilkan max **4 skill** dari `project.skills`
-  - Jika lebih: tampilkan `+N` pill di akhir
-  - Styling pill:
-    - `font-size: theme.fontSizes.xs` (12px)
-    - `padding: 3px 10px`
-    - `border-radius: theme.radii.full`
-    - `background: theme.colors.accentMuted`
-    - `color: theme.colors.accentLime`
-    - `border: 1px solid theme.colors.borderSubtle`
-    - `font-weight: theme.fontWeights.medium`
-  - Pill `+N` (overflow counter):
-    - Sama styling, tapi `color: theme.colors.textMuted`, `background: theme.colors.glass`
-
-- **Action Row** (flex, `justify-content: space-between`, `margin-top: theme.spacing.md`, `padding-top: theme.spacing.md`, `border-top: 1px solid theme.colors.borderSubtle`):
-  - **"Live Demo"** link:
-    - `<a href={project.url} target="_blank" rel="noopener noreferrer">`
-    - `font-size: theme.fontSizes.sm`
-    - `color: theme.colors.accentLime`
-    - `font-weight: theme.fontWeights.medium`
-    - Icon `ExternalLink` dari lucide-react (size 14) setelah teks
-    - Hover: `opacity: 0.85`
-  - **"Detail"** link:
-    - Untuk sementara: `<a href={#}>` (nanti diganti `<Link to={/projects/${project.id}}>` setelah routing diaktifkan)
-    - `font-size: theme.fontSizes.sm`
-    - `color: theme.colors.textMuted`
-    - `font-weight: theme.fontWeights.medium`
-    - Icon `ArrowRight` dari lucide-react (size 14)
-    - Hover: `color: theme.colors.textHighlight`
+#### Label Nama
+- `font-size: theme.fontSizes.xs` (12px)
+- `font-weight: theme.fontWeights.medium`
+- `color: theme.colors.textSecondary`
+- `text-align: center`
+- `margin-top: theme.spacing.xs`
 
 ---
 
-### 6. Project Grid
-
-- **Container**: `max-width: 1200px`, `margin: 0 auto`, `padding: 0 theme.spacing.lg`
-- **Grid**:
-  - Desktop (≥ 1024px): `grid-template-columns: repeat(2, 1fr)`, `gap: theme.spacing.lg` (24px)
-  - Tablet (≤ 768px): `grid-template-columns: 1fr` (single column)
-- Margin section: `padding-top: theme.spacing['4xl']`, `padding-bottom: theme.spacing['4xl']`
-- `id="projects"` sebagai scroll anchor
-
----
-
-### 7. Section Footer — CTA Selengkapnya
-
-- Posisi: rata tengah, di bawah grid, `margin-top: theme.spacing['2xl']`
-- Tombol **"Lihat Semua Proyek (10)"**:
-  - Styling mirip `SecondaryButton` di Hero — outlined style
-  - `background: transparent`
-  - `border: 1px solid theme.colors.border`
-  - `border-radius: theme.radii.sm`
-  - `padding: 12px 28px`
-  - `color: theme.colors.textPrimary`
-  - `font-weight: theme.fontWeights.medium`
-  - `font-size: theme.fontSizes.sm`
-  - Icon `ArrowRight` dari lucide-react (size 16) di akhir teks
-  - Hover: `border-color: theme.colors.borderHover`, `background: theme.colors.accentMuted`, `color: theme.colors.textHighlight`
-  - Untuk sementara: `href="#"` (nanti diganti `<Link to="/projects">` setelah routing)
-  - Angka `(10)` diambil dinamis dari `projectsData.length`
-
----
-
-### 8. Entrance Animations (motion library)
-
-Semua animasi menggunakan `motion/react` dengan `whileInView` agar hanya dipicu saat section masuk viewport:
-
-| Elemen | Animasi | Trigger |
-|---|---|---|
-| Section Header (h2 + p) | `fadeInUp` (y: 20→0, opacity: 0→1) | `whileInView`, `once: true` |
-| Filter Tabs row | `fadeInUp`, delay 100ms | `whileInView`, `once: true` |
-| Project Card (masing-masing) | `fadeInUp`, delay = `index * 100ms` | `whileInView`, `once: true`, `margin: "-50px"` |
-| CTA Footer | `fadeInUp`, delay 200ms | `whileInView`, `once: true` |
-
-- Duration: `400ms`
-- Easing: `[0.4, 0, 0.2, 1]`
-- `viewport: { once: true, margin: '-50px' }` — animasi hanya sekali, trigger sedikit sebelum elemen benar-benar terlihat penuh
-
----
-
-### 9. Urutan Eksekusi
-
-```
-Step 1 → Buat src/components/Projects/Projects.styles.ts (semua styled-components)
-Step 2 → Buat src/components/Projects/ProjectCard.tsx (kartu individual)
-Step 3 → Buat src/components/Projects/Projects.tsx (section wrapper)
-Step 4 → Buat src/components/Projects/index.ts (barrel export)
-Step 5 → Update src/App.tsx — import Projects, tambahkan di bawah Hero
-Step 6 → Verifikasi: tsc --noEmit, npm run build
-Step 7 → Commit & push: "feat: featured projects section with filter tabs and glass cards"
-```
-
----
-
-### 10. Theme Tokens yang Dipakai (Section ini)
-
-```
-colors: darkBase, secondarySurface, glass, glassHover
-        accentLime, accentMuted, accentGlow
-        textHighlight, textSecondary, textMuted, textPrimary, textInverse
-        border, borderHover, borderSubtle, borderGlass
-fonts:  display (Poiret One), heading (Google Sans)
-fontSizes: xs, sm, md, lg, '3xl', '4xl'
-fontWeights: medium, semibold, regular
-lineHeights: relaxed
-letterSpacings: wide
-spacing: xs, sm, md, lg, xl, '2xl', '4xl'
-radii: xs, sm, md, full
-transitions: fast (150ms), normal (250ms)
-shadows: glow
-```
-
----
----
-
-## Build Plan: Routing Setup + `/projects` Catalogue Page
-
-> ✅ Featured Projects section sudah selesai.
-> 🔧 Tombol "Lihat Semua Proyek" & "Detail" masih pakai placeholder `href="#"` — belum berpindah rute.
-> Package `react-router` v7.18.5 sudah terinstall, `BrowserRouter` & `createBrowserRouter` tersedia.
-
----
-
-### 1. Arsitektur Rute (Hybrid Model)
-
-```
-/                    →  HomePage     (Hero + Featured Projects + Skills + Certificates + Contact)
-/projects            →  ProjectsPage (Katalog lengkap 10 proyek + filter + search)
-/projects/:id        →  ProjectDetailPage (Studi kasus teknis per proyek) [akan dibangun nanti]
-*                    →  NotFoundPage (404 fallback)
-```
-
-**Pola yang dipakai:** `createBrowserRouter` + `RouterProvider` (React Router v7 modern API, bukan komponen `<BrowserRouter>` lama).
-
----
-
-### 2. File Structure Baru
-
-```
-src/
-├── router/
-│   └── index.tsx           # Definisi semua route
-├── pages/
-│   ├── HomePage.tsx         # Semua section beranda (Hero, Projects, Skills, dsb.)
-│   ├── ProjectsPage.tsx     # Katalog lengkap /projects
-│   ├── ProjectDetailPage.tsx # /projects/:id (placeholder dulu)
-│   └── NotFoundPage.tsx     # 404
-├── components/
-│   ├── Navbar/              # (sudah ada — perlu update: anchor jadi Link)
-│   └── Projects/
-│       ├── ProjectCard.tsx  # (sudah ada — perlu update: href jadi <Link to>)
-│       └── Projects.tsx     # (sudah ada — perlu update: AllProjectsButton jadi <Link>)
-├── App.tsx                  # (berubah: tidak lagi render komponen langsung, render RouterProvider)
-└── main.tsx                 # (tidak berubah)
-```
-
----
-
-### 3. File 1: `src/router/index.tsx`
-
-```ts
-import { createBrowserRouter } from 'react-router';
-import HomePage from '../pages/HomePage';
-import ProjectsPage from '../pages/ProjectsPage';
-import ProjectDetailPage from '../pages/ProjectDetailPage';
-import NotFoundPage from '../pages/NotFoundPage';
-
-export const router = createBrowserRouter([
-  { path: '/',             element: <HomePage /> },
-  { path: '/projects',     element: <ProjectsPage /> },
-  { path: '/projects/:id', element: <ProjectDetailPage /> },
-  { path: '*',             element: <NotFoundPage /> },
-]);
-```
-
----
-
-### 4. File 2: `src/App.tsx` (refactor menjadi RouterProvider)
-
-App.tsx sekarang hanya bertugas sebagai router host — tidak lagi render Navbar/Hero langsung:
-
-```tsx
-import { RouterProvider } from 'react-router';
-import { router } from './router';
-
-export default function App() {
-  return <RouterProvider router={router} />;
-}
-```
-
-Styled `AppContainer` dan `MainContent` dipindahkan ke masing-masing halaman yang membutuhkannya.
-
----
-
-### 5. File 3: `src/pages/HomePage.tsx`
-
-Menjadi container utama yang membungkus semua section beranda:
-
-```tsx
-import { Navbar } from '../components/Navbar';
-import { Hero } from '../components/Hero';
-import { Projects } from '../components/Projects';
-// ... (nanti: Skills, Certificates, Contact)
-
-export default function HomePage() {
-  return (
-    <div>          {/* background: darkBase, min-height: 100vh */}
-      <Navbar />
-      <main>
-        <Hero />
-        <Projects />
-        {/* <Skills /> */}
-        {/* <Certificates /> */}
-        {/* <Contact /> */}
-      </main>
-    </div>
-  );
-}
-```
-
----
-
-### 6. File 4: `src/pages/ProjectsPage.tsx` — Katalog Lengkap
-
-#### Layout
-
-```
-┌───────────────────────────────────────────────────────────┐
-│  NAVBAR (sama)                                            │
-├───────────────────────────────────────────────────────────┤
-│  PAGE HEADER                                              │
-│                                                           │
-│  ← Kembali ke Beranda                                     │
-│                                                           │
-│  All Projects                                             │
-│  Seluruh proyek yang pernah dibangun.                     │
-│                                                           │
-├───────────────────────────────────────────────────────────┤
-│  FILTER BAR                                               │
-│                                                           │
-│  [All (10)] [Web App (5)] [Landing (4)] [Interactive (1)] │
-│                                                           │
-├───────────────────────────────────────────────────────────┤
-│  PROJECTS GRID (3 kolom desktop, 2 tablet, 1 mobile)      │
-│                                                           │
-│  ┌────────┐  ┌────────┐  ┌────────┐                       │
-│  │ Card 1 │  │ Card 2 │  │ Card 3 │                       │
-│  └────────┘  └────────┘  └────────┘                       │
-│  ┌────────┐  ┌────────┐  ┌────────┐                       │
-│  │ Card 4 │  │ Card 5 │  │ Card 6 │                       │
-│  └────────┘  └────────┘  └────────┘                       │
-│  ... (10 proyek total)                                    │
-└───────────────────────────────────────────────────────────┘
-```
-
-#### Perbedaan vs Featured Projects di Beranda
-
-| Aspek | Beranda (`/`) | Halaman Katalog (`/projects`) |
-|---|---|---|
-| **Jumlah proyek** | 4 (featured saja) | 10 (semua proyek) |
-| **Grid kolom** | 2 kolom | 3 kolom (desktop), 2 (tablet), 1 (mobile) |
-| **Filter** | Tabs sederhana | Tabs + badge jumlah per kategori |
-| **Header** | "Selected Works" | "All Projects" + tombol kembali |
-| **CTA Footer** | "Lihat Semua Proyek (10) →" | Tidak ada (sudah halaman lengkap) |
-
-#### Back Button
-
-- `<button onClick={() => navigate(-1)}>` atau `<Link to="/">← Kembali ke Beranda</Link>`
-- Gunakan hook `useNavigate()` dari react-router.
-- Styling:
-  - Inline flex, `align-items: center`, `gap: 6px`
-  - `font-size: theme.fontSizes.sm`
-  - `color: theme.colors.textMuted`
-  - Icon `ArrowLeft` dari lucide-react (size 14)
-  - Hover: `color: theme.colors.accentLime`
-  - `margin-bottom: theme.spacing.xl`
-
-#### Filter Badge Count
-
-Tab filter di `ProjectsPage` menampilkan jumlah proyek per kategori:
-
-```ts
-const categoryCount = {
-  all: projectsData.length,                                  // 10
-  app: projectsData.filter(p => p.category === 'app').length, // 5
-  landing: projectsData.filter(p => p.category === 'landing').length, // 4
-  interactive: projectsData.filter(p => p.category === 'interactive').length, // 1
-};
-```
-
-Teks tab: `"Web App (5)"`, `"Landing (4)"`, `"Interactive (1)"`.
-
-#### Grid 3 Kolom (ProjectsPage)
-
-Karena ada 10 proyek, layout perlu 3 kolom di desktop agar tidak terlalu panjang:
+### 6. Skill Grid Layout
 
 ```css
-grid-template-columns: repeat(3, 1fr);  /* ≥ 1024px */
-grid-template-columns: repeat(2, 1fr);  /* 768px - 1024px */
-grid-template-columns: 1fr;             /* < 768px */
+grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+gap: theme.spacing.md;
 ```
 
-Karena `ProjectCard` yang sudah ada dibuat reusable, kita cukup buat styled `CatalogGrid` baru di `ProjectsPage` — tidak perlu modifikasi komponen `ProjectCard`.
+- `auto-fill` + `minmax(100px, 1fr)` → Grid menyesuaikan jumlah kolom otomatis berdasarkan lebar container tanpa media query manual.
+- Desktop 1200px → ±10 kolom, Tablet 768px → ±6 kolom, Mobile 375px → ±3 kolom.
+- `margin-top: theme.spacing.xl`
 
 ---
 
-### 7. File 5: `src/pages/ProjectDetailPage.tsx` — Placeholder
+### 7. Journey Timeline (`JourneyTimeline.tsx`)
 
-Belum dibangun penuh. Cukup buat halaman placeholder yang:
-- Menampilkan nama proyek dari `projectsData.find(p => p.id === params.id)`.
-- Menampilkan thumbnail dan deskripsi singkat.
-- Tombol kembali ke `/projects`.
-- Badge *"Full case study coming soon"*.
+#### Struktur HTML
+```html
+<section> <!-- Subsection wrapper -->
+  <h3>Career Journey</h3>
+  <p>Dari nol ke production SPA.</p>
 
-Ini akan diisi penuh di sprint berikutnya.
+  <div class="timeline"> <!-- garis vertikal kiri -->
+    <div class="milestone"> <!-- repeat per milestone -->
+      <div class="node">   <!-- titik bulat di garis -->
+        <span class="year">2024</span>
+      </div>
+      <div class="content">
+        <h4>Foundations of Web Development</h4>
+        <p class="headline">Core Web Standards & Vanilla Programming</p>
+        <p class="description">Mastered web fundamentals...</p>
+        <div class="tech-tags">
+          <span>HTML5</span>
+          <span>CSS3</span>
+          ...
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+#### Garis Vertikal (Timeline Line)
+- `position: absolute`, `left: 20px`, `top: 0`, `bottom: 0`
+- `width: 1px`
+- `background: linear-gradient(to bottom, theme.colors.border, theme.colors.borderSubtle, transparent)`
+
+#### Node (Titik Tahun)
+- Bulat: `width: 40px`, `height: 40px`, `border-radius: 50%`
+- `background: theme.colors.secondarySurface`
+- `border: 2px solid theme.colors.accentLime`
+- `display: flex`, `align-items: center`, `justify-content: center`
+- Tahun di dalam node:
+  - `font-size: theme.fontSizes.xs` (12px)
+  - `font-weight: theme.fontWeights.bold`
+  - `color: theme.colors.accentLime`
+  - `letter-spacing: theme.letterSpacings.wide`
+
+#### Content Area
+- `padding-left: theme.spacing.xl` (space setelah node)
+- `padding-bottom: theme.spacing['3xl']` (jarak antar milestone)
+
+**Title** (`<h4>`):
+- `font-family: theme.fonts.heading`
+- `font-size: theme.fontSizes.lg` (20px)
+- `font-weight: theme.fontWeights.semibold`
+- `color: theme.colors.textHighlight`
+- `margin-bottom: theme.spacing.xs`
+
+**Headline** (`<p class="headline">`):
+- `font-size: theme.fontSizes.sm`
+- `font-weight: theme.fontWeights.medium`
+- `color: theme.colors.accentLime`
+- `margin-bottom: theme.spacing.sm`
+
+**Description** (`<p>`):
+- `font-size: theme.fontSizes.sm`
+- `color: theme.colors.textSecondary`
+- `line-height: theme.lineHeights.relaxed`
+- `max-width: 600px`
+- `margin-bottom: theme.spacing.md`
+
+**Tech Tags** (`<div class="tech-tags">`):
+- Flex row, `gap: 6px`, `flex-wrap: wrap`
+- Tiap tag: `font-size: xs`, `padding: 3px 10px`, `border-radius: full`
+- `background: accentMuted`, `color: accentLime`, `border: 1px solid borderSubtle`
+- Jika lebih dari 5 tag → tampilkan `+N` pill (sama persis dengan ProjectCard)
 
 ---
 
-### 8. File 6: `src/pages/NotFoundPage.tsx`
+### 8. Entrance Animations
 
-Halaman sederhana 404:
-- Judul besar: **"404"** (Poiret One, `textHighlight`)
-- Teks: *"Halaman tidak ditemukan."* (`textMuted`)
-- Tombol `<Link to="/">Kembali ke Beranda</Link>` (Primary button style)
+Semua animasi `whileInView` → trigger sekali saat scroll masuk viewport:
+
+| Elemen | Animasi | Delay |
+|---|---|---|
+| Section Header (h2 + p) | `fadeInUp` (y: 20→0) | 0ms |
+| Tabs row | `fadeInUp` | 100ms |
+| Skill Card (tiap item) | `fadeInUp`, staggered | `index * 50ms` (lebih cepat karena banyak item) |
+| Journey Subsection Header | `fadeInUp` | 0ms (trigger sendiri) |
+| Milestone (tiap item) | `fadeInLeft` (x: -20→0) | `index * 150ms` |
+
+- Duration: `400ms`, easing: `[0.4, 0, 0.2, 1] as const`
+- `viewport: { once: true, margin: '-50px' }`
 
 ---
 
-### 9. Update Komponen yang Sudah Ada
+### 9. Divider antara Skills dan Journey
 
-#### `ProjectCard.tsx` — `DetailLink` ganti `<Link>`
-```tsx
-// SEBELUM:
-<DetailLink href={`#/projects/${project.id}`}>Detail</DetailLink>
-
-// SESUDAH (import Link from 'react-router'):
-<DetailLink as={Link} to={`/projects/${project.id}`}>Detail</DetailLink>
-```
-
-> **Catatan:** `styled-components` mendukung polimorfisme dengan prop `as`. `DetailLink` tetap dapat styling yang sama, tapi render sebagai `<Link>` dari react-router.
-
-#### `Projects.tsx` — `AllProjectsButton` ganti `<Link>`
-```tsx
-// SEBELUM:
-<AllProjectsButton href="#/projects">...</AllProjectsButton>
-
-// SESUDAH:
-<AllProjectsButton as={Link} to="/projects">...</AllProjectsButton>
-```
-
-#### `Navbar.tsx` — Logo Brand tetap `href="#hero"`, tapi nav links pakai `<a>` biasa di HomePage (smooth scroll).
-Saat di halaman `/projects`, link navbar ke section (seperti `#projects`) tidak bisa smooth scroll karena beda halaman. Kita buat Navbar menggunakan `useLocation()` untuk membedakan:
-- Di route `/`: Gunakan anchor `href="#projects"` (smooth scroll).
-- Di route `/projects` atau `/projects/:id`: Gunakan `<Link to="/#projects">` (navigate ke beranda lalu scroll).
+- `<hr>` atau `<div>` sebagai pemisah visual antara grid skill dan linimasa.
+- `width: 100%`, `height: 1px`
+- `background: linear-gradient(to right, transparent, theme.colors.border, transparent)`
+- `margin: theme.spacing['3xl'] 0`
 
 ---
 
 ### 10. Urutan Eksekusi
 
 ```
-Step 1  → Buat src/pages/HomePage.tsx       (pindahkan konten dari App.tsx)
-Step 2  → Buat src/pages/ProjectsPage.tsx   (katalog 10 proyek, 3-kolom grid, filter + badge count)
-Step 3  → Buat src/pages/ProjectDetailPage.tsx (placeholder — nama + thumbnail + "coming soon")
-Step 4  → Buat src/pages/NotFoundPage.tsx   (404 sederhana)
-Step 5  → Buat src/router/index.tsx          (definisi 4 route)
-Step 6  → Refactor src/App.tsx               (hanya render <RouterProvider router={router} />)
-Step 7  → Update ProjectCard.tsx             (DetailLink: href → as={Link} to=)
-Step 8  → Update Projects.tsx                (AllProjectsButton: href → as={Link} to=)
-Step 9  → Update Navbar.tsx                  (tambah useLocation, bedakan smooth scroll vs Link)
-Step 10 → Verifikasi: tsc --noEmit, npm run build
-Step 11 → Commit & push: "feat: setup react-router v7 with projects catalogue page"
+Step 1 → Buat src/components/Skills/Skills.styles.ts
+Step 2 → Buat src/components/Skills/SkillCard.tsx
+Step 3 → Buat src/components/Skills/JourneyTimeline.tsx
+Step 4 → Buat src/components/Skills/Skills.tsx
+Step 5 → Buat src/components/Skills/index.ts
+Step 6 → Update src/pages/HomePage.tsx — import Skills, tambah di bawah Projects
+Step 7 → tsc --noEmit + npm run build
+Step 8 → Commit & push: "feat: skills and career journey section"
 ```
 
 ---
 
-### 11. Vite Config — `base` URL
+### 11. Theme Tokens yang Dipakai
 
-> **Penting:** Karena ini di-deploy ke GitHub Pages nanti, pastikan `vite.config.ts` punya `base: '/'` (bukan nama repo) agar `BrowserRouter` bekerja benar di root domain.
-
-Jika nanti deploy ke `https://rayhandev9.github.io/portfolio-v4/`, maka perlu `base: '/portfolio-v4/'` di `vite.config.ts` DAN gunakan `createHashRouter` sebagai pengganti `createBrowserRouter`. Untuk sementara, gunakan `createBrowserRouter` untuk development.
-
----
-
-### 12. Token & Dependencies
-
-**Package yang sudah ada (tidak perlu install baru):**
-- `react-router` v7.18.5 — sudah terinstall ✅
-
-**Hooks yang akan dipakai:**
-- `useNavigate()` — programmatic navigation (tombol kembali)
-- `useParams()` — ambil `:id` di ProjectDetailPage
-- `useLocation()` — cek route aktif di Navbar
-- `Link` — navigasi tanpa reload halaman
+```
+colors: darkBase, secondarySurface, glass, glassHover
+        accentLime, accentMuted
+        textHighlight, textSecondary, textMuted
+        border, borderHover, borderSubtle, borderGlass
+fonts:  display (Poiret One), heading (Google Sans)
+fontSizes: xs, sm, md, lg, '3xl', '4xl'
+fontWeights: medium, semibold, bold, regular
+lineHeights: relaxed
+letterSpacings: wide, wider
+spacing: xs, sm, md, lg, xl, '2xl', '3xl', '4xl'
+radii: md, full
+transitions: fast (150ms)
+shadows: glow
+```

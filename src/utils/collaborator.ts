@@ -15,6 +15,7 @@ export function detectCollaboratorPlatform(
   const lowerUrl = url.toLowerCase();
   if (lowerUrl.includes('github.com')) return 'github';
   if (lowerUrl.includes('instagram.com')) return 'instagram';
+  if (lowerUrl.includes('tiktok.com')) return 'tiktok';
   if (lowerUrl.includes('shopee.co.id') || lowerUrl.includes('shopee.')) return 'shopee';
   return 'website';
 }
@@ -30,6 +31,9 @@ export function getCollaboratorInfo(collaborator: Collaborator): CollaboratorInf
   } else if (platform === 'instagram') {
     label = `Client: ${collaborator.name}`;
     badgeLabel = `@${collaborator.name}`;
+  } else if (platform === 'tiktok') {
+    label = `TikTok: ${collaborator.name}`;
+    badgeLabel = `TikTok: ${collaborator.name}`;
   } else if (platform === 'shopee') {
     label = `Toko Shopee: ${collaborator.name}`;
     badgeLabel = `Shopee: ${collaborator.name}`;

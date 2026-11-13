@@ -1,6 +1,6 @@
 export type ProjectCategory = 'all' | 'app' | 'landing' | 'interactive';
 
-export type CollaboratorPlatform = 'github' | 'instagram' | 'shopee' | 'website';
+export type CollaboratorPlatform = 'github' | 'instagram' | 'shopee' | 'tiktok' | 'website';
 
 export interface Collaborator {
   name: string;

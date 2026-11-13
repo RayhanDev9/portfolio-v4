@@ -136,6 +136,15 @@ export default function ProjectDetailPage() {
         />
       );
     }
+    if (platform === 'tiktok') {
+      return (
+        <img
+          src="/icons/social/tiktok.svg"
+          alt="TikTok"
+          style={{ width: size, height: size, display: 'inline-block' }}
+        />
+      );
+    }
     if (platform === 'shopee') return <ShoppingBag size={size} />;
     return <ExternalLink size={size} />;
   };

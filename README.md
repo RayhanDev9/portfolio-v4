@@ -97,29 +97,44 @@ export interface Project {
 ```
 
 #### B. Pembaruan Data Proyek Nyata (`src/data/projects.ts`)
-1. **Mading Kampus (`mading-kampus`)**:
+1. **DapurRasa Food Store (`dapur-rasa`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/e-commerce-vue.js`
+2. **Fast React Pizza (`fast-react-pizza`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/fast-pizza`
+3. **Danu Satya Portfolio (`danu-satya`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/portfolio-danu`
+   - `collab`: `Client: @dnustya_`
+   - `collaborator`: `{ name: 'Danu Satya', role: 'Graphic & Motion Designer', url: 'https://instagram.com/dnustya_', platform: 'instagram' }`
+4. **Siap Kerja (`siap-kerja`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/siap-kerja`
+   - `collab`: `Collab with @EternalVultr`
+   - `collaborator`: `{ name: 'EternalVultr', role: 'Team Collaborator', url: 'https://github.com/EternalVultr', platform: 'github' }`
+5. **TK PAUD Permata (`tk-paud-permata`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/TK`
+   - `collab`: `Client: Yayasan Rayfi TK Permata`
+   - `collaborator`: `{ name: 'Yayasan Rayfi TK Permata', role: 'Client', url: 'https://www.tiktok.com/@yayasanrayfitkpermata?_r=1', platform: 'tiktok' }`
+6. **Mading Kampus (`mading-kampus`)**:
    - `githubUrl`: `https://github.com/RayhanDev9/mading-kampus`
    - `collab`: `Collab with @akumalas`
    - `collaborator`: `{ name: 'akumalas', role: 'Backend Collaborator', url: 'https://github.com/akumalas', platform: 'github' }`
-2. **Siap Kerja (`siap-kerja`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/siap-kerja`
-   - `collab`: `Collab with @EternalVultr`
-   - `collaborator`: `{ name: 'EternalVultr', role: 'Developer Collaborator', url: 'https://github.com/EternalVultr', platform: 'github' }`
-3. **Company Profile ISC (`company-profile-isc`)**:
+7. **Store Radeva (`store-radeva`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/radeva`
+   - `collab`: `Toko Shopee: Radeva`
+   - `collaborator`: `{ name: 'Store Radeva', role: 'E-Commerce Store', url: 'https://shopee.co.id/Bedak-MBK-Powder-Sachetan-13-6-gram-Dan-Box-200-gram-bedak-deodoran-legendaris-Varian-Putih-i.1736388240.56660827193', platform: 'shopee' }`
+8. **Company Profile ISC (`company-profile-isc`)**:
    - `githubUrl`: `https://github.com/RayhanDev9/company-profile-isc`
    - `collab`: `Collab with @ItzRyz`
    - `collaborator`: `{ name: 'ItzRyz', role: 'ISC Collaborator', url: 'https://github.com/ItzRyz', platform: 'github' }`
-4. **Danu Satya Portfolio (`danu-satya`)**:
-   - `collab`: `Client: @dnustya_`
-   - `collaborator`: `{ name: 'Danu Satya', role: 'Graphic & Motion Designer', url: 'https://instagram.com/dnustya_', platform: 'instagram' }`
-5. **Store Radeva (`store-radeva`)**:
-   - `collab`: `Toko Shopee: Radeva`
-   - `collaborator`: `{ name: 'Store Radeva', role: 'E-Commerce Store', url: 'https://shopee.co.id/Bedak-MBK-Powder-Sachetan-13-6-gram-Dan-Box-200-gram-bedak-deodoran-legendaris-Varian-Putih-i.1736388240.56660827193', platform: 'shopee' }`
+9. **Pig Game (`pig-game`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/pig-Game`
+10. **First Portfolio Milestone (`first-portfolio`)**:
+   - `githubUrl`: `https://github.com/RayhanDev9/First-portfolio`
 
 #### C. Smart Platform Helper (`src/utils/collaborator.ts` atau inline helper)
 Mendeteksi jenis platform dan ikon:
 - `github.com` -> Ikon GitHub / `Code2`, label format: `Collab: @username`
 - `instagram.com` -> Ikon Instagram, label format: `Client: @username`
+- `tiktok.com` -> Ikon TikTok SVG, label format: `TikTok: @username`
 - `shopee.co.id` -> Ikon `ShoppingBag`, label format: `Toko Shopee`
 - Default -> Ikon `ExternalLink`, label format: `Partner Web ↗`
 

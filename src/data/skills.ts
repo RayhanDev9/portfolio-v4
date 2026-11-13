@@ -9,6 +9,7 @@ export const skillCategories: SkillCategory[] = [
       { name: 'JavaScript', icon: '/icons/tech/javascript.svg' },
       { name: 'HTML5', icon: '/icons/tech/html-5.svg' },
       { name: 'CSS3', icon: '/icons/tech/css-3.svg' },
+      { name: 'AJAX', icon: '/icons/tech/ajax.svg' },
       { name: 'Vite', icon: '/icons/tech/vite.svg' },
       { name: 'Git', icon: '/icons/tech/git.svg' },
       { name: 'GitHub', icon: '/icons/tech/github.svg' },
@@ -20,6 +21,7 @@ export const skillCategories: SkillCategory[] = [
     description: 'Reactive component engines, state containers, and data caching',
     skills: [
       { name: 'React', icon: '/icons/tech/react.svg' },
+      { name: 'React Native', icon: '/icons/tech/react-native.svg' },
       { name: 'Vue.js', icon: '/icons/tech/vue.svg' },
       { name: 'Redux Toolkit', icon: '/icons/tech/redux.svg' },
       { name: 'Pinia', icon: '/icons/tech/pinia.svg' },
@@ -34,6 +36,7 @@ export const skillCategories: SkillCategory[] = [
     description: 'Design systems, responsive layouts, motion, and icon packages',
     skills: [
       { name: 'Tailwind CSS', icon: '/icons/tech/tailwind.svg' },
+      { name: 'styled-components', icon: '/icons/tech/styled-components.svg' },
       { name: 'Framer Motion', icon: '/icons/tech/framer-motion.svg' },
       { name: 'Sass', icon: '/icons/tech/sass.svg' },
       { name: 'Bootstrap', icon: '/icons/tech/bootstrap-4.svg' },

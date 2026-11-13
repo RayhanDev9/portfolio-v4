@@ -181,29 +181,41 @@ export const CardIssuer = styled.span`
 export const SkillsRow = styled.div`
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
   gap: 6px;
   margin-top: auto;
-  min-height: 48px;
+  min-height: 52px;
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 export const SkillTag = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: ${({ theme }) => theme.radii.full};
   background-color: ${({ theme }) => theme.colors.glass};
   color: ${({ theme }) => theme.colors.textSecondary};
   border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.3;
+  height: fit-content;
+  align-self: flex-start;
 `;
 
 export const SkillTagMore = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: ${({ theme }) => theme.radii.full};
   background-color: ${({ theme }) => theme.colors.glass};
   color: ${({ theme }) => theme.colors.textMuted};
   border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.3;
+  height: fit-content;
+  align-self: flex-start;
 `;
 
 export const ZoomButton = styled.button`

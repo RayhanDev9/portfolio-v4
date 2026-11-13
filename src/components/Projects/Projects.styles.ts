@@ -165,6 +165,8 @@ export const CardDescription = styled.p`
 export const TechStackRow = styled.div`
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
   gap: 6px;
   margin-top: auto;
   margin-bottom: ${({ theme }) => theme.spacing.md};
@@ -179,6 +181,11 @@ export const TechPill = styled.span`
   border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.3;
+  height: fit-content;
+  align-self: flex-start;
 `;
 
 export const TechPillMore = styled.span`
@@ -189,6 +196,11 @@ export const TechPillMore = styled.span`
   color: ${({ theme }) => theme.colors.textMuted};
   border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.3;
+  height: fit-content;
+  align-self: flex-start;
 `;
 
 export const CardActionRow = styled.div`

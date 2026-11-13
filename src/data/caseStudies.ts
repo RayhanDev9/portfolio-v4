@@ -23,6 +23,83 @@ export interface CaseStudyDetail {
 }
 
 export const caseStudiesData: Record<string, CaseStudyDetail> = {
+  'uang-kas-kampus': {
+    projectId: 'uang-kas-kampus',
+    tagline: 'Sistem manajemen kas kelas kampus fullstack dengan pelacakan multi-semester & audit mutasi real-time.',
+    problem:
+      'Pencatatan kas mahasiswa secara manual sering kali menimbulkan selisih saldo, kesulitan mengelola pergantian semester akademik, ketiadaan transparansi pengeluaran belanja kelas, serta lambatnya proses rekapitulasi data mahasiswa.',
+    solution:
+      'Membangun aplikasi web fullstack (Vue 3 + Node.js/Express) dengan TanStack Query untuk caching data reaktif. Mengimplementasikan kalkulasi saldo kas bersih real-time, otentikasi PIN bendahara, drawer riwayat audit mutasi uang keluar-masuk, serta modul impor/ekspor spreadsheet Excel.',
+    architecture: [
+      {
+        title: 'Multi-Semester Context & Selective Query Invalidation',
+        reason:
+          'Memisahkan data per semester akademik dan mengotomatiskan refetching query kas, pengeluaran, dan history seketika setelah mutasi berhasil.',
+      },
+      {
+        title: 'Modular Vue 3 Composables (useKas, usePengeluaran, useSemester)',
+        reason:
+          'Mengisolasi logika bisnis dan kontrak API ke dalam modul mandiri, menjaga komponen UI tetap deklaratif dan mudah dipelihara.',
+      },
+      {
+        title: 'Secured Express REST API with Header PIN Authentication',
+        reason:
+          'Mengamankan mutasi kritis (pencatatan belanja kas dan pergantian status semester) menggunakan verifikasi PIN bendahara via header x-admin-pin.',
+      },
+      {
+        title: 'Automated Spreadsheet Parsing & Export Engine',
+        reason:
+          'Memproses upload file .xlsx/.csv langsung di browser dan server untuk migrasi data massal mahasiswa dengan validasi baris instan.',
+      },
+    ],
+    keyFeatures: [
+      'Kalkulasi saldo kas bersih real-time: (Kas Mahasiswa + Pemasukan Lain) - Total Belanja',
+      'Manajemen arsip dan switcher multi-semester aktif tanpa reload halaman',
+      'Audit trail mutasi uang keluar dan masuk via drawer riwayat interaktif',
+      'Impor dan ekspor rekapitulasi kas kelas ke format spreadsheet Microsoft Excel (.xlsx)',
+      'Dual view responsif: Data table bernomor di desktop dan kartu interaktif di mobile',
+    ],
+    metricsOrLearnings:
+      'Penerapan query caching dan invalidasi selektif memangkas waktu tunggu pembaruan data hingga di bawah 200ms saat bendahara mencatat transaksi baru.',
+    codeSnippet: {
+      title: 'Arsitektur Composable: Manajemen Belanja Kas (Cash Out)',
+      filename: 'src/composables/usePengeluaran.js',
+      language: 'javascript',
+      code: `import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+import axios from 'axios';
+
+export function usePengeluaran(semesterId) {
+  const queryClient = useQueryClient();
+
+  const pengeluaranQuery = useQuery({
+    queryKey: ['pengeluaran', semesterId],
+    queryFn: async () => {
+      const res = await axios.get('/api/pengeluaran', {
+        params: { semesterId: semesterId.value },
+      });
+      return res.data;
+    },
+  });
+
+  const createPengeluaran = useMutation({
+    mutationFn: (newExpense) =>
+      axios.post('/api/pengeluaran', newExpense.payload, {
+        headers: { 'x-admin-pin': newExpense.pin },
+      }),
+    onSuccess: () => {
+      // Invalidate query terkait agar saldo bersih langsung sinkron
+      queryClient.invalidateQueries(['pengeluaran']);
+      queryClient.invalidateQueries(['kas']);
+      queryClient.invalidateQueries(['history']);
+    },
+  });
+
+  return { pengeluaranQuery, createPengeluaran };
+}`,
+      explanation:
+        'Composable usePengeluaran mengelola fetching dan mutasi uang keluar kelas secara reaktif, sekaligus mengotomatiskan invalidasi cache saldo kas bersih seketika transaksi baru tersimpan.',
+    },
+  },
   'dapur-rasa': {
     projectId: 'dapur-rasa',
     tagline: 'Aplikasi e-commerce kuliner modern dengan instant search & state caching.',

@@ -20,6 +20,7 @@ export interface Project {
   skills: string[];
   url: string;
   githubUrl?: string;
+  githubBackendUrl?: string;
   img: string;
   alt: string;
   featured?: boolean;

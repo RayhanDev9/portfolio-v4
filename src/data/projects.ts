@@ -2,6 +2,28 @@ import type { Project } from "../types/portfolio";
 
 export const projectsData: Project[] = [
   {
+    id: "uang-kas-kampus",
+    title: "Uang Kas Kampus (KasKita)",
+    category: "app",
+    role: "Fullstack Developer",
+    description:
+      "Aplikasi manajemen kas kelas kampus komprehensif dengan sistem multi-semester, kalkulasi saldo kas bersih real-time, audit pengeluaran belanja kelas, riwayat log mutasi, dan impor/ekspor data Excel.",
+    skills: [
+      "Vue 3",
+      "Tailwind CSS",
+      "TanStack Query",
+      "Node.js",
+      "Express.js",
+      "Composables",
+    ],
+    url: "https://uang-kas-kampus.vercel.app/",
+    githubUrl: "https://github.com/RayhanDev9/uang-kas-kampus",
+    githubBackendUrl: "https://github.com/RayhanDev9/backend-uang-kas-kampus",
+    img: "/images/projects/uang-kas-kelas.avif",
+    alt: "Uang Kas Kampus KasKita Dashboard",
+    featured: true,
+  },
+  {
     id: "siap-kerja",
     title: "Siap Kerja",
     category: "app",

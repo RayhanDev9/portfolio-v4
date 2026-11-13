@@ -208,7 +208,18 @@ export default function ProjectDetailPage() {
                     rel="noopener noreferrer"
                   >
                     <Code2 size={16} />
-                    <span>Lihat Source Code</span>
+                    <span>{project.githubBackendUrl ? 'Frontend Repo' : 'Lihat Source Code'}</span>
+                  </SecondaryCodeLink>
+                )}
+
+                {project.githubBackendUrl && (
+                  <SecondaryCodeLink
+                    href={project.githubBackendUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Code2 size={16} />
+                    <span>Backend Repo</span>
                   </SecondaryCodeLink>
                 )}
 

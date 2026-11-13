@@ -102,10 +102,24 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`Buka repositori GitHub ${project.title}`}
+                  aria-label={`Buka repositori GitHub frontend ${project.title}`}
+                  title={project.githubBackendUrl ? 'Frontend Repository' : 'Source Code'}
                 >
                   <Code2 size={14} />
-                  <span>Repo</span>
+                  <span>{project.githubBackendUrl ? 'FE Repo' : 'Repo'}</span>
+                </RepoLink>
+              )}
+
+              {project.githubBackendUrl && (
+                <RepoLink
+                  href={project.githubBackendUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Buka repositori GitHub backend ${project.title}`}
+                  title="Backend Repository"
+                >
+                  <Code2 size={14} />
+                  <span>BE Repo</span>
                 </RepoLink>
               )}
             </CardActionGroup>

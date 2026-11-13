@@ -53,7 +53,7 @@ export const ContactGrid = styled.div`
   align-items: start;
 
   ${({ theme }) => theme.media.tablet} {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: ${({ theme }) => theme.spacing['2xl']};
   }
 `;

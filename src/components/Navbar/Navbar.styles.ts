@@ -6,6 +6,8 @@ export const NavHeader = styled.header<{ $scrolled: boolean }>`
   left: 0;
   right: 0;
   width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
   z-index: 100;
   background-color: ${({ theme, $scrolled }) =>
     $scrolled ? theme.colors.glassElevated : theme.colors.glass};
@@ -35,11 +37,12 @@ export const NavHeader = styled.header<{ $scrolled: boolean }>`
 
 export const NavContainer = styled.div`
   max-width: 1200px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
 `;
 
 export const Brand = styled.a`

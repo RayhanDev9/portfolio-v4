@@ -13,11 +13,16 @@ const PageContainer = styled.div`
   color: ${({ theme }) => theme.colors.textPrimary};
   display: flex;
   flex-direction: column;
+  max-width: 100%;
+  width: 100%;
+  overflow-x: hidden;
 `;
 
 const MainContent = styled.main`
   flex: 1;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 `;
 
 export default function HomePage() {

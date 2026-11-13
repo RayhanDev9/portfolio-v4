@@ -11,6 +11,9 @@ export const HeroSection = styled.section`
   padding-top: 120px;
   background-color: ${({ theme }) => theme.colors.darkBase};
   overflow: hidden;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 
   ${({ theme }) => theme.media.mobile} {
     padding-top: 100px;
@@ -30,8 +33,9 @@ export const HeroContainer = styled.div`
   align-items: center;
 
   ${({ theme }) => theme.media.tablet} {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: ${({ theme }) => theme.spacing['2xl']};
+    max-width: 100%;
   }
 `;
 
@@ -76,6 +80,8 @@ export const RoleSlideViewport = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.md};
   display: flex;
   align-items: center;
+  max-width: 100%;
+  width: 100%;
 
   ${({ theme }) => theme.media.tablet} {
     justify-content: center;
@@ -83,6 +89,7 @@ export const RoleSlideViewport = styled.div`
 
   ${({ theme }) => theme.media.mobile} {
     height: 34px;
+    max-width: 100%;
   }
 `;
 
@@ -99,7 +106,9 @@ export const RoleSubtitle = styled(motion.h2)`
   white-space: nowrap;
 
   ${({ theme }) => theme.media.mobile} {
-    font-size: ${({ theme }) => theme.fontSizes.xl};
+    font-size: clamp(1rem, 4.5vw, 1.25rem);
+    letter-spacing: 0.02em;
+    max-width: 100%;
   }
 `;
 
@@ -281,8 +290,8 @@ export const PolaroidCard = styled.div`
   }
 
   ${({ theme }) => theme.media.mobile} {
-    max-width: 280px;
-    transform: rotate(1deg);
+    max-width: min(280px, 85vw);
+    transform: rotate(0deg);
   }
 `;
 

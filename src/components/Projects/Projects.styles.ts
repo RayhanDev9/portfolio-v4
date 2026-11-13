@@ -79,15 +79,16 @@ export const FilterTabButton = styled.button<{ $active: boolean }>`
 
 export const ProjectsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: ${({ theme }) => theme.spacing.lg};
 
   ${({ theme }) => theme.media.tablet} {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
 export const CardContainer = styled.article`
+  min-width: 0;
   background-color: ${({ theme }) => theme.colors.secondarySurface};
   border: 1px solid ${({ theme }) => theme.colors.borderGlass};
   border-radius: ${({ theme }) => theme.radii.md};
@@ -224,15 +225,17 @@ export const CardActionRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.xs};
   padding-top: ${({ theme }) => theme.spacing.md};
   border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  flex-wrap: wrap;
 `;
 
 export const CardActionGroup = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.md};
+  flex-wrap: wrap;
+  gap: 8px;
 `;
 
 export const RepoLink = styled.a`

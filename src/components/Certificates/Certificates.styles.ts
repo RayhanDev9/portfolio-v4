@@ -79,19 +79,20 @@ export const FilterTabButton = styled.button<{ $active: boolean }>`
 
 export const CertificatesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: ${({ theme }) => theme.spacing.lg};
 
   @media (max-width: 1023px) and (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   ${({ theme }) => theme.media.tablet} {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
 export const CardContainer = styled.article`
+  min-width: 0;
   background-color: ${({ theme }) => theme.colors.secondarySurface};
   border: 1px solid ${({ theme }) => theme.colors.borderGlass};
   border-radius: ${({ theme }) => theme.radii.md};

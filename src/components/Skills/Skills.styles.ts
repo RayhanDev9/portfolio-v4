@@ -215,6 +215,7 @@ export const MilestoneItem = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spacing.xl};
   padding-bottom: ${({ theme }) => theme.spacing['3xl']};
+  min-width: 0;
 
   &:last-child {
     padding-bottom: 0;
@@ -263,6 +264,7 @@ export const MilestoneNode = styled.div`
 
 export const MilestoneCard = styled.div`
   flex: 1;
+  min-width: 0;
   background-color: ${({ theme }) => theme.colors.secondarySurface};
   border: 1px solid ${({ theme }) => theme.colors.borderGlass};
   border-radius: ${({ theme }) => theme.radii.md};

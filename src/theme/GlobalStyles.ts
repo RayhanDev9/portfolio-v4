@@ -12,6 +12,9 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
     color-scheme: dark;
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
   }
 
   body {
@@ -24,7 +27,18 @@ export const GlobalStyles = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
     min-height: 100vh;
+  }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Custom Selection Color */

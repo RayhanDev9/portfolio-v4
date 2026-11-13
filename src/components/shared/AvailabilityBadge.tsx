@@ -34,9 +34,20 @@ const BadgeContainer = styled.div<{ $size?: 'sm' | 'base' }>`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   letter-spacing: ${({ theme }) => theme.letterSpacings.wide};
   text-transform: uppercase;
+  max-width: 100%;
   transition: border-color ${({ theme }) => theme.transitions.fast},
     background-color ${({ theme }) => theme.transitions.fast};
   user-select: none;
+
+  span:not(:first-child) {
+    word-break: break-word;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    padding: 4px 10px;
+  }
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.borderHover};

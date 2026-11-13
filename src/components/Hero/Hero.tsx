@@ -24,9 +24,17 @@ import {
 } from './Hero.styles';
 
 const easeOut = [0.4, 0, 0.2, 1] as const;
+const heroRoles = profileData.roles || [profileData.role];
 
-export function Hero() {
-  const roles = profileData.roles || [profileData.role];
+interface RoleRotatorProps {
+  roles: string[];
+}
+
+/**
+ * Sub-komponen terisolasi untuk animasi rotasi peran.
+ * Mencegah re-render pada komponen induk Hero setiap interval berganti.
+ */
+function RoleRotator({ roles }: RoleRotatorProps) {
   const [roleIndex, setRoleIndex] = useState(0);
 
   useEffect(() => {
@@ -36,8 +44,26 @@ export function Hero() {
     }, 2800);
 
     return () => clearInterval(interval);
-  }, [roles.length]);
+  }, [roles]);
 
+  return (
+    <RoleSlideViewport aria-label={`Peran: ${roles[roleIndex]}`}>
+      <AnimatePresence mode="wait">
+        <RoleSubtitle
+          key={roleIndex}
+          initial={{ y: 20, opacity: 0, filter: 'blur(3px)' }}
+          animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+          exit={{ y: -20, opacity: 0, filter: 'blur(3px)' }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {roles[roleIndex]}
+        </RoleSubtitle>
+      </AnimatePresence>
+    </RoleSlideViewport>
+  );
+}
+
+export function Hero() {
   return (
     <HeroSection id="hero">
       <HeroContainer>
@@ -66,19 +92,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2, ease: easeOut }}
           >
-            <RoleSlideViewport aria-label={`Peran: ${roles[roleIndex]}`}>
-              <AnimatePresence mode="wait">
-                <RoleSubtitle
-                  key={roleIndex}
-                  initial={{ y: 20, opacity: 0, filter: 'blur(3px)' }}
-                  animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                  exit={{ y: -20, opacity: 0, filter: 'blur(3px)' }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  {roles[roleIndex]}
-                </RoleSubtitle>
-              </AnimatePresence>
-            </RoleSlideViewport>
+            <RoleRotator roles={heroRoles} />
           </motion.div>
 
           <motion.div

@@ -1,209 +1,66 @@
 import { useEffect } from 'react';
-import styled from 'styled-components';
-import { useParams, Link } from 'react-router';
+import { useParams } from 'react-router';
 import { motion } from 'motion/react';
-import { ArrowLeft, ExternalLink, Code2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ExternalLink,
+  Code2,
+  CheckCircle2,
+  AlertCircle,
+  Layers,
+  Sparkles,
+  Cpu,
+} from 'lucide-react';
 import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
 import { projectsData } from '../data/projects';
-
-const PageContainer = styled.div`
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.darkBase};
-  color: ${({ theme }) => theme.colors.textPrimary};
-  display: flex;
-  flex-direction: column;
-`;
-
-const MainContent = styled.main`
-  flex: 1;
-  width: 100%;
-  padding: ${({ theme }) => `${theme.spacing['4xl']} ${theme.spacing.lg}`};
-  padding-top: 120px;
-
-  ${({ theme }) => theme.media.mobile} {
-    padding-top: 100px;
-    padding-left: ${({ theme }) => theme.spacing.md};
-    padding-right: ${({ theme }) => theme.spacing.md};
-  }
-`;
-
-const ContentContainer = styled.div`
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-`;
-
-const BackLink = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textMuted};
-  text-decoration: none;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  transition: color ${({ theme }) => theme.transitions.fast},
-    transform ${({ theme }) => theme.transitions.fast};
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.accentLime};
-    transform: translateX(-3px);
-  }
-`;
-
-const DetailCard = styled.div`
-  background-color: ${({ theme }) => theme.colors.secondarySurface};
-  border: 1px solid ${({ theme }) => theme.colors.borderGlass};
-  border-radius: ${({ theme }) => theme.radii.lg};
-  overflow: hidden;
-  box-shadow: ${({ theme }) => theme.shadows.card};
-`;
-
-const Thumbnail = styled.img`
-  width: 100%;
-  max-height: 480px;
-  object-fit: cover;
-  display: block;
-`;
-
-const CardBody = styled.div`
-  padding: ${({ theme }) => theme.spacing['2xl']};
-
-  ${({ theme }) => theme.media.mobile} {
-    padding: ${({ theme }) => theme.spacing.lg};
-  }
-`;
-
-const BadgeRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  flex-wrap: wrap;
-  margin-bottom: ${({ theme }) => theme.spacing.md};
-`;
-
-const CategoryBadge = styled.span`
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  padding: 4px 12px;
-  border-radius: ${({ theme }) => theme.radii.full};
-  background-color: ${({ theme }) => theme.colors.accentMuted};
-  color: ${({ theme }) => theme.colors.accentLime};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  text-transform: uppercase;
-  letter-spacing: ${({ theme }) => theme.letterSpacings.wider};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
-`;
-
-const ComingSoonBadge = styled.span`
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  padding: 4px 12px;
-  border-radius: ${({ theme }) => theme.radii.full};
-  background-color: ${({ theme }) => theme.colors.glass};
-  color: ${({ theme }) => theme.colors.textMuted};
-  border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
-`;
-
-const ProjectTitle = styled.h1`
-  font-family: ${({ theme }) => theme.fonts.heading};
-  font-size: ${({ theme }) => theme.fontSizes['3xl']};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-  color: ${({ theme }) => theme.colors.textHighlight};
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
-
-  ${({ theme }) => theme.media.mobile} {
-    font-size: ${({ theme }) => theme.fontSizes['2xl']};
-  }
-`;
-
-const CollabText = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textMuted};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
-
-const ProjectDescription = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.base};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  line-height: ${({ theme }) => theme.lineHeights.relaxed};
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-`;
-
-const SectionHeader = styled.h2`
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  color: ${({ theme }) => theme.colors.textHighlight};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-`;
-
-const TechList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: ${({ theme }) => theme.spacing['2xl']};
-`;
-
-const TechItem = styled.span`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  padding: 6px 14px;
-  border-radius: ${({ theme }) => theme.radii.full};
-  background-color: ${({ theme }) => theme.colors.glass};
-  color: ${({ theme }) => theme.colors.textHighlight};
-  border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
-`;
-
-const ActionButtonGroup = styled.div`
-  display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
-  flex-wrap: wrap;
-  padding-top: ${({ theme }) => theme.spacing.lg};
-  border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
-`;
-
-const PrimaryLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  background-color: ${({ theme }) => theme.colors.accentLime};
-  color: ${({ theme }) => theme.colors.textInverse};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  padding: 12px 24px;
-  border-radius: ${({ theme }) => theme.radii.sm};
-  text-decoration: none;
-  transition: filter ${({ theme }) => theme.transitions.fast},
-    transform ${({ theme }) => theme.transitions.fast};
-
-  &:hover {
-    filter: brightness(1.08);
-    transform: translateY(-2px);
-  }
-`;
-
-const SecondaryLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs};
-  background-color: transparent;
-  color: ${({ theme }) => theme.colors.textPrimary};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
-  padding: 12px 24px;
-  border-radius: ${({ theme }) => theme.radii.sm};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  text-decoration: none;
-  transition: border-color ${({ theme }) => theme.transitions.fast},
-    color ${({ theme }) => theme.transitions.fast};
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.borderHover};
-    color: ${({ theme }) => theme.colors.textHighlight};
-  }
-`;
+import { caseStudiesData } from '../data/caseStudies';
+import {
+  PageContainer,
+  MainContent,
+  ContentContainer,
+  NavRow,
+  BackLink,
+  MetaPills,
+  CategoryBadge,
+  CollabBadge,
+  ProjectHero,
+  ProjectTitle,
+  ProjectTagline,
+  ProjectDescription,
+  HeroActionRow,
+  PrimaryDemoLink,
+  SecondaryCodeLink,
+  SkillsList,
+  SkillPill,
+  ShowcaseCard,
+  ShowcaseImage,
+  SectionsWrapper,
+  TwoColGrid,
+  DeepDiveCard,
+  DeepDiveCardHeader,
+  DeepDiveCardTitle,
+  DeepDiveCardText,
+  ArchitectureList,
+  ArchitectureItem,
+  ArchTitle,
+  ArchReason,
+  FeaturesList,
+  FeatureItem,
+  ProjectNavWrapper,
+  ProjectNavCard,
+  NavDirectionLabel,
+  NavProjectTitle,
+} from './ProjectDetailPage.styles';
 
 const easeOut = [0.4, 0, 0.2, 1] as const;
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const project = projectsData.find((p) => p.id === id);
+  const currentIndex = projectsData.findIndex((p) => p.id === id);
+  const project = currentIndex !== -1 ? projectsData[currentIndex] : null;
+  const caseStudy = id ? caseStudiesData[id] : null;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -225,78 +82,182 @@ export default function ProjectDetailPage() {
             </BackLink>
           </ContentContainer>
         </MainContent>
+        <Footer />
       </PageContainer>
     );
   }
+
+  const prevProject =
+    projectsData[(currentIndex - 1 + projectsData.length) % projectsData.length];
+  const nextProject =
+    projectsData[(currentIndex + 1) % projectsData.length];
 
   return (
     <PageContainer>
       <Navbar />
       <MainContent>
         <ContentContainer>
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, ease: easeOut }}
-          >
+          <NavRow>
             <BackLink to="/projects">
               <ArrowLeft size={16} />
               <span>Kembali ke Katalog Proyek</span>
             </BackLink>
-          </motion.div>
+
+            <MetaPills>
+              <CategoryBadge>{project.category}</CategoryBadge>
+              {project.collab && <CollabBadge>{project.collab}</CollabBadge>}
+            </MetaPills>
+          </NavRow>
 
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: easeOut }}
+            transition={{ duration: 0.35, ease: easeOut }}
           >
-            <DetailCard>
-              <Thumbnail src={project.img} alt={project.alt || project.title} />
-              <CardBody>
-                <BadgeRow>
-                  <CategoryBadge>{project.category}</CategoryBadge>
-                  <ComingSoonBadge>Studi Kasus Detail Sedang Disiapkan</ComingSoonBadge>
-                </BadgeRow>
+            <ProjectHero>
+              <ProjectTitle>{project.title}</ProjectTitle>
+              {caseStudy?.tagline && (
+                <ProjectTagline>{caseStudy.tagline}</ProjectTagline>
+              )}
+              <ProjectDescription>{project.description}</ProjectDescription>
 
-                <ProjectTitle>{project.title}</ProjectTitle>
+              <HeroActionRow>
+                <PrimaryDemoLink
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>Buka Live Demo</span>
+                  <ExternalLink size={16} />
+                </PrimaryDemoLink>
 
-                {project.collab && <CollabText>{project.collab}</CollabText>}
-
-                <ProjectDescription>{project.description}</ProjectDescription>
-
-                <SectionHeader>Teknologi &amp; Arsitektur</SectionHeader>
-                <TechList>
-                  {project.skills.map((skill) => (
-                    <TechItem key={skill}>{skill}</TechItem>
-                  ))}
-                </TechList>
-
-                <ActionButtonGroup>
-                  <PrimaryLink
-                    href={project.url}
+                {project.githubUrl && (
+                  <SecondaryCodeLink
+                    href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <span>Buka Live Demo</span>
-                    <ExternalLink size={16} />
-                  </PrimaryLink>
+                    <Code2 size={16} />
+                    <span>Lihat Source Code</span>
+                  </SecondaryCodeLink>
+                )}
+              </HeroActionRow>
 
-                  {project.githubUrl && (
-                    <SecondaryLink
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Code2 size={16} />
-                      <span>Lihat Source Code</span>
-                    </SecondaryLink>
-                  )}
-                </ActionButtonGroup>
-              </CardBody>
-            </DetailCard>
+              <SkillsList>
+                {project.skills.map((skill) => (
+                  <SkillPill key={skill}>{skill}</SkillPill>
+                ))}
+              </SkillsList>
+            </ProjectHero>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1, ease: easeOut }}
+          >
+            <ShowcaseCard>
+              <ShowcaseImage src={project.img} alt={project.alt || project.title} />
+            </ShowcaseCard>
+          </motion.div>
+
+          {caseStudy && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.15, ease: easeOut }}
+            >
+              <SectionsWrapper>
+                <TwoColGrid>
+                  <DeepDiveCard>
+                    <DeepDiveCardHeader>
+                      <AlertCircle size={15} />
+                      <span>Tantangan &amp; Masalah</span>
+                    </DeepDiveCardHeader>
+                    <DeepDiveCardTitle>Kebutuhan Sistem &amp; Kendala Awal</DeepDiveCardTitle>
+                    <DeepDiveCardText>{caseStudy.problem}</DeepDiveCardText>
+                  </DeepDiveCard>
+
+                  <DeepDiveCard>
+                    <DeepDiveCardHeader>
+                      <CheckCircle2 size={15} />
+                      <span>Solusi &amp; Implementasi</span>
+                    </DeepDiveCardHeader>
+                    <DeepDiveCardTitle>Pendekatan Teknis &amp; Rekayasa</DeepDiveCardTitle>
+                    <DeepDiveCardText>{caseStudy.solution}</DeepDiveCardText>
+                  </DeepDiveCard>
+                </TwoColGrid>
+
+                {caseStudy.architecture && caseStudy.architecture.length > 0 && (
+                  <DeepDiveCard>
+                    <DeepDiveCardHeader>
+                      <Layers size={15} />
+                      <span>Keputusan Arsitektur &amp; Teknologi</span>
+                    </DeepDiveCardHeader>
+                    <DeepDiveCardTitle>Alasan Pemilihan Stack &amp; Pola Desain</DeepDiveCardTitle>
+                    <ArchitectureList>
+                      {caseStudy.architecture.map((item, idx) => (
+                        <ArchitectureItem key={idx}>
+                          <ArchTitle>{item.title}</ArchTitle>
+                          <ArchReason>{item.reason}</ArchReason>
+                        </ArchitectureItem>
+                      ))}
+                    </ArchitectureList>
+                  </DeepDiveCard>
+                )}
+
+                {caseStudy.keyFeatures && caseStudy.keyFeatures.length > 0 && (
+                  <DeepDiveCard>
+                    <DeepDiveCardHeader>
+                      <Sparkles size={15} />
+                      <span>Fitur Kunci &amp; Spesifikasi Teknis</span>
+                    </DeepDiveCardHeader>
+                    <DeepDiveCardTitle>Kapabilitas Utama Sistem</DeepDiveCardTitle>
+                    <FeaturesList>
+                      {caseStudy.keyFeatures.map((feat, idx) => (
+                        <FeatureItem key={idx}>
+                          <CheckCircle2 size={16} />
+                          <span>{feat}</span>
+                        </FeatureItem>
+                      ))}
+                    </FeaturesList>
+                  </DeepDiveCard>
+                )}
+
+                {caseStudy.metricsOrLearnings && (
+                  <DeepDiveCard>
+                    <DeepDiveCardHeader>
+                      <Cpu size={15} />
+                      <span>Hasil Teknis &amp; Evaluasi</span>
+                    </DeepDiveCardHeader>
+                    <DeepDiveCardTitle>Dampak &amp; Refleksi Rekayasa</DeepDiveCardTitle>
+                    <DeepDiveCardText>{caseStudy.metricsOrLearnings}</DeepDiveCardText>
+                  </DeepDiveCard>
+                )}
+              </SectionsWrapper>
+            </motion.div>
+          )}
+
+          <ProjectNavWrapper>
+            <ProjectNavCard to={`/projects/${prevProject.id}`}>
+              <NavDirectionLabel>
+                <ArrowLeft size={14} />
+                <span>Proyek Sebelumnya</span>
+              </NavDirectionLabel>
+              <NavProjectTitle>{prevProject.title}</NavProjectTitle>
+            </ProjectNavCard>
+
+            <ProjectNavCard to={`/projects/${nextProject.id}`} $alignRight>
+              <NavDirectionLabel>
+                <span>Proyek Selanjutnya</span>
+                <ArrowRight size={14} />
+              </NavDirectionLabel>
+              <NavProjectTitle>{nextProject.title}</NavProjectTitle>
+            </ProjectNavCard>
+          </ProjectNavWrapper>
         </ContentContainer>
       </MainContent>
+      <Footer />
     </PageContainer>
   );
 }

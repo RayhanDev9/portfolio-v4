@@ -14,186 +14,179 @@
 | Hero Section (Polaroid, CTA, Socials) | ✅ Selesai | `f578672` |
 | Featured Projects + Filter Tabs | ✅ Selesai | `9fcd808` |
 | React Router v7 + `/projects` Catalogue | ✅ Selesai | `5748b9e` |
-| `/projects/:id` Detail Page (placeholder) | ✅ Selesai | `5748b9e` |
 | Skills & Career Journey (`#skills`) | ✅ Selesai | `f155aaf` |
 | Certificates Showcase & Lightbox Modal | ✅ Selesai | `bcc484e` |
 | Fix: Uniform Card Height & `/certificates` Route | ✅ Selesai | `5540aa2` |
-| **Contact Section & Footer (`#contact`)** | ✅ Selesai | `7e891ab` |
-| `/projects/:id` Full Case Study | ⬜ Belum | — |
+| Contact Section & Global Footer (`#contact`) | ✅ Selesai | `268fa20` |
+| **/projects/:id Full Case Study** | ✅ Selesai | `5928a90` |
 
 ---
 
-## 📋 Active Build Plan: Contact Section & Footer (`#contact`)
+## 📋 Active Build Plan: Deep-Dive Case Study Page (`/projects/:id`)
 
-### 1. Tujuan & Konteks
+### 1. Tujuan & Filosofi
 
-Section ini adalah penutup dari alur beranda (*Seamless Storytelling Flow*) sekaligus menjadi target navigasi dari:
-1. Tombol **"Hubungi"** di Hero section (`href="#contact"`).
-2. Tautan **"Contact"** di Navbar & Mobile Menu (`href="#contact"`).
+Halaman detail proyek (`/projects/:id`) saat ini masih berupa placeholder sederhana dengan badge *"Studi Kasus Detail Sedang Disiapkan"*.
 
-Desain memadukan prinsip **Brandlos** (direct persona, perataan data tegas, dan aksi nyata tanpa basa-basi) dengan **AW Media** (glassmorphism card surface dengan 1px subtle border glow).
-
----
-
-### 2. Struktur File
-
-```
-src/components/Contact/
-├── Contact.tsx          # Section wrapper (#contact) — header & split grid
-├── Contact.styles.ts    # Styled-components untuk Contact section & form
-├── ContactDirect.tsx    # Kolom kiri: Info kontak langsung, copy email, WhatsApp & socials
-├── ContactForm.tsx      # Kolom kanan: Formulir interaktif (nama, email, layanan, pesan)
-└── index.ts             # Barrel export
-
-src/components/Footer/
-├── Footer.tsx           # Footer komponen (copyright, nav links, back-to-top)
-├── Footer.styles.ts     # Styled-components untuk Footer
-└── index.ts             # Barrel export
-```
+Sesuai aturan locked di **GEMINI.md (Section 4: Deep-Dive Case Study Routes)** dan standar **Anti-Slop & Impeccable Taste**:
+- **Menolak deskripsi generik**: Tidak menggunakan teks AI-slop atau basa-basi pemasaran.
+- **Fokus pada engineering nyata**: Menjelaskan masalah spesifik yang diselesaikan, keputusan arsitektur data, alasan pemilihan tech stack, dan tantangan performa.
+- **Navigasi mulus**: Memberikan aksi langsung (Live Demo, GitHub source code) serta navigasi *Next / Previous Project* untuk menjelajahi seluruh 10 proyek secara berkesinambungan.
+- **Kelengkapan tampilan**: Melengkapi halaman dengan `<Footer />` global.
 
 ---
 
-### 3. Layout & Desain
+### 2. Desain Layout (`/projects/:id`)
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────┐
-│  SECTION HEADER                                                            │
+│  NAVBAR (Fixed Top)                                                        │
+├────────────────────────────────────────────────────────────────────────────┤
 │                                                                            │
-│  Let's Connect                         (Poiret One display font)           │
-│  Terbuka untuk kolaborasi proyek       (subheading, textMuted)             │
-│  frontend atau diskusi teknis.                                             │
+│  ← Kembali ke Katalog Proyek                                               │
+│                                                                            │
+│  [WEB APP] • [FRONT-END • MENTOR: AHMAD HAKIM]                             │
+│  DapurRasa Food Store                                                      │
+│  Aplikasi e-commerce kuliner modern dengan instant search & state caching. │
+│                                                                            │
+│  [ Buka Live Demo ↗ ]   [ Source Code < / > ]   [Vue 3] [Pinia] [Query]    │
 │                                                                            │
 ├────────────────────────────────────────────────────────────────────────────┤
-│  SPLIT 2-COLUMN GRID (1.1fr 1fr desktop, 1-col mobile)                     │
-│                                                                            │
-│  KOLOM KIRI: DIRECT CHANNELS           KOLOM KANAN: INTERACTIVE FORM       │
-│  ┌─────────────────────────────────┐   ┌─────────────────────────────────┐ │
-│  │ [🟢 Available for Remote...]    │   │ Kirim Pesan Langsung            │ │
-│  │                                 │   │                                 │ │
-│  │ ✉️ m.rayhanoi26@gmail.com        │   │ Nama Lengkap                    │ │
-│  │    [Salin Email] [Kirim Email]  │   │ [                               ] │ │
-│  │                                 │   │                                 │ │
-│  │ 💬 WhatsApp Langsung            │   │ Alamat Email                    │ │
-│  │    +62 895 3256 03726           │   │ [                               ] │ │
-│  │                                 │   │                                 │ │
-│  │ 📍 Banten, Indonesia (GMT+7)    │   │ Layanan / Topik                 │ │
-│  │                                 │   │ [ Web App / Frontend Dev  ▼ ]   │ │
-│  │ Terhubung di Media Sosial:      │   │                                 │ │
-│  │ [GitHub] [IG] [WA] [Email]      │   │ Pesan Anda                      │ │
-│  │                                 │   │ [                             ] │ │
-│  │                                 │   │                                 │ │
-│  │                                 │   │ [ Kirim Pesan ✉️ ]             │ │
-│  └─────────────────────────────────┘   └─────────────────────────────────┘ │
+│  SHOWCASE BANNER                                                           │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │                                                                      │  │
+│  │                    Preview Gambar Resolusi Tinggi                    │  │
+│  │                                                                      │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
 │                                                                            │
 ├────────────────────────────────────────────────────────────────────────────┤
-│  FOOTER                                                                    │
-│  ────────────────────────────────────────────────────────────────────────  │
-│  Rayhan.   © 2026 Muhamad Rayhan       Home • Projects • Skills • Certs   │
-│  Crafted with React 19 & TypeScript                     [↑ Back to Top]   │
+│  DEEP-DIVE SECTIONS (Grid 2 Kolom)                                         │
+│                                                                            │
+│  ┌──────────────────────────────────┐  ┌─────────────────────────────────┐ │
+│  │ 🎯 TANTANGAN & MASALAH NYATA     │  │ 💡 SOLUSI & IMPLEMENTASI        │ │
+│  │ Masalah konkurensi data menu dan │  │ Arsitektur Vue 3 Composables    │ │
+│  │ kebutuhan caching tanpa fetch    │  │ dipadu TanStack Query untuk     │ │
+│  │ berulang saat navigasi rute...   │  │ stale-while-revalidate data...  │ │
+│  └──────────────────────────────────┘  └─────────────────────────────────┘ │
+│                                                                            │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │ ⚙️ KEPUTUSAN ARSITEKTUR & TEKNOLOGI                                  │  │
+│  │ • Mengapa Pinia? (State modular tanpa boilerplate Vuex lama)         │  │
+│  │ • Mengapa TanStack Query? (Pengurangan network request hingga 60%)   │  │
+│  │ • Mengapa Composables? (Separation of concerns logika search)        │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+│                                                                            │
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
+│  │ ✨ FITUR KUNCI & SPESIFIKASI TEKNIS                                   │  │
+│  │ ✓ Instant search dengan debounce optimasi performa                    │  │
+│  │ ✓ Cart synchronization real-time lintas rute                         │  │
+│  │ ✓ Responsive fluid grid untuk checkout mobile dan desktop            │  │
+│  └──────────────────────────────────────────────────────────────────────┘  │
+│                                                                            │
+├────────────────────────────────────────────────────────────────────────────┤
+│  NEXT / PREVIOUS PROJECT NAVIGATION                                        │
+│  ┌───────────────────────────────┐   ┌──────────────────────────────────┐  │
+│  │ ← Proyek Sebelumnya           │   │ Proyek Selanjutnya →             │  │
+│  │ First Portfolio Milestone     │   │ Fast React Pizza                 │  │
+│  └───────────────────────────────┘   └──────────────────────────────────┘  │
+├────────────────────────────────────────────────────────────────────────────┤
+│  GLOBAL FOOTER                                                             │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### 4. Detail Komponen Contact
+### 3. Struktur Data Teknis (`src/data/caseStudies.ts`)
 
-#### A. Kolom Kiri: Direct Channels (`ContactDirect.tsx`)
-1. **Status Badge**:
-   - Memakai `<AvailabilityBadge />` ("Available for Remote • Freelance • Hybrid").
-2. **Email Card**:
-   - Menampilkan email `m.rayhanoi26@gmail.com`.
-   - Tombol **"Salin Email"** dengan feedback tooltip *"Tersalin!"* selama 2 detik via clipboard API (`navigator.clipboard.writeText`).
-   - Tautan langsung `mailto:m.rayhanoi26@gmail.com`.
-3. **WhatsApp Card**:
-   - Menampilkan nomor WhatsApp `+62 895 3256 03726`.
-   - Tautan langsung ke `https://wa.me/62895325603726` dengan target `_blank`.
-4. **Location Card**:
-   - Ikon pin lokasi + `"Banten, Indonesia (GMT+7)"`.
-5. **Socials Row**:
-   - Mengambil data dari `profileData.socials` (GitHub, Instagram, Email, WhatsApp) dengan hover background glow.
+Kita akan membuat data studi kasus terstruktur untuk setiap proyek:
 
-#### B. Kolom Kanan: Interactive Form (`ContactForm.tsx`)
-1. **Form Fields**:
-   - **Nama**: `<input type="text" required placeholder="Nama Anda" />`
-   - **Email**: `<input type="email" required placeholder="email@contoh.com" />`
-   - **Kategori Proyek**: `<select>` dengan opsi:
-     - *Frontend Web Application (React / Vue / TypeScript)*
-     - *Landing Page & Web Profile*
-     - *UI/UX Implementation & Slicing*
-     - *Diskusi & Konsultasi Teknis*
-   - **Pesan**: `<textarea required rows={4} placeholder="Tuliskan kebutuhan proyek Anda..." />`
-2. **Interaktivitas & Feedback**:
-   - Dark glass input styling: `background: theme.colors.glass`, border subtle 1px.
-   - Focus state: border `theme.colors.accentLime` dengan box-shadow halus (`accentGlow`).
-   - Saat submit:
-     - Mencegah reload (`e.preventDefault()`).
-     - Menyusun link `mailto` otomatis dengan subjek dan isi pesan yang diformat rapi, lalu membuka client email pengguna.
-     - Menampilkan feedback visual sukses: *"Pesan siap dikirimkan melalui aplikasi email Anda!"*.
-     - Reset form.
-3. **Submit Button**:
-   - Solid accent lime (`#B7D894`), teks `#202734` semibold, icon `Send` dari `lucide-react`.
+```ts
+export interface CaseStudyArchitecture {
+  title: string;
+  reason: string;
+}
+
+export interface CaseStudyDetail {
+  projectId: string;
+  tagline: string;
+  problem: string;
+  solution: string;
+  architecture: CaseStudyArchitecture[];
+  keyFeatures: string[];
+  metricsOrLearnings: string;
+}
+```
+
+#### Contoh Data Engineering Nyata untuk Proyek Unggulan:
+1. **DapurRasa Food Store (`dapur-rasa`)**:
+   - *Problem*: Manajemen data menu statis yang lambat diakses ulang, sinkronisasi keranjang belanja yang rapuh saat berpindah halaman, serta pencarian menu yang memicu render berlebihan.
+   - *Solution*: Mengadopsi Vue 3 Composition API dengan Pinia modular store untuk sinkronisasi cart, serta TanStack Vue Query untuk data caching di sisi klien.
+   - *Architecture*:
+     - *Pinia*: Menggantikan Vuex lama untuk type safety TypeScript penuh dan zero boilerplate mutations.
+     - *TanStack Query*: Mengeliminasi fetch berulang dengan caching cerdas (*stale-while-revalidate*).
+     - *Custom Composables*: Isolasi logika filter dan pencarian menu agar komponen UI tetap murni (*clean presentation*).
+2. **Fast React Pizza (`fast-react-pizza`)**:
+   - *Problem*: Aplikasi pemesanan pizza membutuhkan kalkulasi harga dinamis, update kuantitas pesanan instan, serta pelacakan status pesanan real-time tanpa reload.
+   - *Solution*: Arsitektur React 18 dengan Redux Toolkit (RTK) untuk global state cart, digabungkan dengan React Router Data Loaders untuk data fetching deklaratif.
+   - *Architecture*:
+     - *Redux Toolkit*: Menangani kompleksitas state multi-level (tambah item, ubah kuantitas, hitung total, kosongkan keranjang).
+     - *React Router Loaders*: Mengambil data pesanan langsung pada fase routing sebelum komponen di-render.
+3. **Danu Satya Portfolio (`danu-satya`)**:
+   - *Problem*: Klien desainer grafis & motion membutuhkan portofolio dark-mode dengan tipografi berkarakter tajam, pemuatan media grafis resolusi tinggi yang cepat, dan layout visual presisi.
+   - *Solution*: React 19 + TypeScript dengan Tailwind CSS v4, optimasi format gambar web modern (AVIF/WebP), dan integrasi custom domain DNS pribadi.
+4. **Siap Kerja (`siap-kerja`)**:
+   - *Problem*: Kolaborasi tim multi-disiplin (FE, BE, UI/UX) untuk platform kesiapan karir yang membutuhkan integrasi rekomendasi AI, modul interaktif, dan animasi transisi responsif.
+   - *Solution*: React + Redux Toolkit terintegrasi dengan endpoint Google Gemini AI, didukung animasi Framer Motion dan manajemen alur kerja Git berbasis tim.
+5. **Proyek Lainnya (5–10)**:
+   - Disediakan fallback arsitektur berbasis data asli di `src/data/projects.ts` sehingga seluruh 10 proyek memiliki studi kasus yang konsisten dan informatif.
 
 ---
 
-### 5. Detail Komponen Footer (`Footer.tsx`)
+### 4. Detail Komponen & Styling
 
-1. **Brand & Copyright**:
-   - Brand logo **"Rayhan."** (Poiret One).
-   - Copyright: `"© 2026 Muhamad Rayhan. All rights reserved."`
-2. **Quick Nav Links**:
-   - Navigasi cepat: `Home`, `Projects`, `Skills`, `Certificates`, `Contact`.
-   - Masing-masing link memiliki smooth scroll anchor.
-3. **Tech Badge & Back to Top**:
-   - Label teks: `"Built with React 19, TypeScript & styled-components"`.
-   - Tombol **"Back to Top"** dengan icon `ArrowUp` yang menjalankan `window.scrollTo({ top: 0, behavior: 'smooth' })`.
-4. **Penempatan Reusable**:
-   - Dipasang di bagian paling bawah [HomePage.tsx](file:///d:/data/rayhan/programs/project-2/portfolio-v4/src/pages/HomePage.tsx), [ProjectsPage.tsx](file:///d:/data/rayhan/programs/project-2/portfolio-v4/src/pages/ProjectsPage.tsx), dan [CertificatesPage.tsx](file:///d:/data/rayhan/programs/project-2/portfolio-v4/src/pages/CertificatesPage.tsx).
-
----
-
-### 6. Entrance Animations (motion library)
-
-| Elemen | Animasi | Trigger |
-|---|---|---|
-| Section Header | `fadeInUp` (y: 20 → 0) | `whileInView`, `once: true` |
-| Direct Channels (Kiri) | `fadeInLeft` (x: -20 → 0) | `whileInView`, `once: true`, delay 100ms |
-| Contact Form (Kanan) | `fadeInRight` (x: 20 → 0) | `whileInView`, `once: true`, delay 150ms |
-| Footer | `fadeIn` (opacity: 0 → 1) | `whileInView`, `once: true` |
-
-- Duration: `400ms`, easing: `[0.4, 0, 0.2, 1] as const`
+1. **Breadcrumb & Meta Tag**:
+   - Tombol `← Kembali ke Katalog Proyek` (Link ke `/projects`).
+   - Pill badge kategori (*Web App*, *Landing Page*, *Interactive*) dan tag kolaborasi/role.
+2. **Hero Header & Action Buttons**:
+   - Judul H1 besar bergaya *Google Sans* / *Poiret One*.
+   - Tombol utama:
+     - `Buka Live Demo` (solid lime `#B7D894` + icon `ExternalLink`).
+     - `Lihat Source Code` (ghost button + icon `Code2`, hanya tampil jika `githubUrl` ada).
+   - Tech stack pill tags lengkap.
+3. **Showcase Visual Container**:
+   - Gambar beresolusi tajam dengan `aspect-ratio: 16 / 9`, border 1px `borderGlass`, dan subtle shadow glow.
+4. **Deep-Dive Cards (Glass Surfaces)**:
+   - **Tantangan & Solusi**: Grid 2 kolom dengan kartu kaca gelap (`#36415A` + blur).
+   - **Keputusan Arsitektur**: Kartu modular yang merinci *Teknologi* dan *Alasan Pemilihan Teknis*.
+   - **Fitur Kunci**: Daftar fitur dengan icon checkmark beraksen lime.
+5. **Next / Previous Navigation**:
+   - Di bagian bawah kartu studi kasus:
+     - Tombol kiri: `← Proyek Sebelumnya` (judul proyek sebelumnya).
+     - Tombol kanan: `Proyek Selanjutnya →` (judul proyek berikutnya).
+     - Berputar secara siklis (proyek pertama mengarah ke proyek terakhir dan sebaliknya).
+6. **Footer Global**:
+   - Memasang `<Footer />` di bagian bawah halaman.
 
 ---
 
-### 7. Urutan Eksekusi
+### 5. Urutan Eksekusi
 
 ```
-Step 1  → Buat src/components/Contact/Contact.styles.ts
-Step 2  → Buat src/components/Contact/ContactDirect.tsx
-Step 3  → Buat src/components/Contact/ContactForm.tsx
-Step 4  → Buat src/components/Contact/Contact.tsx
-Step 5  → Buat src/components/Contact/index.ts
-Step 6  → Buat src/components/Footer/Footer.styles.ts
-Step 7  → Buat src/components/Footer/Footer.tsx & index.ts
-Step 8  → Update src/pages/HomePage.tsx — import Contact & Footer
-Step 9  → Update src/pages/ProjectsPage.tsx & CertificatesPage.tsx — pasang Footer
-Step 10 → Verifikasi: tsc --noEmit + npm run build
-Step 11 → Git commit & push: "feat: implement contact section and footer"
+Step 1  → Buat src/data/caseStudies.ts (data teknis tantangan, arsitektur, dan solusi 10 proyek)
+Step 2  → Buat src/pages/ProjectDetailPage.styles.ts (semua styled-components detail studi kasus)
+Step 3  → Refactor src/pages/ProjectDetailPage.tsx (tampilan komprehensif, navigasi next/prev, dan footer)
+Step 4  → Verifikasi build & type check: tsc --noEmit + npm run build
+Step 5  → Update README.md status tracker
+Step 6  → Git commit & push: "feat: implement comprehensive engineering case study page"
 ```
 
 ---
 
-### 8. Theme Tokens yang Dipakai
+### 6. Kriteria Keberhasilan
 
-```
-colors: darkBase, secondarySurface, glass, glassHover, glassElevated
-        accentLime, accentMuted, accentGlow
-        textHighlight, textSecondary, textMuted, textPrimary, textInverse
-        border, borderHover, borderSubtle, borderGlass
-fonts:  display (Poiret One), heading (Google Sans), body
-fontSizes: xs, sm, base, md, lg, xl, '2xl', '3xl', '4xl'
-fontWeights: medium, semibold, regular, bold
-spacing: xs, sm, md, lg, xl, '2xl', '3xl', '4xl'
-radii: sm, md, full
-transitions: fast (150ms), normal (250ms)
-shadows: glow, card
-```
+- ✅ **Hilangkan Placeholder**: Tidak ada lagi tulisan *"Studi Kasus Detail Sedang Disiapkan"*.
+- ✅ **High-Signal Technical Prose**: Bahasa teknis lugas, berbasis arsitektur data riil tanpa AI cliches (*delve, tapestry, seamless, game-changer*).
+- ✅ **Aksi Lengkap**: Tombol Live Demo, Source Code, dan link kembali berfungsi instan.
+- ✅ **Sirkulasi Proyek Mulus**: Recruiter dapat berpindah dari satu proyek ke proyek lain dengan tombol Next/Prev.
+- ✅ **Desain Terpadu**: Glassmorphism AW Media × ketegasan Brandlos konsisten dengan halaman beranda.
+- ✅ **Lolos Verifikasi**: 0 error TypeScript, build produksi Vite sukses, dan working tree git bersih.

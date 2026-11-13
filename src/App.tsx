@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { Projects } from './components/Projects';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -21,6 +22,7 @@ export default function App() {
       <Navbar />
       <MainContent>
         <Hero />
+        <Projects />
       </MainContent>
     </AppContainer>
   );

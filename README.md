@@ -274,3 +274,335 @@ Step 7 → Commit & push: "feat: navbar & hero section with glassmorphism design
 | `fonts.heading` | Google Sans / Plus Jakarta Sans | h1 name |
 | `transitions.fast` | `150ms ease-out` | Hover states |
 | `transitions.normal` | `250ms ease-out` | Scroll effects, mobile menu |
+
+---
+---
+
+## Build Plan: Featured Projects Section (`#projects`)
+
+> ✅ Navbar & Hero sudah selesai. Section ini adalah tujuan scroll dari tombol "Lihat Proyek" di Hero.
+
+### Data yang Tersedia
+
+Dari `src/data/projects.ts` — **10 proyek total**:
+
+| # | ID | Judul | Kategori | Featured? |
+|---|---|---|---|---|
+| 1 | `dapur-rasa` | DapurRasa Food Store | `app` | ✅ |
+| 2 | `fast-react-pizza` | Fast React Pizza | `app` | ✅ |
+| 3 | `danu-satya` | Danu Satya Portfolio | `landing` | ✅ |
+| 4 | `siap-kerja` | Siap Kerja | `app` | ✅ |
+| 5 | `tk-paud-permata` | TK PAUD Permata | `landing` | — |
+| 6 | `mading-kampus` | Mading Kampus | `app` | — |
+| 7 | `store-radeva` | Store Radeva | `landing` | — |
+| 8 | `company-profile-isc` | Company Profile ISC | `landing` | — |
+| 9 | `pig-game` | Pig Game | `interactive` | — |
+| 10 | `first-portfolio` | First Portfolio Milestone | `landing` | — |
+
+**Di beranda hanya tampil 4 proyek yang `featured: true`.**
+Tombol di bawah mengarah ke halaman katalog lengkap `/projects` (dibangun nanti).
+
+---
+
+### 1. File Structure
+
+```
+src/components/Projects/
+├── Projects.tsx          # Section wrapper — heading, filter, grid, CTA
+├── Projects.styles.ts    # Semua styled-components
+├── ProjectCard.tsx       # Kartu individual per proyek
+└── index.ts              # Barrel export
+```
+
+---
+
+### 2. Section Layout
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  SECTION HEADER                                                  │
+│                                                                  │
+│  Selected Works                  (heading, Poiret One display)   │
+│  Proyek terpilih yang menunjukkan                                │
+│  kemampuan arsitektur frontend.  (subheading, textSecondary)     │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│  FILTER TABS (opsional, hanya jika > 1 kategori featured)        │
+│                                                                  │
+│  [All ✓]  [Web App]  [Landing Page]                              │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│  PROJECT GRID (2 kolom desktop, 1 kolom mobile)                  │
+│                                                                  │
+│  ┌─────────────────────────┐  ┌─────────────────────────┐        │
+│  │  ┌───────────────────┐  │  │  ┌───────────────────┐  │        │
+│  │  │                   │  │  │  │                   │  │        │
+│  │  │    Thumbnail       │  │  │  │    Thumbnail       │  │        │
+│  │  │    (hover: zoom)   │  │  │  │    (hover: zoom)   │  │        │
+│  │  │                   │  │  │  │                   │  │        │
+│  │  └───────────────────┘  │  │  └───────────────────┘  │        │
+│  │                         │  │                         │        │
+│  │  DapurRasa Food Store   │  │  Fast React Pizza       │        │
+│  │  Culinary e-commerce... │  │  Interactive pizza...   │        │
+│  │                         │  │                         │        │
+│  │  [Vue 3] [Pinia] [VQ]  │  │  [React] [Redux] [TW]  │        │
+│  │                         │  │                         │        │
+│  │  Live Demo →    Detail  │  │  Live Demo →    Detail  │        │
+│  └─────────────────────────┘  └─────────────────────────┘        │
+│                                                                  │
+│  ┌─────────────────────────┐  ┌─────────────────────────┐        │
+│  │  ... Danu Satya ...     │  │  ... Siap Kerja ...     │        │
+│  └─────────────────────────┘  └─────────────────────────┘        │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────┤
+│  SECTION FOOTER                                                  │
+│                                                                  │
+│           [ Lihat Semua Proyek (10) → ]                          │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 3. Section Header
+
+- **Heading** (`<h2>`):
+  - Teks: `"Selected Works"`
+  - `font-family: theme.fonts.display` (Poiret One)
+  - `font-size: theme.fontSizes['4xl']` (48px) desktop, `theme.fontSizes['3xl']` (36px) mobile
+  - `color: theme.colors.textHighlight`
+  - `font-weight: theme.fontWeights.regular`
+  - `letter-spacing: theme.letterSpacings.wide`
+- **Subheading** (`<p>`):
+  - Teks: `"Proyek terpilih yang menunjukkan kemampuan arsitektur frontend."`
+  - `font-size: theme.fontSizes.md` (18px)
+  - `color: theme.colors.textMuted`
+  - `margin-top: theme.spacing.sm`
+  - `max-width: 480px`
+
+---
+
+### 4. Filter Tabs
+
+> Di beranda, filter tabs bersifat **opsional** karena hanya 4 featured projects (3 app, 1 landing). Kita tetap implementasi agar konsisten dengan halaman `/projects` nanti. Filter hanya memfilter proyek yang ditampilkan (featured saja di home).
+
+#### Data Kategori
+```ts
+const CATEGORIES: { value: ProjectCategory; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'app', label: 'Web App' },
+  { value: 'landing', label: 'Landing Page' },
+  { value: 'interactive', label: 'Interactive' },
+];
+```
+
+#### Styling Tab Button
+- **Default state**:
+  - `background: transparent`
+  - `border: 1px solid theme.colors.borderSubtle`
+  - `border-radius: theme.radii.full`
+  - `padding: 6px 16px`
+  - `color: theme.colors.textMuted`
+  - `font-size: theme.fontSizes.sm`
+  - `font-weight: theme.fontWeights.medium`
+  - `cursor: pointer`
+  - `transition: all theme.transitions.fast`
+- **Active state** (`$active` prop):
+  - `background: theme.colors.accentMuted`
+  - `border-color: theme.colors.border`
+  - `color: theme.colors.accentLime`
+- **Hover state** (non-active):
+  - `border-color: theme.colors.borderHover`
+  - `color: theme.colors.textSecondary`
+
+#### Behavior
+- Default active tab: `'all'`
+- State management: `useState<ProjectCategory>('all')`
+- Filter logic: `category === 'all' ? featuredProjects : featuredProjects.filter(p => p.category === category)`
+- Saat kategori berubah, kartu langsung difilter tanpa animasi rumit (cukup `AnimatePresence` + layout animation)
+
+---
+
+### 5. Project Card (`ProjectCard.tsx`)
+
+#### Props Interface
+```ts
+interface ProjectCardProps {
+  project: Project;
+  index: number; // untuk stagger delay animasi
+}
+```
+
+#### Struktur Visual Kartu
+```
+┌────────────────────────────────┐
+│ ┌────────────────────────────┐ │  ← Thumbnail wrapper
+│ │                            │ │     aspect-ratio: 16/10
+│ │       Thumbnail Image      │ │     overflow: hidden
+│ │       (hover: scale 1.04)  │ │     border-radius: top corners
+│ │                            │ │
+│ └────────────────────────────┘ │
+│                                │
+│  DapurRasa Food Store          │  ← Title (h3)
+│  Team: Ahmad Hakim • FE       │  ← Collab + Role (opsional)
+│                                │
+│  Culinary e-commerce app       │  ← Description (2 baris, ellipsis)
+│  featuring instant menu...     │
+│                                │
+│  [Vue 3] [Pinia] [TanStack]   │  ← Tech pills (max 4 tampil)
+│                                │
+│  Live Demo →         Detail →  │  ← Action row
+└────────────────────────────────┘
+```
+
+#### Styling Detail
+
+**Card Container**:
+- `background: theme.colors.secondarySurface`
+- `border: 1px solid theme.colors.borderGlass`
+- `border-radius: theme.radii.md` (12px)
+- `overflow: hidden`
+- `transition: border-color theme.transitions.fast, transform theme.transitions.fast, box-shadow theme.transitions.fast`
+- Hover:
+  - `border-color: theme.colors.borderHover`
+  - `transform: translateY(-4px)`
+  - `box-shadow: theme.shadows.glow`
+
+**Thumbnail**:
+- `<img>` di dalam overflow-hidden wrapper
+- `width: 100%`, `aspect-ratio: 16 / 10`
+- `object-fit: cover`
+- `transition: transform theme.transitions.normal`
+- Card hover → `transform: scale(1.04)` pada image (zoom halus)
+
+**Content area** (padding: `theme.spacing.lg`):
+- **Title** (`<h3>`):
+  - `font-family: theme.fonts.heading`
+  - `font-size: theme.fontSizes.lg` (20px)
+  - `font-weight: theme.fontWeights.semibold`
+  - `color: theme.colors.textHighlight`
+  - `margin-bottom: theme.spacing.xs`
+
+- **Meta** (collab + role, opsional — hanya jika `project.collab` atau `project.role` ada):
+  - `font-size: theme.fontSizes.xs`
+  - `color: theme.colors.textMuted`
+  - `margin-bottom: theme.spacing.sm`
+  - Format: `"Mentor: Ahmad Hakim • Front-End"` atau `"Team: FE • BE • UI/UX • Front-End"`
+
+- **Description** (`<p>`):
+  - `font-size: theme.fontSizes.sm` (14px)
+  - `color: theme.colors.textSecondary`
+  - `line-height: theme.lineHeights.relaxed`
+  - `-webkit-line-clamp: 2` + `overflow: hidden` + `text-overflow: ellipsis` (max 2 baris, sisanya dipotong)
+  - `margin-bottom: theme.spacing.md`
+
+- **Tech Stack Pills** (flex row, `gap: 6px`, `flex-wrap: wrap`):
+  - Tampilkan max **4 skill** dari `project.skills`
+  - Jika lebih: tampilkan `+N` pill di akhir
+  - Styling pill:
+    - `font-size: theme.fontSizes.xs` (12px)
+    - `padding: 3px 10px`
+    - `border-radius: theme.radii.full`
+    - `background: theme.colors.accentMuted`
+    - `color: theme.colors.accentLime`
+    - `border: 1px solid theme.colors.borderSubtle`
+    - `font-weight: theme.fontWeights.medium`
+  - Pill `+N` (overflow counter):
+    - Sama styling, tapi `color: theme.colors.textMuted`, `background: theme.colors.glass`
+
+- **Action Row** (flex, `justify-content: space-between`, `margin-top: theme.spacing.md`, `padding-top: theme.spacing.md`, `border-top: 1px solid theme.colors.borderSubtle`):
+  - **"Live Demo"** link:
+    - `<a href={project.url} target="_blank" rel="noopener noreferrer">`
+    - `font-size: theme.fontSizes.sm`
+    - `color: theme.colors.accentLime`
+    - `font-weight: theme.fontWeights.medium`
+    - Icon `ExternalLink` dari lucide-react (size 14) setelah teks
+    - Hover: `opacity: 0.85`
+  - **"Detail"** link:
+    - Untuk sementara: `<a href={#}>` (nanti diganti `<Link to={/projects/${project.id}}>` setelah routing diaktifkan)
+    - `font-size: theme.fontSizes.sm`
+    - `color: theme.colors.textMuted`
+    - `font-weight: theme.fontWeights.medium`
+    - Icon `ArrowRight` dari lucide-react (size 14)
+    - Hover: `color: theme.colors.textHighlight`
+
+---
+
+### 6. Project Grid
+
+- **Container**: `max-width: 1200px`, `margin: 0 auto`, `padding: 0 theme.spacing.lg`
+- **Grid**:
+  - Desktop (≥ 1024px): `grid-template-columns: repeat(2, 1fr)`, `gap: theme.spacing.lg` (24px)
+  - Tablet (≤ 768px): `grid-template-columns: 1fr` (single column)
+- Margin section: `padding-top: theme.spacing['4xl']`, `padding-bottom: theme.spacing['4xl']`
+- `id="projects"` sebagai scroll anchor
+
+---
+
+### 7. Section Footer — CTA Selengkapnya
+
+- Posisi: rata tengah, di bawah grid, `margin-top: theme.spacing['2xl']`
+- Tombol **"Lihat Semua Proyek (10)"**:
+  - Styling mirip `SecondaryButton` di Hero — outlined style
+  - `background: transparent`
+  - `border: 1px solid theme.colors.border`
+  - `border-radius: theme.radii.sm`
+  - `padding: 12px 28px`
+  - `color: theme.colors.textPrimary`
+  - `font-weight: theme.fontWeights.medium`
+  - `font-size: theme.fontSizes.sm`
+  - Icon `ArrowRight` dari lucide-react (size 16) di akhir teks
+  - Hover: `border-color: theme.colors.borderHover`, `background: theme.colors.accentMuted`, `color: theme.colors.textHighlight`
+  - Untuk sementara: `href="#"` (nanti diganti `<Link to="/projects">` setelah routing)
+  - Angka `(10)` diambil dinamis dari `projectsData.length`
+
+---
+
+### 8. Entrance Animations (motion library)
+
+Semua animasi menggunakan `motion/react` dengan `whileInView` agar hanya dipicu saat section masuk viewport:
+
+| Elemen | Animasi | Trigger |
+|---|---|---|
+| Section Header (h2 + p) | `fadeInUp` (y: 20→0, opacity: 0→1) | `whileInView`, `once: true` |
+| Filter Tabs row | `fadeInUp`, delay 100ms | `whileInView`, `once: true` |
+| Project Card (masing-masing) | `fadeInUp`, delay = `index * 100ms` | `whileInView`, `once: true`, `margin: "-50px"` |
+| CTA Footer | `fadeInUp`, delay 200ms | `whileInView`, `once: true` |
+
+- Duration: `400ms`
+- Easing: `[0.4, 0, 0.2, 1]`
+- `viewport: { once: true, margin: '-50px' }` — animasi hanya sekali, trigger sedikit sebelum elemen benar-benar terlihat penuh
+
+---
+
+### 9. Urutan Eksekusi
+
+```
+Step 1 → Buat src/components/Projects/Projects.styles.ts (semua styled-components)
+Step 2 → Buat src/components/Projects/ProjectCard.tsx (kartu individual)
+Step 3 → Buat src/components/Projects/Projects.tsx (section wrapper)
+Step 4 → Buat src/components/Projects/index.ts (barrel export)
+Step 5 → Update src/App.tsx — import Projects, tambahkan di bawah Hero
+Step 6 → Verifikasi: tsc --noEmit, npm run build
+Step 7 → Commit & push: "feat: featured projects section with filter tabs and glass cards"
+```
+
+---
+
+### 10. Theme Tokens yang Dipakai (Section ini)
+
+```
+colors: darkBase, secondarySurface, glass, glassHover
+        accentLime, accentMuted, accentGlow
+        textHighlight, textSecondary, textMuted, textPrimary, textInverse
+        border, borderHover, borderSubtle, borderGlass
+fonts:  display (Poiret One), heading (Google Sans)
+fontSizes: xs, sm, md, lg, '3xl', '4xl'
+fontWeights: medium, semibold, regular
+lineHeights: relaxed
+letterSpacings: wide
+spacing: xs, sm, md, lg, xl, '2xl', '4xl'
+radii: xs, sm, md, full
+transitions: fast (150ms), normal (250ms)
+shadows: glow
+```

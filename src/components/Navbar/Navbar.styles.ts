@@ -111,6 +111,39 @@ export const NavActions = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
 `;
 
+export const CommandPaletteTrigger = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: ${({ theme }) => theme.colors.glass};
+  border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  border-radius: ${({ theme }) => theme.radii.full};
+  padding: 5px 10px;
+  color: ${({ theme }) => theme.colors.textMuted};
+  cursor: pointer;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accentLime};
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+  }
+`;
+
+export const CommandKeyBadge = styled.span`
+  font-family: monospace;
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: ${({ theme }) => theme.radii.sm};
+  background-color: ${({ theme }) => theme.colors.darkBase};
+  border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  color: ${({ theme }) => theme.colors.textMuted};
+
+  ${({ theme }) => theme.media.mobile} {
+    display: none;
+  }
+`;
+
 export const NavResumeButton = styled.a`
   display: none;
   align-items: center;

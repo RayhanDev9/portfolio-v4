@@ -316,6 +316,72 @@ export const FeatureItem = styled.li`
   }
 `;
 
+export const CodeSnippetCard = styled.div`
+  background-color: ${({ theme }) => theme.colors.darkBase};
+  border: 1px solid ${({ theme }) => theme.colors.borderGlass};
+  border-radius: ${({ theme }) => theme.radii.md};
+  overflow: hidden;
+  margin-top: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const CodeHeaderBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background-color: ${({ theme }) => theme.colors.secondarySurface};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+`;
+
+export const CodeHeaderLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: monospace;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+export const CodeCopyBtn = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  border-radius: ${({ theme }) => theme.radii.sm};
+  padding: 4px 10px;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  cursor: pointer;
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.accentLime};
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    background-color: ${({ theme }) => theme.colors.accentMuted};
+  }
+`;
+
+export const CodePre = styled.pre`
+  margin: 0;
+  padding: 16px 20px;
+  overflow-x: auto;
+  font-family: 'Fira Code', Consolas, Monaco, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: ${({ theme }) => theme.colors.textHighlight};
+  background-color: rgba(15, 20, 28, 0.7);
+`;
+
+export const CodeExplanationText = styled.p`
+  padding: 12px 16px;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textMuted};
+  line-height: 1.5;
+  border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  background-color: ${({ theme }) => theme.colors.secondarySurface};
+`;
+
 export const ProjectNavWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);

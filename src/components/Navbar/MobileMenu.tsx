@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useLocation } from 'react-router';
-import { FileDown } from 'lucide-react';
+import { FileDown, Search } from 'lucide-react';
 import { AvailabilityBadge } from '../shared/AvailabilityBadge';
 import { profileData } from '../../data/profile';
 
@@ -11,6 +11,7 @@ interface MobileMenuProps {
   items: Array<{ label: string; href: string }>;
   isHome?: boolean;
   activeSection?: string;
+  onOpenPalette?: () => void;
 }
 
 const MenuOverlay = styled(motion.div)`
@@ -56,6 +57,29 @@ const NavItemLink = styled.a<{ $active?: boolean }>`
   }
 `;
 
+const MobilePaletteButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: ${({ theme }) => theme.colors.glass};
+  color: ${({ theme }) => theme.colors.textHighlight};
+  border: 1px solid ${({ theme }) => theme.colors.borderGlass};
+  border-radius: ${({ theme }) => theme.radii.sm};
+  padding: 12px 20px;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  cursor: pointer;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+  transition: all ${({ theme }) => theme.transitions.fast};
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    color: ${({ theme }) => theme.colors.accentLime};
+  }
+`;
+
 const MobileCvButton = styled.a`
   display: inline-flex;
   align-items: center;
@@ -85,7 +109,7 @@ const BadgeWrapper = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.sm};
 `;
 
 export function MobileMenu({
@@ -94,6 +118,7 @@ export function MobileMenu({
   items,
   isHome = true,
   activeSection = 'hero',
+  onOpenPalette,
 }: MobileMenuProps) {
   const location = useLocation();
 
@@ -151,6 +176,19 @@ export function MobileMenu({
           </NavList>
 
           <BadgeWrapper>
+            {onOpenPalette && (
+              <MobilePaletteButton
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenPalette();
+                }}
+              >
+                <Search size={16} />
+                <span>Menu Cepat (Command Palette ⌘K)</span>
+              </MobilePaletteButton>
+            )}
+
             {profileData.resumeUrl && (
               <MobileCvButton
                 href={profileData.resumeUrl}

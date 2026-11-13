@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Menu, X, FileDown } from "lucide-react";
+import { Menu, X, FileDown, Search } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { AvailabilityBadge } from "../shared/AvailabilityBadge";
 import { profileData } from "../../data/profile";
+import { CommandPalette } from "../CommandPalette";
 import { MobileMenu } from "./MobileMenu";
 import {
   NavHeader,
@@ -11,6 +12,8 @@ import {
   NavLinksList,
   NavLink,
   NavActions,
+  CommandPaletteTrigger,
+  CommandKeyBadge,
   NavResumeButton,
   DesktopBadgeWrapper,
   MenuToggleButton,
@@ -27,6 +30,7 @@ const NAV_ITEMS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("hero");
   const location = useLocation();
   const isHome = location.pathname === "/";
@@ -38,6 +42,18 @@ export function Navbar() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   useEffect(() => {
@@ -118,6 +134,16 @@ export function Navbar() {
           </NavLinksList>
 
           <NavActions>
+            <CommandPaletteTrigger
+              type="button"
+              onClick={() => setPaletteOpen(true)}
+              aria-label="Buka Command Palette (Ctrl + K)"
+              title="Command Palette (Ctrl + K)"
+            >
+              <Search size={14} />
+              <CommandKeyBadge>⌘K</CommandKeyBadge>
+            </CommandPaletteTrigger>
+
             {profileData.resumeUrl && (
               <NavResumeButton
                 href={profileData.resumeUrl}
@@ -156,6 +182,12 @@ export function Navbar() {
         items={NAV_ITEMS}
         isHome={isHome}
         activeSection={activeSection}
+        onOpenPalette={() => setPaletteOpen(true)}
+      />
+
+      <CommandPalette
+        isOpen={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
       />
     </>
   );

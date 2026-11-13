@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { motion } from 'motion/react';
 import {
@@ -11,6 +11,9 @@ import {
   Layers,
   Sparkles,
   Cpu,
+  Copy,
+  Check,
+  FileCode,
 } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
@@ -48,6 +51,12 @@ import {
   ArchReason,
   FeaturesList,
   FeatureItem,
+  CodeSnippetCard,
+  CodeHeaderBar,
+  CodeHeaderLeft,
+  CodeCopyBtn,
+  CodePre,
+  CodeExplanationText,
   ProjectNavWrapper,
   ProjectNavCard,
   NavDirectionLabel,
@@ -58,6 +67,8 @@ const easeOut = [0.4, 0, 0.2, 1] as const;
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const [copiedCode, setCopiedCode] = useState(false);
+
   const currentIndex = projectsData.findIndex((p) => p.id === id);
   const project = currentIndex !== -1 ? projectsData[currentIndex] : null;
   const caseStudy = id ? caseStudiesData[id] : null;
@@ -65,6 +76,23 @@ export default function ProjectDetailPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
+
+  const handleCopyCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    } catch {
+      const ta = document.createElement('textarea');
+      ta.value = code;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      setCopiedCode(true);
+      setTimeout(() => setCopiedCode(false), 2000);
+    }
+  };
 
   if (!project) {
     return (
@@ -203,6 +231,51 @@ export default function ProjectDetailPage() {
                         </ArchitectureItem>
                       ))}
                     </ArchitectureList>
+                  </DeepDiveCard>
+                )}
+
+                {caseStudy.codeSnippet && (
+                  <DeepDiveCard>
+                    <DeepDiveCardHeader>
+                      <Code2 size={15} />
+                      <span>Cuplikan Arsitektur Kode</span>
+                    </DeepDiveCardHeader>
+                    <DeepDiveCardTitle>{caseStudy.codeSnippet.title}</DeepDiveCardTitle>
+
+                    <CodeSnippetCard>
+                      <CodeHeaderBar>
+                        <CodeHeaderLeft>
+                          <FileCode size={14} />
+                          <span>{caseStudy.codeSnippet.filename}</span>
+                        </CodeHeaderLeft>
+
+                        <CodeCopyBtn
+                          type="button"
+                          onClick={() => handleCopyCode(caseStudy.codeSnippet!.code)}
+                          aria-label="Salin potongan kode"
+                        >
+                          {copiedCode ? (
+                            <>
+                              <Check size={13} />
+                              <span>Tersalin!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy size={13} />
+                              <span>Salin Kode</span>
+                            </>
+                          )}
+                        </CodeCopyBtn>
+                      </CodeHeaderBar>
+
+                      <CodePre>
+                        <code>{caseStudy.codeSnippet.code}</code>
+                      </CodePre>
+
+                      <CodeExplanationText>
+                        <strong>Catatan Rekayasa:</strong> {caseStudy.codeSnippet.explanation}
+                      </CodeExplanationText>
+                    </CodeSnippetCard>
                   </DeepDiveCard>
                 )}
 

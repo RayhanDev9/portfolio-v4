@@ -3,6 +3,14 @@ export interface CaseStudyArchitecture {
   reason: string;
 }
 
+export interface CodeSnippetData {
+  title: string;
+  filename: string;
+  language: string;
+  code: string;
+  explanation: string;
+}
+
 export interface CaseStudyDetail {
   projectId: string;
   tagline: string;
@@ -11,6 +19,7 @@ export interface CaseStudyDetail {
   architecture: CaseStudyArchitecture[];
   keyFeatures: string[];
   metricsOrLearnings: string;
+  codeSnippet?: CodeSnippetData;
 }
 
 export const caseStudiesData: Record<string, CaseStudyDetail> = {
@@ -51,6 +60,48 @@ export const caseStudiesData: Record<string, CaseStudyDetail> = {
     ],
     metricsOrLearnings:
       'Pemisahan logika filter ke dalam composables mandiri mempermudah testing fungsional dan menurunkan duplikasi kode logika antarmuka hingga 40%.',
+    codeSnippet: {
+      title: 'Arsitektur State: Pinia Store Keranjang Belanja',
+      filename: 'src/stores/cart.ts',
+      language: 'typescript',
+      code: `import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import type { CartItem, MenuItem } from '@/types';
+
+export const useCartStore = defineStore('cart', () => {
+  const items = ref<CartItem[]>([]);
+
+  const totalCount = computed(() =>
+    items.value.reduce((sum, item) => sum + item.quantity, 0)
+  );
+
+  const totalPrice = computed(() =>
+    items.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  );
+
+  function addItem(item: MenuItem) {
+    const existing = items.value.find((i) => i.id === item.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      items.value.push({ ...item, quantity: 1 });
+    }
+  }
+
+  function updateQuantity(id: string, delta: number) {
+    const target = items.value.find((i) => i.id === id);
+    if (!target) return;
+    target.quantity += delta;
+    if (target.quantity <= 0) {
+      items.value = items.value.filter((i) => i.id !== id);
+    }
+  }
+
+  return { items, totalCount, totalPrice, addItem, updateQuantity };
+});`,
+      explanation:
+        'Menggunakan Vue 3 Composition API di dalam Pinia untuk reaktivitas murni, type safety penuh tanpa mutasi Vuex lama, dan pemisahan state cart dari presentasi UI.',
+    },
   },
 
   'fast-react-pizza': {

@@ -390,14 +390,35 @@ export const SubmitButton = styled.button`
   transition: all ${({ theme }) => theme.transitions.fast};
   margin-top: ${({ theme }) => theme.spacing.xs};
 
-  &:hover {
+  &:hover:not(:disabled) {
     filter: brightness(1.08);
     transform: translateY(-2px);
     box-shadow: ${({ theme }) => theme.shadows.glow};
   }
 
-  &:active {
+  &:active:not(:disabled) {
     transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+`;
+
+export const SpinnerIcon = styled.span`
+  display: inline-flex;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;
 

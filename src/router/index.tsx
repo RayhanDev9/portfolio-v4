@@ -1,4 +1,5 @@
 import { createBrowserRouter, Outlet, ScrollRestoration } from 'react-router';
+import { CursorGlow } from '../components/shared/CursorGlow';
 import HomePage from '../pages/HomePage';
 import ProjectsPage from '../pages/ProjectsPage';
 import ProjectDetailPage from '../pages/ProjectDetailPage';
@@ -8,6 +9,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 function RootLayout() {
   return (
     <>
+      <CursorGlow />
       <ScrollRestoration />
       <Outlet />
     </>

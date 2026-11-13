@@ -3,6 +3,12 @@ import type { ProfileData } from '../types/portfolio';
 export const profileData: ProfileData = {
   name: 'Muhamad Rayhan',
   role: 'Frontend Web Developer',
+  roles: [
+    'Frontend Web Developer',
+    'React & TypeScript Specialist',
+    'Vue.js & State Architect',
+    'Interactive UI Engineer',
+  ],
   headline: 'Crafting responsive, performant web applications with React, Vue, and TypeScript.',
   bio: 'Frontend developer specializing in modern component architectures, global state management, and responsive interfaces. Building real-world web applications with clean TypeScript code, TanStack Query, Pinia, and Tailwind CSS.',
   availability: 'Available for Remote • Freelance • Hybrid',

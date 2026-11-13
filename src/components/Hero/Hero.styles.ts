@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { motion } from 'motion/react';
 
 export const HeroSection = styled.section`
   position: relative;
@@ -68,13 +69,34 @@ export const NameHeading = styled.h1`
   }
 `;
 
-export const RoleSubtitle = styled.h2`
+export const RoleSlideViewport = styled.div`
+  position: relative;
+  height: 40px;
+  overflow: hidden;
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  display: flex;
+  align-items: center;
+
+  ${({ theme }) => theme.media.tablet} {
+    justify-content: center;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    height: 34px;
+  }
+`;
+
+export const RoleSubtitle = styled(motion.h2)`
   font-family: ${({ theme }) => theme.fonts.display};
   font-size: ${({ theme }) => theme.fontSizes['2xl']};
   font-weight: ${({ theme }) => theme.fontWeights.regular};
   color: ${({ theme }) => theme.colors.accentLime};
   letter-spacing: ${({ theme }) => theme.letterSpacings.wider};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+  margin: 0;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
 
   ${({ theme }) => theme.media.mobile} {
     font-size: ${({ theme }) => theme.fontSizes.xl};

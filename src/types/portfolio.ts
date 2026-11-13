@@ -69,6 +69,7 @@ export interface SocialLink {
 export interface ProfileData {
   name: string;
   role: string;
+  roles?: string[];
   headline: string;
   bio: string;
   availability: string;

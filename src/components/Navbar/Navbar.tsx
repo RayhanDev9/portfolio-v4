@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router';
 import { AvailabilityBadge } from '../shared/AvailabilityBadge';
 import { MobileMenu } from './MobileMenu';
 import {
@@ -24,6 +25,8 @@ const NAV_ITEMS = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,16 +41,28 @@ export function Navbar() {
     <>
       <NavHeader $scrolled={scrolled}>
         <NavContainer>
-          <Brand href="#hero">
-            Rayhan<span>.</span>
-          </Brand>
+          {isHome ? (
+            <Brand href="#hero">
+              Rayhan<span>.</span>
+            </Brand>
+          ) : (
+            <Brand as={Link} to="/">
+              Rayhan<span>.</span>
+            </Brand>
+          )}
 
           <NavLinksList>
-            {NAV_ITEMS.map((item) => (
-              <NavLink key={item.href} href={item.href}>
-                {item.label}
-              </NavLink>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              isHome ? (
+                <NavLink key={item.href} href={item.href}>
+                  {item.label}
+                </NavLink>
+              ) : (
+                <NavLink key={item.href} as={Link} to={`/${item.href}`}>
+                  {item.label}
+                </NavLink>
+              ),
+            )}
           </NavLinksList>
 
           <NavActions>
@@ -70,6 +85,7 @@ export function Navbar() {
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         items={NAV_ITEMS}
+        isHome={isHome}
       />
     </>
   );

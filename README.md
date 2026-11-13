@@ -606,3 +606,284 @@ radii: xs, sm, md, full
 transitions: fast (150ms), normal (250ms)
 shadows: glow
 ```
+
+---
+---
+
+## Build Plan: Routing Setup + `/projects` Catalogue Page
+
+> ✅ Featured Projects section sudah selesai.
+> 🔧 Tombol "Lihat Semua Proyek" & "Detail" masih pakai placeholder `href="#"` — belum berpindah rute.
+> Package `react-router` v7.18.5 sudah terinstall, `BrowserRouter` & `createBrowserRouter` tersedia.
+
+---
+
+### 1. Arsitektur Rute (Hybrid Model)
+
+```
+/                    →  HomePage     (Hero + Featured Projects + Skills + Certificates + Contact)
+/projects            →  ProjectsPage (Katalog lengkap 10 proyek + filter + search)
+/projects/:id        →  ProjectDetailPage (Studi kasus teknis per proyek) [akan dibangun nanti]
+*                    →  NotFoundPage (404 fallback)
+```
+
+**Pola yang dipakai:** `createBrowserRouter` + `RouterProvider` (React Router v7 modern API, bukan komponen `<BrowserRouter>` lama).
+
+---
+
+### 2. File Structure Baru
+
+```
+src/
+├── router/
+│   └── index.tsx           # Definisi semua route
+├── pages/
+│   ├── HomePage.tsx         # Semua section beranda (Hero, Projects, Skills, dsb.)
+│   ├── ProjectsPage.tsx     # Katalog lengkap /projects
+│   ├── ProjectDetailPage.tsx # /projects/:id (placeholder dulu)
+│   └── NotFoundPage.tsx     # 404
+├── components/
+│   ├── Navbar/              # (sudah ada — perlu update: anchor jadi Link)
+│   └── Projects/
+│       ├── ProjectCard.tsx  # (sudah ada — perlu update: href jadi <Link to>)
+│       └── Projects.tsx     # (sudah ada — perlu update: AllProjectsButton jadi <Link>)
+├── App.tsx                  # (berubah: tidak lagi render komponen langsung, render RouterProvider)
+└── main.tsx                 # (tidak berubah)
+```
+
+---
+
+### 3. File 1: `src/router/index.tsx`
+
+```ts
+import { createBrowserRouter } from 'react-router';
+import HomePage from '../pages/HomePage';
+import ProjectsPage from '../pages/ProjectsPage';
+import ProjectDetailPage from '../pages/ProjectDetailPage';
+import NotFoundPage from '../pages/NotFoundPage';
+
+export const router = createBrowserRouter([
+  { path: '/',             element: <HomePage /> },
+  { path: '/projects',     element: <ProjectsPage /> },
+  { path: '/projects/:id', element: <ProjectDetailPage /> },
+  { path: '*',             element: <NotFoundPage /> },
+]);
+```
+
+---
+
+### 4. File 2: `src/App.tsx` (refactor menjadi RouterProvider)
+
+App.tsx sekarang hanya bertugas sebagai router host — tidak lagi render Navbar/Hero langsung:
+
+```tsx
+import { RouterProvider } from 'react-router';
+import { router } from './router';
+
+export default function App() {
+  return <RouterProvider router={router} />;
+}
+```
+
+Styled `AppContainer` dan `MainContent` dipindahkan ke masing-masing halaman yang membutuhkannya.
+
+---
+
+### 5. File 3: `src/pages/HomePage.tsx`
+
+Menjadi container utama yang membungkus semua section beranda:
+
+```tsx
+import { Navbar } from '../components/Navbar';
+import { Hero } from '../components/Hero';
+import { Projects } from '../components/Projects';
+// ... (nanti: Skills, Certificates, Contact)
+
+export default function HomePage() {
+  return (
+    <div>          {/* background: darkBase, min-height: 100vh */}
+      <Navbar />
+      <main>
+        <Hero />
+        <Projects />
+        {/* <Skills /> */}
+        {/* <Certificates /> */}
+        {/* <Contact /> */}
+      </main>
+    </div>
+  );
+}
+```
+
+---
+
+### 6. File 4: `src/pages/ProjectsPage.tsx` — Katalog Lengkap
+
+#### Layout
+
+```
+┌───────────────────────────────────────────────────────────┐
+│  NAVBAR (sama)                                            │
+├───────────────────────────────────────────────────────────┤
+│  PAGE HEADER                                              │
+│                                                           │
+│  ← Kembali ke Beranda                                     │
+│                                                           │
+│  All Projects                                             │
+│  Seluruh proyek yang pernah dibangun.                     │
+│                                                           │
+├───────────────────────────────────────────────────────────┤
+│  FILTER BAR                                               │
+│                                                           │
+│  [All (10)] [Web App (5)] [Landing (4)] [Interactive (1)] │
+│                                                           │
+├───────────────────────────────────────────────────────────┤
+│  PROJECTS GRID (3 kolom desktop, 2 tablet, 1 mobile)      │
+│                                                           │
+│  ┌────────┐  ┌────────┐  ┌────────┐                       │
+│  │ Card 1 │  │ Card 2 │  │ Card 3 │                       │
+│  └────────┘  └────────┘  └────────┘                       │
+│  ┌────────┐  ┌────────┐  ┌────────┐                       │
+│  │ Card 4 │  │ Card 5 │  │ Card 6 │                       │
+│  └────────┘  └────────┘  └────────┘                       │
+│  ... (10 proyek total)                                    │
+└───────────────────────────────────────────────────────────┘
+```
+
+#### Perbedaan vs Featured Projects di Beranda
+
+| Aspek | Beranda (`/`) | Halaman Katalog (`/projects`) |
+|---|---|---|
+| **Jumlah proyek** | 4 (featured saja) | 10 (semua proyek) |
+| **Grid kolom** | 2 kolom | 3 kolom (desktop), 2 (tablet), 1 (mobile) |
+| **Filter** | Tabs sederhana | Tabs + badge jumlah per kategori |
+| **Header** | "Selected Works" | "All Projects" + tombol kembali |
+| **CTA Footer** | "Lihat Semua Proyek (10) →" | Tidak ada (sudah halaman lengkap) |
+
+#### Back Button
+
+- `<button onClick={() => navigate(-1)}>` atau `<Link to="/">← Kembali ke Beranda</Link>`
+- Gunakan hook `useNavigate()` dari react-router.
+- Styling:
+  - Inline flex, `align-items: center`, `gap: 6px`
+  - `font-size: theme.fontSizes.sm`
+  - `color: theme.colors.textMuted`
+  - Icon `ArrowLeft` dari lucide-react (size 14)
+  - Hover: `color: theme.colors.accentLime`
+  - `margin-bottom: theme.spacing.xl`
+
+#### Filter Badge Count
+
+Tab filter di `ProjectsPage` menampilkan jumlah proyek per kategori:
+
+```ts
+const categoryCount = {
+  all: projectsData.length,                                  // 10
+  app: projectsData.filter(p => p.category === 'app').length, // 5
+  landing: projectsData.filter(p => p.category === 'landing').length, // 4
+  interactive: projectsData.filter(p => p.category === 'interactive').length, // 1
+};
+```
+
+Teks tab: `"Web App (5)"`, `"Landing (4)"`, `"Interactive (1)"`.
+
+#### Grid 3 Kolom (ProjectsPage)
+
+Karena ada 10 proyek, layout perlu 3 kolom di desktop agar tidak terlalu panjang:
+
+```css
+grid-template-columns: repeat(3, 1fr);  /* ≥ 1024px */
+grid-template-columns: repeat(2, 1fr);  /* 768px - 1024px */
+grid-template-columns: 1fr;             /* < 768px */
+```
+
+Karena `ProjectCard` yang sudah ada dibuat reusable, kita cukup buat styled `CatalogGrid` baru di `ProjectsPage` — tidak perlu modifikasi komponen `ProjectCard`.
+
+---
+
+### 7. File 5: `src/pages/ProjectDetailPage.tsx` — Placeholder
+
+Belum dibangun penuh. Cukup buat halaman placeholder yang:
+- Menampilkan nama proyek dari `projectsData.find(p => p.id === params.id)`.
+- Menampilkan thumbnail dan deskripsi singkat.
+- Tombol kembali ke `/projects`.
+- Badge *"Full case study coming soon"*.
+
+Ini akan diisi penuh di sprint berikutnya.
+
+---
+
+### 8. File 6: `src/pages/NotFoundPage.tsx`
+
+Halaman sederhana 404:
+- Judul besar: **"404"** (Poiret One, `textHighlight`)
+- Teks: *"Halaman tidak ditemukan."* (`textMuted`)
+- Tombol `<Link to="/">Kembali ke Beranda</Link>` (Primary button style)
+
+---
+
+### 9. Update Komponen yang Sudah Ada
+
+#### `ProjectCard.tsx` — `DetailLink` ganti `<Link>`
+```tsx
+// SEBELUM:
+<DetailLink href={`#/projects/${project.id}`}>Detail</DetailLink>
+
+// SESUDAH (import Link from 'react-router'):
+<DetailLink as={Link} to={`/projects/${project.id}`}>Detail</DetailLink>
+```
+
+> **Catatan:** `styled-components` mendukung polimorfisme dengan prop `as`. `DetailLink` tetap dapat styling yang sama, tapi render sebagai `<Link>` dari react-router.
+
+#### `Projects.tsx` — `AllProjectsButton` ganti `<Link>`
+```tsx
+// SEBELUM:
+<AllProjectsButton href="#/projects">...</AllProjectsButton>
+
+// SESUDAH:
+<AllProjectsButton as={Link} to="/projects">...</AllProjectsButton>
+```
+
+#### `Navbar.tsx` — Logo Brand tetap `href="#hero"`, tapi nav links pakai `<a>` biasa di HomePage (smooth scroll).
+Saat di halaman `/projects`, link navbar ke section (seperti `#projects`) tidak bisa smooth scroll karena beda halaman. Kita buat Navbar menggunakan `useLocation()` untuk membedakan:
+- Di route `/`: Gunakan anchor `href="#projects"` (smooth scroll).
+- Di route `/projects` atau `/projects/:id`: Gunakan `<Link to="/#projects">` (navigate ke beranda lalu scroll).
+
+---
+
+### 10. Urutan Eksekusi
+
+```
+Step 1  → Buat src/pages/HomePage.tsx       (pindahkan konten dari App.tsx)
+Step 2  → Buat src/pages/ProjectsPage.tsx   (katalog 10 proyek, 3-kolom grid, filter + badge count)
+Step 3  → Buat src/pages/ProjectDetailPage.tsx (placeholder — nama + thumbnail + "coming soon")
+Step 4  → Buat src/pages/NotFoundPage.tsx   (404 sederhana)
+Step 5  → Buat src/router/index.tsx          (definisi 4 route)
+Step 6  → Refactor src/App.tsx               (hanya render <RouterProvider router={router} />)
+Step 7  → Update ProjectCard.tsx             (DetailLink: href → as={Link} to=)
+Step 8  → Update Projects.tsx                (AllProjectsButton: href → as={Link} to=)
+Step 9  → Update Navbar.tsx                  (tambah useLocation, bedakan smooth scroll vs Link)
+Step 10 → Verifikasi: tsc --noEmit, npm run build
+Step 11 → Commit & push: "feat: setup react-router v7 with projects catalogue page"
+```
+
+---
+
+### 11. Vite Config — `base` URL
+
+> **Penting:** Karena ini di-deploy ke GitHub Pages nanti, pastikan `vite.config.ts` punya `base: '/'` (bukan nama repo) agar `BrowserRouter` bekerja benar di root domain.
+
+Jika nanti deploy ke `https://rayhandev9.github.io/portfolio-v4/`, maka perlu `base: '/portfolio-v4/'` di `vite.config.ts` DAN gunakan `createHashRouter` sebagai pengganti `createBrowserRouter`. Untuk sementara, gunakan `createBrowserRouter` untuk development.
+
+---
+
+### 12. Token & Dependencies
+
+**Package yang sudah ada (tidak perlu install baru):**
+- `react-router` v7.18.5 — sudah terinstall ✅
+
+**Hooks yang akan dipakai:**
+- `useNavigate()` — programmatic navigation (tombol kembali)
+- `useParams()` — ambil `:id` di ProjectDetailPage
+- `useLocation()` — cek route aktif di Navbar
+- `Link` — navigasi tanpa reload halaman

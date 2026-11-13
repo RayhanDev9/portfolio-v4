@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'motion/react';
+import { Link } from 'react-router';
 import { AvailabilityBadge } from '../shared/AvailabilityBadge';
 
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
   items: Array<{ label: string; href: string }>;
+  isHome?: boolean;
 }
 
 const MenuOverlay = styled(motion.div)`
@@ -56,7 +58,7 @@ const BadgeWrapper = styled.div`
   border-top: 1px solid ${({ theme }) => theme.colors.borderSubtle};
 `;
 
-export function MobileMenu({ isOpen, onClose, items }: MobileMenuProps) {
+export function MobileMenu({ isOpen, onClose, items, isHome = true }: MobileMenuProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -74,9 +76,15 @@ export function MobileMenu({ isOpen, onClose, items }: MobileMenuProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05, duration: 0.2 }}
               >
-                <NavItemLink href={item.href} onClick={onClose}>
-                  {item.label}
-                </NavItemLink>
+                {isHome ? (
+                  <NavItemLink href={item.href} onClick={onClose}>
+                    {item.label}
+                  </NavItemLink>
+                ) : (
+                  <NavItemLink as={Link} to={`/${item.href}`} onClick={onClose}>
+                    {item.label}
+                  </NavItemLink>
+                )}
               </motion.li>
             ))}
           </NavList>

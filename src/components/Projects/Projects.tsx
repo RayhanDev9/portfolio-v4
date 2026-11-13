@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
 import { projectsData } from '../../data/projects';
 import type { ProjectCategory } from '../../types/portfolio';
 import { ProjectCard } from './ProjectCard';
@@ -87,7 +88,8 @@ export function Projects() {
         >
           <FooterCTAWrapper>
             <AllProjectsButton
-              href="#/projects"
+              as={Link}
+              to="/projects"
               aria-label={`Lihat semua ${projectsData.length} proyek di katalog lengkap`}
             >
               <span>Lihat Semua Proyek ({projectsData.length})</span>

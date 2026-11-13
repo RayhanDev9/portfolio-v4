@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { ExternalLink, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
 import type { Project } from '../../types/portfolio';
 import {
   CardContainer,
@@ -77,7 +78,8 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             </LiveDemoLink>
 
             <DetailLink
-              href={`#/projects/${project.id}`}
+              as={Link}
+              to={`/projects/${project.id}`}
               aria-label={`Lihat studi kasus ${project.title}`}
             >
               <span>Detail</span>

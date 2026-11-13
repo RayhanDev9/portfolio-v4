@@ -400,7 +400,9 @@ export default function CertificatesPage() {
 
       <CertificateLightbox
         certificate={selectedCert}
+        certificates={displayedCertificates}
         onClose={() => setSelectedCert(null)}
+        onSelectCertificate={(cert) => setSelectedCert(cert)}
       />
 
       <Footer />

@@ -259,6 +259,65 @@ export const LightboxOverlay = styled.div`
   }
 `;
 
+export const LightboxCounter = styled.span`
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  color: ${({ theme }) => theme.colors.textMuted};
+  padding: 5px 14px;
+  border-radius: ${({ theme }) => theme.radii.full};
+  background-color: ${({ theme }) => theme.colors.glass};
+  border: 1px solid ${({ theme }) => theme.colors.borderSubtle};
+  z-index: 201;
+
+  ${({ theme }) => theme.media.mobile} {
+    top: 14px;
+    left: 14px;
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+`;
+
+export const LightboxNavButton = styled.button<{ $direction: 'prev' | 'next' }>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  ${({ $direction }) => ($direction === 'prev' ? 'left: 24px;' : 'right: 24px;')}
+  width: 46px;
+  height: 46px;
+  border-radius: ${({ theme }) => theme.radii.full};
+  background-color: ${({ theme }) => theme.colors.glass};
+  border: 1px solid ${({ theme }) => theme.colors.borderGlass};
+  color: ${({ theme }) => theme.colors.textHighlight};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 202;
+  transition: all ${({ theme }) => theme.transitions.fast};
+  box-shadow: ${({ theme }) => theme.shadows.card};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.glassHover};
+    border-color: ${({ theme }) => theme.colors.borderHover};
+    color: ${({ theme }) => theme.colors.accentLime};
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.accentLime};
+    outline-offset: 2px;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    ${({ $direction }) => ($direction === 'prev' ? 'left: 8px;' : 'right: 8px;')}
+    width: 38px;
+    height: 38px;
+  }
+`;
+
 export const LightboxCloseButton = styled.button`
   position: absolute;
   top: 20px;

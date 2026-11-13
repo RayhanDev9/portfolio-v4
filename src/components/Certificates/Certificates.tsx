@@ -124,7 +124,9 @@ export function Certificates() {
 
         <CertificateLightbox
           certificate={selectedCert}
+          certificates={displayedCertificates}
           onClose={() => setSelectedCert(null)}
+          onSelectCertificate={(cert) => setSelectedCert(cert)}
         />
       </CertificatesContainer>
     </CertificatesSection>

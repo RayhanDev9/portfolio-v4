@@ -23,6 +23,7 @@
 | Paket Fitur Kunci Tambahan (Scroll, SEO, CV, Search, 404) | ✅ Selesai | `4ec736f` |
 | Paket Fitur Tingkat Lanjut (Command Palette, Ambient Glow, Direct Email, Code Snippets) | ✅ Selesai | `ea6112b` |
 | **Integrasi Link GitHub Repo & Dinamika Link Kolaborator (GitHub, Instagram, Shopee)** | ✅ Selesai | `cdae4c6` |
+| Finishing Touch (Lightbox Next/Prev Navigation & Vite Chunk Splitting) | ✅ Selesai | `22f33ef` |
 
 ---
 

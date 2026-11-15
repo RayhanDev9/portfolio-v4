@@ -1,35 +1,19 @@
 import type { Certificate } from '../types/portfolio';
 
 export const certificatesData: Certificate[] = [
-  // --- Penghargaan & Organisasi ---
+  // --- Kursus & Sertifikasi Udemy (Urutan Tertinggi / Paling Depan) ---
   {
-    id: 'penghargaan-isc',
-    title: 'Sertifikat Penghargaan: Informatics Study Club (ISC)',
-    platform: 'penghargaan',
-    platformName: 'Penghargaan',
-    issuer: 'Informatics Study Club (Universitas Pamulang)',
-    img: '/images/sertifikat/penghargaan-isc.avif',
-    alt: 'Sertifikat Penghargaan Informatics Study Club Bidang Web Development',
-    skills: ['Web Development', 'Informatics Study Club', 'Dedikasi & Kontribusi', 'Teknologi Informasi'],
-    desc: 'Penghargaan atas dedikasi dan kontribusi aktif sebagai anggota Informatics Study Club (ISC) bidang Web Development pada Program Studi Teknik Informatika Universitas Pamulang.',
+    id: 'udemy-react-jonas',
+    title: 'The Ultimate React Course 2025: React, Next.js, Redux & More',
+    platform: 'udemy',
+    platformName: 'Udemy',
+    issuer: 'Jonas Schmedtmann',
+    img: '/images/sertifikat/react.avif',
+    alt: 'Certificate The Ultimate React Course 2025 Jonas Schmedtmann',
+    skills: ['React', 'Next.js', 'Redux Toolkit', 'Custom Hooks', 'Tailwind CSS', 'Performance'],
+    desc: 'Pelatihan intensif 84 jam mendalami ekosistem React modern: arsitektur komponen, state management lanjutan, Redux Toolkit, Context API, custom hooks, dan implementasi Next.js.',
     featured: true,
   },
-
-  // --- Kompetisi & Hackathon ---
-  {
-    id: 'hackathon-himtif',
-    title: 'Hackathon: Innovating Beyond The Code',
-    platform: 'kompetisi',
-    platformName: 'Kompetisi',
-    issuer: 'HIMTIF (Himpunan Mahasiswa Teknik Informatika)',
-    img: '/images/sertifikat/hackathon.avif',
-    alt: 'Sertifikat Partisipasi Hackathon Innovating Beyond The Code HIMTIF',
-    skills: ['Hackathon', 'Problem Solving', 'Team Collaboration', 'Web Development'],
-    desc: 'Partisipasi kompetisi Hackathon HIMTIF dalam merancang dan mengembangkan solusi aplikasi web di bawah batas waktu intensif.',
-    featured: true,
-  },
-
-  // --- Kursus & Sertifikasi Udemy ---
   {
     id: 'udemy-js-jonas',
     title: 'The Complete JavaScript Course: From Zero to Expert',
@@ -67,7 +51,7 @@ export const certificatesData: Certificate[] = [
     featured: true,
   },
 
-  // --- Kursus & Sertifikasi Codepolitan ---
+  // --- Kursus & Sertifikasi Codepolitan (Di Bawah Udemy) ---
   {
     id: 'codepolitan-vue-pinia',
     title: 'State Management Vue 3 dengan Pinia',
@@ -145,5 +129,31 @@ export const certificatesData: Certificate[] = [
     alt: 'Certificate Belajar Dasar HTML Codepolitan',
     skills: ['HTML5', 'Semantic Tags', 'Forms & Inputs', 'Document Structure'],
     desc: 'Fondasi dokumen web semantik, struktur markup terstandar, pembuatan formulir interaktif, dan hierarki heading yang terstruktur.',
+  },
+
+  // --- Penghargaan & Organisasi / Kompetisi ---
+  {
+    id: 'penghargaan-isc',
+    title: 'Sertifikat Penghargaan: Informatics Study Club (ISC)',
+    platform: 'penghargaan',
+    platformName: 'Penghargaan',
+    issuer: 'Informatics Study Club (Universitas Pamulang)',
+    img: '/images/sertifikat/penghargaan-isc.avif',
+    alt: 'Sertifikat Penghargaan Informatics Study Club Bidang Web Development',
+    skills: ['Web Development', 'Informatics Study Club', 'Dedikasi & Kontribusi', 'Teknologi Informasi'],
+    desc: 'Penghargaan atas dedikasi dan kontribusi aktif sebagai anggota Informatics Study Club (ISC) bidang Web Development pada Program Studi Teknik Informatika Universitas Pamulang.',
+    featured: true,
+  },
+  {
+    id: 'hackathon-himtif',
+    title: 'Hackathon: Innovating Beyond The Code',
+    platform: 'kompetisi',
+    platformName: 'Kompetisi',
+    issuer: 'HIMTIF (Himpunan Mahasiswa Teknik Informatika)',
+    img: '/images/sertifikat/hackathon.avif',
+    alt: 'Sertifikat Partisipasi Hackathon Innovating Beyond The Code HIMTIF',
+    skills: ['Hackathon', 'Problem Solving', 'Team Collaboration', 'Web Development'],
+    desc: 'Partisipasi kompetisi Hackathon HIMTIF dalam merancang dan mengembangkan solusi aplikasi web di bawah batas waktu intensif.',
+    featured: true,
   },
 ];

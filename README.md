@@ -1,171 +1,172 @@
-# Portfolio v4 — Muhamad Rayhan
+# Muhamad Rayhan — Frontend Web Developer
 
-> React 19 + TypeScript + Vite + styled-components
-> Design DNA: AW Media dark glassmorphism × Brandlos confident typography
+<div align="center">
 
----
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-rayhandev.my.id-b7d894?style=for-the-badge&logo=googlechrome&logoColor=202734)](https://rayhandev.my.id)
+[![React 19](https://img.shields.io/badge/React%2019-202734?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-202734?style=for-the-badge&logo=typescript&logoColor=3178C6)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite%208-202734?style=for-the-badge&logo=vite&logoColor=646CFF)](https://vitejs.dev/)
+[![styled-components](https://img.shields.io/badge/styled--components-202734?style=for-the-badge&logo=styledcomponents&logoColor=DB7093)](https://styled-components.com/)
+[![Motion](https://img.shields.io/badge/Motion-202734?style=for-the-badge&logo=framer&logoColor=0055FF)](https://motion.dev/)
+[![License](https://img.shields.io/badge/License-MIT-36415A?style=for-the-badge)](LICENSE)
 
-## 🚀 Status Implementasi
+<br />
 
-| Section / Fitur | Status | Commit |
-|---|---|---|
-| Theme System & Design Tokens | ✅ Selesai | `d01871d` |
-| Navbar & Glassmorphism Mobile Menu | ✅ Selesai | `f578672` |
-| Hero Section (Polaroid, CTA, Socials) | ✅ Selesai | `f578672` |
-| Featured Projects + Filter Tabs | ✅ Selesai | `9fcd808` |
-| React Router v7 + `/projects` Catalogue | ✅ Selesai | `5748b9e` |
-| Skills & Career Journey (`#skills`) | ✅ Selesai | `f155aaf` |
-| Certificates Showcase & Lightbox Modal | ✅ Selesai | `bcc484e` |
-| Fix: Uniform Card Height & `/certificates` Route | ✅ Selesai | `5540aa2` |
-| Contact Section & Global Footer (`#contact`) | ✅ Selesai | `268fa20` |
-| /projects/:id Full Case Study | ✅ Selesai | `b4e6f74` |
-| Fix: Prevent Pill Tags Stretching | ✅ Selesai | `29f416e` |
-| Paket Fitur Kunci Tambahan (Scroll, SEO, CV, Search, 404) | ✅ Selesai | `4ec736f` |
-| Paket Fitur Tingkat Lanjut (Command Palette, Ambient Glow, Direct Email, Code Snippets) | ✅ Selesai | `ea6112b` |
-| **Integrasi Link GitHub Repo & Dinamika Link Kolaborator (GitHub, Instagram, Shopee)** | ✅ Selesai | `cdae4c6` |
-| Finishing Touch (Lightbox Next/Prev Navigation & Vite Chunk Splitting) | ✅ Selesai | `22f33ef` |
+**Web Portfolio v4** dirancang dengan arsitektur modern berkinerja tinggi, tipografi berkarakter, dan interaktivitas terukur.
+
+[🌐 Kunjungi Website](https://rayhandev.my.id) • [💼 Unduh Resume / CV](https://rayhandev.my.id/CV_Muhamad_Rayhan_ATS_EN.pdf) • [📬 Hubungi Langsung](mailto:m.rayhanoi26@gmail.com)
+
+</div>
 
 ---
 
-## 📋 Active Build Plan: Integrasi Link GitHub Repo & Dinamika Kolaborator Multi-Platform
+## 🎨 Design DNA: AW Media × Brandlos Synthesis
 
-### 1. Latar Belakang & Filosofi Desain
+Portofolio ini dibangun di atas filosofi desain terpadu yang memadukan kedalaman estetika gelap dengan struktur modular yang tegas:
 
-Setiap proyek portofolio memiliki konteks kolaborasi dan kepemilikan kode yang berbeda:
-1. **Source Code Repositori GitHub RayhanDev9**: Menghubungkan langsung ke kode sumber proyek untuk verifikasi teknis recruiter.
-2. **Rekan Kolaborator Developer**: Menghubungkan ke profil GitHub rekan satu tim (*Team Collaborator*).
-3. **Klien / Partner Desainer Grafis**: Menghubungkan ke akun Instagram resmi (*Creative Partner*).
-4. **Klien Toko / E-Commerce**: Menghubungkan ke Toko Online Shopee resmi (*E-Commerce Client*).
+* **Dark Glassmorphism (AW Media):** Kanvas gelap pekat (`#202734`) dilapisi kartu semi-transparan (`#36415A` dengan `backdrop-filter: blur(12px)`) dan garis tepi kontras tipis 1px (`rgba(183, 216, 148, 0.16)`) yang bereaksi terhadap kursor (*glow on hover*).
+* **Confident Persona (Brandlos):** Tipografi lugas dan terstruktur dengan kontras tegas antara display font berkarakter dan heading sans modern.
+* **Palette Disiplin:**
 
-Sistem akan dirancang dengan **Smart Dynamic Platform Detection** agar secara otomatis mengenali jenis link (`github.com`, `instagram.com`, `shopee.co.id`, atau website kustom) dan menampilkan ikon serta label yang sesuai tanpa redundansi atau layout yang berantakan.
-
----
-
-### 2. Desain Layout & Penempatan UI
-
-```
-┌────────────────────────────────────────────────────────────────────────────┐
-│ HALAMAN DETAIL STUDI KASUS (/projects/:id)                                 │
-│                                                                            │
-│ ← Kembali ke Katalog Proyek             [WEB APP] • [👥 @akumalas ↗]       │
-│                                                                            │
-│ Mading Kampus                                                              │
-│ Digital campus magazine and announcement portal developed in team.         │
-│                                                                            │
-│ [ Buka Live Demo ↗ ]  [ Source Code < / > ]  [ 👥 Partner: @akumalas ↗ ]   │
-│                                                                            │
-│ (Ikon & label tombol ketiga beradaptasi otomatis sesuai platform):         │
-│ • GitHub: [ 🐙 Collab: @akumalas ↗ ]                                       │
-│ • Instagram: [ 📸 Client: @dnustya_ ↗ ]                                    │
-│ • Shopee: [ 🛍️ Toko Shopee ↗ ]                                            │
-├────────────────────────────────────────────────────────────────────────────┤
-│ KARTU KATALOG PROYEK (ProjectCard.tsx)                                     │
-│ ┌────────────────────────────────────────────────────────────────────────┐ │
-│ │ 🖼️ Thumbnail Proyek                                                    │ │
-│ │                                                                        │ │
-│ │ Danu Satya Portfolio                                                   │ │
-│ │ Front-End • Client: [@dnustya_ ↗] (Link aktif dengan warna aksen)      │ │
-│ │                                                                        │ │
-│ │ [React 19] [Tailwind CSS] [TypeScript]                                 │ │
-│ │                                                                        │ │
-│ │ [ Live Demo ↗ ]  [ < / > Repo ]  [ Detail → ]                          │ │
-│ └────────────────────────────────────────────────────────────────────────┘ │
-└────────────────────────────────────────────────────────────────────────────┘
-```
+| Token | Hex | Preview | Penggunaan |
+|---|---|---|---|
+| `darkBase` | `#202734` | ![#202734](https://via.placeholder.com/15/202734/000000?text=+) | Background canvas utama & backdrop |
+| `secondarySurface` | `#36415A` | ![#36415A](https://via.placeholder.com/15/36415A/000000?text=+) | Glass card surface & elevated containers |
+| `accentLime` | `#B7D894` | ![#B7D894](https://via.placeholder.com/15/B7D894/000000?text=+) | Tombol aksi primer, indikator status, & link aktif |
+| `textHighlight` | `#E0F8C7` | ![#E0F8C7](https://via.placeholder.com/15/E0F8C7/000000?text=+) | Heading judul, teks sorotan, & display typography |
 
 ---
 
-### 3. Rincian Teknis Per Komponen
+## ⚡ Fitur Utama & Arsitektur
 
-#### A. Pembaruan Model Data (`src/types/portfolio.ts`)
-Menambahkan interface `Collaborator`:
-```typescript
-export type CollaboratorPlatform = 'github' | 'instagram' | 'shopee' | 'website';
+### 1. Hybrid Navigation Model
+* **Beranda Tunggal (`/`):** Alur cerita mengalir dari *Hero Section*, *Featured Projects*, *Tech Skills & Career Journey*, *Certificates Showcase*, hingga *Contact Direct Channel*.
+* **Studi Kasus Mendalam (`/projects/:id`):** Analisis teknis proyek nyata mencakup perumusan masalah, arsitektur data, rincian *tech stack*, dan tautan *live demo* serta repositori kode.
+* **Katalog Lengkap (`/projects` & `/all-certificates`):** Eksplorasi seluruh karya dan kredensial dilengkapi pencarian teks instan dan filter kategori tanpa reload halaman.
 
-export interface Collaborator {
-  name: string;        // contoh: 'akumalas', 'EternalVultr', 'ItzRyz', 'Danu Satya', 'Store Radeva'
-  role?: string;       // contoh: 'Backend Collaborator', 'UI/UX Designer', 'Client'
-  url: string;         // tautan langsung ke profil / toko
-  platform?: CollaboratorPlatform; // opsional: otomatis dideteksi dari URL jika kosong
-}
+### 2. Interactive Lightbox Modal
+* Pratinjau sertifikat resolusi tinggi di tempat dengan navigasi multi-arah (tombol geser *Next/Prev*, navigasi keyboard `ArrowLeft` / `ArrowRight` / `Escape`, dan indikator nomor urut).
 
-export interface Project {
-  // ... field eksisting
-  githubUrl?: string;          // Repositori GitHub RayhanDev9
-  collab?: string;             // Label teks ringkas untuk badge
-  collaborator?: Collaborator; // Objek detail kolaborator
-}
-```
+### 3. Command Palette (`Ctrl + K` / `Cmd + K`)
+* Menu navigasi cepat berbasis keyboard untuk berpindah section, membuka halaman proyek, atau mengunduh CV secara instan.
 
-#### B. Pembaruan Data Proyek Nyata (`src/data/projects.ts`)
-1. **DapurRasa Food Store (`dapur-rasa`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/e-commerce-vue.js`
-2. **Fast React Pizza (`fast-react-pizza`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/fast-pizza`
-3. **Danu Satya Portfolio (`danu-satya`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/portfolio-danu`
-   - `collab`: `Client: @dnustya_`
-   - `collaborator`: `{ name: 'Danu Satya', role: 'Graphic & Motion Designer', url: 'https://instagram.com/dnustya_', platform: 'instagram' }`
-4. **Siap Kerja (`siap-kerja`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/siap-kerja`
-   - `collab`: `Collab with @EternalVultr`
-   - `collaborator`: `{ name: 'EternalVultr', role: 'Team Collaborator', url: 'https://github.com/EternalVultr', platform: 'github' }`
-5. **TK PAUD Permata (`tk-paud-permata`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/TK`
-   - `collab`: `Client: Yayasan Rayfi TK Permata`
-   - `collaborator`: `{ name: 'Yayasan Rayfi TK Permata', role: 'Client', url: 'https://www.tiktok.com/@yayasanrayfitkpermata?_r=1', platform: 'tiktok' }`
-6. **Mading Kampus (`mading-kampus`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/mading-kampus`
-   - `collab`: `Collab with @akumalas`
-   - `collaborator`: `{ name: 'akumalas', role: 'Backend Collaborator', url: 'https://github.com/akumalas', platform: 'github' }`
-7. **Store Radeva (`store-radeva`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/radeva`
-   - `collab`: `Toko Shopee: Radeva`
-   - `collaborator`: `{ name: 'Store Radeva', role: 'E-Commerce Store', url: 'https://shopee.co.id/Bedak-MBK-Powder-Sachetan-13-6-gram-Dan-Box-200-gram-bedak-deodoran-legendaris-Varian-Putih-i.1736388240.56660827193', platform: 'shopee' }`
-8. **Company Profile ISC (`company-profile-isc`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/company-profile-isc`
-   - `collab`: `Collab with @ItzRyz`
-   - `collaborator`: `{ name: 'ItzRyz', role: 'ISC Collaborator', url: 'https://github.com/ItzRyz', platform: 'github' }`
-9. **Pig Game (`pig-game`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/pig-Game`
-10. **First Portfolio Milestone (`first-portfolio`)**:
-   - `githubUrl`: `https://github.com/RayhanDev9/First-portfolio`
+### 4. Smart Collaborator & Multi-Platform Detection
+* Deteksi otomatis jenis platform partner pada kartu proyek (GitHub, Instagram, Toko Shopee, atau TikTok) lengkap dengan ikon SVG native dan atribusi peran kolaborator.
 
-#### C. Smart Platform Helper (`src/utils/collaborator.ts` atau inline helper)
-Mendeteksi jenis platform dan ikon:
-- `github.com` -> Ikon GitHub / `Code2`, label format: `Collab: @username`
-- `instagram.com` -> Ikon Instagram, label format: `Client: @username`
-- `tiktok.com` -> Ikon TikTok SVG, label format: `TikTok: @username`
-- `shopee.co.id` -> Ikon `ShoppingBag`, label format: `Toko Shopee`
-- Default -> Ikon `ExternalLink`, label format: `Partner Web ↗`
+### 5. Respon Lintas Perangkat (Zero Horizontal Overflow)
+* Layout elastis dan teruji aman dari *overflow* horizontal hingga layar terkecil (320px) dengan tipografi `clamp()`, kartu berotasi adaptif, dan pembungkus fleksibel.
 
-#### D. Integrasi Halaman Detail Studi Kasus (`ProjectDetailPage.tsx` & `.styles.ts`)
-- `CollabBadge`: Diubah menjadi link interaktif (`as="a" target="_blank"`).
-- `HeroActionRow`: Tombol ketiga `CollabActionButton` bergaya glassmorphism dengan hover glow aksen lime.
-
-#### E. Integrasi Kartu Katalog (`ProjectCard.tsx` & `Projects.styles.ts`)
-- `CardMeta`: Menjadikan teks kolaborator link aktif yang dapat diklik tanpa mengganggu navigasi kartu utama.
-- `CardActionRow`: Jika `project.githubUrl` ada, tampilkan tombol direct link repositori.
+### 6. Optimasi Performa & Build
+* Pembagian kode otomatis (*manual chunks code splitting*) via Vite untuk memisahkan React, Motion, styled-components, dan icons ke dalam berkas terpisah, menjaga ukuran bundle utama tetap ramping (~190 kB).
+* Integrasi SEO lengkap: CNAME kustom `rayhandev.my.id`, fallback 404 SPA, OpenGraph meta tags, Google Analytics 4, sitemap.xml, dan robots.txt.
 
 ---
 
-### 4. Urutan Eksekusi
+## 🛠️ Tech Stack
 
-```
-Step 1 → Update src/types/portfolio.ts (Tambahkan interface Collaborator & field collaborator di Project)
-Step 2 → Update src/data/projects.ts (Masukkan link repo GitHub & data kolaborator Mading Kampus, Siap Kerja, ISC, Danu Satya, Radeva)
-Step 3 → Buat helper icon & detector platform kolaborasi (GitHub, Instagram, Shopee, Website)
-Step 4 → Update ProjectDetailPage.tsx & ProjectDetailPage.styles.ts (Tampilkan tombol & badge kolaborator)
-Step 5 → Update ProjectCard.tsx & Projects.styles.ts (Link kolaborator di kartu & tombol repo GitHub)
-Step 6 → Verifikasi Typecheck & Build Produksi (tsc --noEmit && npm run build)
-Step 7 → Update README.md status & Git Commit + Push
+<div align="center">
+
+| Kategori | Teknologi & Tools |
+|---|---|
+| **Core Framework** | ![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript_5.9-007ACC?style=flat-square&logo=typescript&logoColor=white) ![Vite](https://img.shields.io/badge/Vite_8-646CFF?style=flat-square&logo=vite&logoColor=white) |
+| **Styling & Motion** | ![styled-components](https://img.shields.io/badge/styled--components-DB7093?style=flat-square&logo=styledcomponents&logoColor=white) ![Motion](https://img.shields.io/badge/Motion_React-0055FF?style=flat-square&logo=framer&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white) |
+| **State & Data** | ![TanStack Query](https://img.shields.io/badge/TanStack_Query-FF4154?style=flat-square&logo=react-query&logoColor=white) ![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-764ABC?style=flat-square&logo=redux&logoColor=white) ![Pinia](https://img.shields.io/badge/Pinia-FFD859?style=flat-square&logo=vue.js&logoColor=black) |
+| **Routing & Icons** | ![React Router](https://img.shields.io/badge/React_Router_7-CA4245?style=flat-square&logo=react-router&logoColor=white) ![Lucide](https://img.shields.io/badge/Lucide_Icons-F56565?style=flat-square&logo=feather&logoColor=white) |
+| **Deploy & Hosting** | ![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=flat-square&logo=github&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white) |
+
+</div>
+
+---
+
+## 📁 Struktur Direktori
+
+```text
+portfolio-v4/
+├── public/                     # Aset statis publik
+│   ├── icons/                  # SVG ikon media sosial, tech stack, dan UI
+│   ├── images/
+│   │   ├── profile/            # Foto profil berformat AVIF
+│   │   ├── projects/           # Tangkapan layar proyek berformat AVIF
+│   │   └── sertifikat/         # Aset gambar sertifikat resmi
+│   ├── 404.html                # SPA redirect fallback GitHub Pages
+│   ├── CNAME                   # Domain kustom (rayhandev.my.id)
+│   ├── robots.txt              # Konfigurasi perayap mesin pencari
+│   └── sitemap.xml             # Peta situs terindeks
+├── src/
+│   ├── components/             # Komponen antarmuka modular
+│   │   ├── Certificates/       # Showcase sertifikat & modal lightbox
+│   │   ├── CommandPalette/     # Palet perintah keyboard shortcut
+│   │   ├── Contact/            # Formulir pesan & kanal kontak langsung
+│   │   ├── Footer/             # Footer global dan copyright
+│   │   ├── Hero/               # Hero banner, teks peran berputar, Polaroid
+│   │   ├── Navbar/             # Navigasi melayang responsif
+│   │   ├── Projects/           # Grid kartu proyek & filter tab
+│   │   ├── Skills/             # Tech stack grid & linimasa perjalanan karier
+│   │   └── shared/             # Komponen badge dan utilitas bersama
+│   ├── data/                   # Data statis terstruktur (proyek, sertifikat, profil)
+│   ├── pages/                  # Halaman rute (Home, Projects, Detail, Certificates, 404)
+│   ├── router/                 # Konfigurasi React Router v7
+│   ├── theme/                  # Theme tokens, palet warna, tipografi, & GlobalStyles
+│   ├── types/                  # Definisi tipe TypeScript
+│   ├── App.tsx                 # Root application wrapper
+│   └── main.tsx                # Entry point aplikasi
+├── index.html                  # Dokumen HTML utama
+├── package.json                # Dependensi proyek
+├── tsconfig.json               # Konfigurasi compiler TypeScript
+└── vite.config.ts              # Konfigurasi Vite & rollup chunk splitting
 ```
 
 ---
 
-### 5. Kriteria Keberhasilan
+## 🚀 Memulai Proyek (Getting Started)
 
-- ✅ **Akses Instan ke Repo**: Pengguna dapat langsung membuka source code GitHub untuk proyek Mading Kampus, Siap Kerja, dan ISC.
-- ✅ **Multi-Platform Kolaborasi**: Link kolaborator GitHub (`@akumalas`, `@EternalVultr`, `@ItzRyz`), Instagram (`@dnustya_`), dan Toko Shopee (Radeva) terbuka di tab baru dengan ikon dan label yang tepat.
-- ✅ **Visual Estetik & Responsif**: Tombol dan badge tertata rapi di mobile maupun desktop sesuai DNA AW Media dark glassmorphism.
-- ✅ **Lolos Verifikasi**: 0 error TypeScript, build Vite produksi 100% sukses, dan git commit bersih.
+### Prasyarat
+* [Node.js](https://nodejs.org/) versi 18.0 atau yang lebih baru
+* Package manager `npm` atau `pnpm`
+
+### Instalasi & Menjalankan Server Lokal
+
+1. **Clone repositori:**
+   ```bash
+   git clone https://github.com/RayhanDev9/portfolio-v4.git
+   cd portfolio-v4
+   ```
+
+2. **Pasang dependensi:**
+   ```bash
+   npm install
+   ```
+
+3. **Jalankan server pengembangan:**
+   ```bash
+   npm run dev
+   ```
+   Buka `http://localhost:5173` di browser Anda.
+
+4. **Pemeriksaan Tipe TypeScript:**
+   ```bash
+   npx tsc --noEmit
+   ```
+
+5. **Kompilasi Build Produksi:**
+   ```bash
+   npm run build
+   ```
+
+---
+
+## 🌐 Informasi Kontak
+
+Jika Anda ingin berdiskusi mengenai proyek kolaborasi, peluang kerja, atau eksplorasi teknis:
+
+* **Domain:** [rayhandev.my.id](https://rayhandev.my.id)
+* **Email:** [m.rayhanoi26@gmail.com](mailto:m.rayhanoi26@gmail.com)
+* **GitHub:** [@RayhanDev9](https://github.com/RayhanDev9)
+* **Instagram:** [@rayyhan_09](https://www.instagram.com/rayyhan_09)
+* **WhatsApp:** [+62 895-3256-03726](https://wa.me/62895325603726)
+
+---
+
+<div align="center">
+  <sub>Dibangun dengan dedikasi pada clean code, aksesibilitas, dan performa tinggi. © 2026 Muhamad Rayhan.</sub>
+</div>
